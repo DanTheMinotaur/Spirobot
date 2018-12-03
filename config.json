@@ -1,5 +1,16 @@
 {
-  "legs": {
-    
-  }
+  "legs": [
+    {
+      "position": "FRONTLEFT",
+      "upper": 0,
+      "middle": 1,
+      "lower": 2
+    },
+    {
+      "position": "FRONTRIGHT",
+      "upper": 0,
+      "middle": 1,
+      "lower": 2
+    }
+  ]
 }
