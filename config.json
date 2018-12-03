@@ -8,9 +8,9 @@
     },
     {
       "position": "FRONTRIGHT",
-      "upper": 0,
-      "middle": 1,
-      "lower": 2
+      "upper": 3,
+      "middle": 4,
+      "lower": 5
     }
   ]
 }
