@@ -9,13 +9,14 @@ class Leg:
     SERVO_FREQUENCY = 60
     SERVO_TIMEOUT = 0.5
 
-    def __init__(self, upper_channel, middle_channel, lower_channel, leg_position=''):
+    def __init__(self, upper_channel, middle_channel, lower_channel, leg_position='', limit_percentage=20):
         """
         Creating the class is initilised on setting the 3 channels of the leg
         :param upper_channel: The motor that is housed on the upper part of the leg, controls horizontal movement
         :param middle_channel: The motor is housed between the middle and lower leg
         :param lower_channel: The motor that is housed at the bottom, or the foot.
         :param leg_position: String Used to identify which leg it is
+        :param limit_percentage: Int value to limit movement by a percentage.
         """
         self.servo_motors = {
             "upper": int(upper_channel),
@@ -26,7 +27,7 @@ class Leg:
         # Initialise the PCA9685 using the default address (0x40).
         self.pwm = Hat.PCA9685()
         self.pwm.set_pwm_freq(self.SERVO_FREQUENCY)
-        self.movement_safety_distance = 50
+        self.limit_percent = limit_percentage
         #print(self.SERVO_MID)
 
 
@@ -66,26 +67,37 @@ class Leg:
         sleep(self.SERVO_TIMEOUT)
 
     def forward(self):
-        servo_values = self.limit_min_max_motion(20)  # Static, for testing
+        servo_values = self.limit_min_max_motion(self.limit_percent)
 
         if "LEFT" in self.leg_position:
             self.__move_servo(self.servo_motors['middle'], servo_values["SERVO_MAX"])
+            if "MIDDLE" not in self.leg_position:
+                self.__move_servo(self.servo_motors['lower'], servo_values["SERVO_MAX"])
+            self.__move_servo(self.servo_motors['upper'], servo_values["SERVO_MIN"])
         else:
             self.__move_servo(self.servo_motors['middle'], servo_values["SERVO_MIN"])
-
-        self.__move_servo(self.servo_motors['lower'], servo_values["SERVO_MAX"])
-
-        self.__move_servo(self.servo_motors['upper'], servo_values["SERVO_MIN"])
-
-        self.__move_servo(self.servo_motors['lower'], self.SERVO_MID)
+            if "MIDDLE" not in self.leg_position:
+                self.__move_servo(self.servo_motors['lower'], servo_values["SERVO_MIN"])
+            self.__move_servo(self.servo_motors['upper'], servo_values["SERVO_MAX"])
+        if "MIDDLE" not in self.leg_position:
+            self.__move_servo(self.servo_motors['lower'], self.SERVO_MID)
 
         self.__move_servo(self.servo_motors['middle'], self.SERVO_MID)
+
 
     def set_initial_position(self):
         for servo_name, servo_channel in self.servo_motors.items():
             self.__move_servo(servo_channel, self.SERVO_MID)
             sleep(self.SERVO_TIMEOUT)
 
+    def move_motor(self, motor_position="lower", position="SERVO_MAX"):
+        servo_postions = self.limit_min_max_motion(10)
+
+        try:
+            print("Moving motor {0} to {1}".format(motor_position, position))
+            self.__move_servo(self.servo_motors[motor_position], servo_postions[position])
+        except KeyError:
+            print("Invalid Value")
 
 
     def test(self):

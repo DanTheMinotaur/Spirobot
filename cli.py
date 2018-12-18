@@ -32,7 +32,20 @@ class BotController(Controller):
         leg = Leg(0,0,0, "TEST")
         print(leg.limit_min_max_motion(percent))
 
+    @ex(help='Make Bot Move Forward')
+    def move_forward(self):
+        bot = Body()
+        bot.move_forward()
 
+    @ex(help='Test a motor on a leg')
+    def test_motor(self):
+        bot = Body()
+        bot.move_motor()
+
+    @ex(help='Curl Bots Legs for transport')
+    def transport(self):
+        bot = Body()
+        bot.transport_mode()
 
 class BotCLI(App):
     class Meta:

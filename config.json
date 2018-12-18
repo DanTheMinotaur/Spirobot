@@ -1,4 +1,5 @@
 {
+  "limit": 30,
   "legs": [
     {
       "position": "FRONTLEFT",
@@ -11,6 +12,30 @@
       "upper": 3,
       "middle": 4,
       "lower": 5
+    },
+    {
+      "position": "MIDDLELEFT",
+      "upper": 6,
+      "middle": 7,
+      "lower": -1
+    },
+    {
+      "position": "MIDDLERIGHT",
+      "upper": 8,
+      "middle": 9,
+      "lower": -1
+    },
+    {
+      "position": "BACKRIGHT",
+      "upper": 10,
+      "middle": 12,
+      "lower": 11
+    },
+    {
+      "position": "BACKLEFT",
+      "upper": 13,
+      "middle": 14,
+      "lower": 15
     }
   ]
 }
