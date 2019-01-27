@@ -1,6 +1,7 @@
 import Adafruit_PCA9685 as Hat
 from time import sleep
 
+
 class Leg:
     """ Class for controlling 3 servo motors and provides functions for general Leg movements"""
     SERVO_MIN = 150

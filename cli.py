@@ -47,6 +47,7 @@ class BotController(Controller):
         bot = Body()
         bot.transport_mode()
 
+
 class BotCLI(App):
     class Meta:
         label = 'BotCLI'
