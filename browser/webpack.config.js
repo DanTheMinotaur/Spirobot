@@ -1,32 +1,33 @@
-const path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+//import * as process from "babel-core";
 
-var extractPlugin = new ExtractTextPlugin({
-    filename: 'main.css'
-});
+const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 //require('bulma/bulma.sass');
 
 module.exports = {
     entry: './src/app.js',
     output: {
-        filename: 'main.js',
-        path: path.resolve(__dirname, 'assets/js')
+        filename: 'js/main.js',
+        path: path.resolve(__dirname, 'assets'),
+        publicPath: 'assets'
     },
     module: {
         rules: [
                 {
                 test: /\.scss$/,
-                use: extractPlugin.extract({
-                    use: ['css-loader', 'scss-loader']
-                })
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ]
             }, {
                 test: /\.js$/,
                 use: [
                     {
                         loader: "babel-loader",
                         options: {
-                            presets: ["es2015"]
+                            presets: ["@babel/preset-env"]
                         }
                     }
                 ]
@@ -34,7 +35,12 @@ module.exports = {
         ]
     },
     plugins: [
-        extractPlugin
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: "css/[name].css",
+            chunkFilename: "css/[id].css"
+        })
     ],
     watch: true
 };
