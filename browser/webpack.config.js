@@ -3,9 +3,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-//require('bulma/bulma.sass');
 
-module.exports = {
+module.exports = (env, args) => ({
     entry: './src/app.js',
     output: {
         filename: 'js/app.js',
@@ -14,22 +13,18 @@ module.exports = {
     },
     module: {
         rules: [
-                {
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader"
+            },
+            {
                 test: /\.scss$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    'sass-loader'
-                ]
-            }, {
-                test: /\.js$/,
-                use: [
-                    {
-                        loader: "babel-loader",
-                        options: {
-                            presets: ["@babel/preset-env"]
-                        }
-                    }
+                    args.mode === 'production' ? MiniCssExtractPlugin.loader : "style-loader",
+                    "css-loader",
+                    'resolve-url-loader',
+                    "sass-loader?sourceMap"
                 ]
             }
         ]
@@ -43,4 +38,4 @@ module.exports = {
         })
     ],
     watch: true
-};
+});
