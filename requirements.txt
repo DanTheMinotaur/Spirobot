@@ -1,0 +1,10 @@
+Adafruit-Blinka==1.2.8
+adafruit-circuitpython-busdevice==2.2.9
+adafruit-circuitpython-motor==1.4.1
+adafruit-circuitpython-pca9685==3.2.5
+adafruit-circuitpython-register==1.7.0
+adafruit-circuitpython-servokit==1.1.0
+Adafruit-PlatformDetect==1.0.0
+Adafruit-PureIO==0.2.3
+spidev==3.4
+sysv-ipc==1.0.0
