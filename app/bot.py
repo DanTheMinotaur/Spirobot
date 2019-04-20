@@ -1,32 +1,66 @@
 from adafruit_servokit import ServoKit
 from time import sleep
-
+import json
 
 class Body:
     SERVO_MAX = 160
     SERVO_MIN = 10
     SERVO_MID = 90
+    DEFAULT_TIMEOUT = 0.3
 
     kit = ServoKit(channels=16)
+
+    def __organise_legs(self):
+        for leg in self.legs:
+            if "left" in leg["position"]:
+                self.left.append(leg)
+            else:
+                self.right.append(leg)
+
+    @staticmethod
+    def __load_config(file):
+        with open(file) as json_file:
+            return json.load(json_file)
+
+    def __init__(self, legs_config="config/legs.json"):
+        self.legs = self.__load_config(legs_config)
+        self.left = list()
+        self.right = list()
+        self.__organise_legs()
 
     def set_all_initial(self):
         """ Sets ALL motors to middle positions aka initial position """
         for channel in range(len(self.kit.servo)):
-            self.kit.servo[channel].angle = 90
-        sleep(0.3)
+            self.kit.servo[channel].angle = self.SERVO_MID
+        sleep(self.DEFAULT_TIMEOUT)
 
+    def walk_forward(self, steps=2):
+        for step in range(steps):
+            self.step_forward()
 
-    def move_leg(self, leg, forward=True):
+    def step_forward(self):
+        for leg in self.left:
+            leg_pos = str(leg["position"])
+            if "front" in leg_pos or "back" in leg_pos:
+                print(leg)
+                self.move_leg(leg)
+
+        for leg in self.right:
+            leg_pos = str(leg["position"])
+            if "front" in leg_pos or "back" in leg_pos:
+                print(leg)
+                self.move_leg(leg)
+
+        self.set_all_initial()
+
+    def move_leg(self, leg, forward=True, limit=45):
         leg_pos = str(leg["position"]).lower()
-        servo_max = self.SERVO_MAX
-        servo_min = self.SERVO_MIN
+        servo_max = self.SERVO_MAX - limit
+        servo_min = self.SERVO_MIN + limit
 
-        if "middle" in leg_pos:
+        if "middle" in leg_pos:  # Set middle legs to less movement so they don't bump into other legs
             servo_max -= 20
             servo_min += 20
-
-        print(servo_min)
-        print(servo_max)
 
         if "left" in leg_pos:
             self.kit.servo[leg["lower"]].angle = servo_max
@@ -34,24 +68,10 @@ class Body:
         else:
             self.kit.servo[leg["lower"]].angle = servo_min
             self.kit.servo[leg["upper"]].angle = servo_max
-        sleep(.3)
+        sleep(self.DEFAULT_TIMEOUT)
         self.kit.servo[leg["lower"]].angle = self.SERVO_MID  # Move leg to ground
-        #sleep(.3)
 
     def test_servo(self, channel, angle=10):
         self.kit.servo[channel].angle = angle
-
-    @staticmethod
-    def __build_leg(position, upper_channel, lower_channel):
-        return {
-            "position": str(position),
-            "upper": int(upper_channel),
-            "lower": int(lower_channel)
-        }
-
-
-class Leg:
-    def __init__(self, upper_channel, lower_channel, leg):
-        pass
 
 

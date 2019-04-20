@@ -69,6 +69,12 @@ def mv_lmd_lg():
 
 
 @cli.command()
+@click.argument('steps')
+def walk_forward(steps):
+    click.echo("Moving Forward")
+    body.walk_forward(int(steps))
+
+@cli.command()
 def init():
     click.echo('Setting All Legs to Initial State')
     body.set_all_initial()
