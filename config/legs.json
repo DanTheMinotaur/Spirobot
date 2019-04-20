@@ -1,0 +1,32 @@
+[
+  {
+    "position": "rightfront",
+    "upper": 1,
+    "lower": 4
+  },
+  {
+    "position": "rightmiddle",
+    "upper": 6,
+    "lower": 5
+  },
+  {
+    "position": "rightback",
+    "upper": 8,
+    "lower": 7
+  },
+  {
+    "position": "leftfront",
+    "upper": 3,
+    "lower": 2
+  },
+  {
+    "position": "leftback",
+    "upper": 9,
+    "lower": 10
+  },
+  {
+    "position": "leftmiddle",
+    "upper": 11,
+    "lower": 14
+  }
+]
