@@ -1,28 +1,36 @@
 // Import Styles
 require( './scss/my_sexy_style.scss');
 import 'bulma/bulma.sass'
+const loginTemplate = require('./js/login.html.handlebars');
+const adminTemplate = require('./js/control-panel.html.handlebars');
 
 // Wait for main content to load
 document.addEventListener("DOMContentLoaded", event => {
+    const appJS = document.getElementById("app");
     try {
         let app = firebase.app();
-        //let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-        //document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
                 console.log("User is signed in" + user.displayName);
+                console.log(adminTemplate);
+                appJS.innerHTML = adminTemplate(user);
             } else {
                 console.log("Not Signed in");
+                appJS.innerHTML = loginTemplate({});
             }
 
         });
     } catch (e) {
         console.error(e);
-        //document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
     }
 
     addEventListeners();
 });
+
+function handlebarsCompiler(template, data) {
+    let compiledTemplate = Handlebars.compile(template);
+    return compiledTemplate(data);
+}
 
 function addEventListeners() {
     document.getElementById("googleLogin").addEventListener("click", loginGoogle);
