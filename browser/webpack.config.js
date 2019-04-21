@@ -15,8 +15,8 @@ module.exports = (env, args) => ({
     entry: './src/app.js',
     output: {
         filename: 'js/app.js',
-        path: path.resolve(__dirname, 'assets'),
-        publicPath: 'assets'
+        path: path.resolve(__dirname, 'public'),
+        publicPath: 'public'
     },
     module: {
         rules: [
