@@ -105,5 +105,6 @@ def init():
 def servo(channel, angle):
     body.test_servo(int(channel), int(angle))
 
+
 if __name__ == '__main__':
     cli()

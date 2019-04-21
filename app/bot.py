@@ -22,6 +22,12 @@ class Body:
         with open(file) as json_file:
             return json.load(json_file)
 
+    def select_leg(self, name):
+        """ Selects Leg by name and returns if, mainly for testing purposes."""
+        for leg in self.legs:
+            if name in leg["position"]:
+                return leg
+
     def __init__(self, legs_config="config/legs.json"):
         self.legs = self.__load_config(legs_config)
         self.left = list()
@@ -41,8 +47,6 @@ class Body:
     def step_forward2(self):
         for leg in self.legs:
             pass
-
-
 
     def step_forward(self):
         for leg in self.left:
