@@ -9,7 +9,6 @@ def cli():
     pass
 
 
-
 @cli.command()
 @click.argument('leg')
 def mv_lg(leg):
@@ -20,14 +19,6 @@ def mv_lg(leg):
     else:
         click.echo("Could not find leg: {}".format(leg))
 
-@cli.command()
-def mv_rfr_lg():
-    click.echo('Setting Right Front Leg')
-    body.move_leg({
-        "position": "rightfront",
-        "upper": 1,
-        "lower": 4
-    })
 
 @cli.command()
 @click.argument('steps')
