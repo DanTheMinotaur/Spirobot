@@ -38,6 +38,12 @@ class Body:
         for step in range(steps):
             self.step_forward()
 
+    def step_forward2(self):
+        for leg in self.legs:
+            pass
+
+
+
     def step_forward(self):
         for leg in self.left:
             leg_pos = str(leg["position"])
@@ -52,6 +58,23 @@ class Body:
                 self.move_leg(leg)
 
         self.set_all_initial()
+
+    def leg_up(self, leg, limit=0):
+        servo_max = self.SERVO_MAX - limit
+        servo_min = self.SERVO_MIN + limit
+        if "left" in leg["position"]:
+            self.kit.servo[leg["lower"]].angle = servo_max
+        else:
+            self.kit.servo[leg["lower"]].angle = servo_min
+
+    def leg_down(self, leg, limit=0):
+        servo_max = self.SERVO_MAX - limit
+        servo_min = self.SERVO_MIN + limit
+        if "left" in leg["position"]:
+            self.kit.servo[leg["lower"]].angle = servo_min
+        else:
+            self.kit.servo[leg["lower"]].angle = servo_max
+
 
     def move_leg(self, leg, forward=True, limit=45):
         leg_pos = str(leg["position"]).lower()

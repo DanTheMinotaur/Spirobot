@@ -1,10 +1,17 @@
-//import * as process from "babel-core";
 
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const MinifyPlugin = require("babel-minify-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserJSPlugin = require("terser-webpack-plugin");
 
 module.exports = (env, args) => ({
+    optimization: {
+        minimizer: [
+            new TerserJSPlugin({}),
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    },
     entry: './src/app.js',
     output: {
         filename: 'js/app.js',
@@ -19,7 +26,7 @@ module.exports = (env, args) => ({
                 loader: "babel-loader"
             },
             {
-                test: /\.scss$/,
+                test: [/\.scss$/, /\.sass$/ ],
                 use: [
                     args.mode === 'production' ? MiniCssExtractPlugin.loader : "style-loader",
                     "css-loader",
@@ -35,7 +42,8 @@ module.exports = (env, args) => ({
             // both options are optional
             filename: "css/[name].css",
             chunkFilename: "css/[id].css"
-        })
+        }),
+        new MinifyPlugin()
     ],
     watch: true
 });

@@ -75,6 +75,25 @@ def walk_forward(steps):
     body.walk_forward(int(steps))
 
 @cli.command()
+def leg_up():
+    click.echo("Moving Leg up")
+    body.leg_up({
+        "position": "leftmiddle",
+        "upper": 11,
+        "lower": 14
+    })
+
+@cli.command()
+def leg_down():
+    click.echo("Moving Leg up")
+    body.leg_up({
+        "position": "leftmiddle",
+        "upper": 11,
+        "lower": 14
+    })
+
+
+@cli.command()
 def init():
     click.echo('Setting All Legs to Initial State')
     body.set_all_initial()
