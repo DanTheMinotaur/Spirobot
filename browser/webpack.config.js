@@ -20,6 +20,7 @@ module.exports = (env, args) => ({
     },
     module: {
         rules: [
+            { test: /\.handlebars$/, loader: "handlebars-loader" },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
