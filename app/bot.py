@@ -23,10 +23,15 @@ class Body:
             return json.load(json_file)
 
     def select_leg(self, name):
-        """ Selects Leg by name and returns if, mainly for testing purposes."""
+        """
+        Selects Leg by name and returns if, mainly for testing purposes.
+        :param name: Name of leg aka position
+        :return: Leg dictionary or None if nothing matches.
+        """
         for leg in self.legs:
             if name in leg["position"]:
                 return leg
+        return None
 
     def __init__(self, legs_config="config/legs.json"):
         self.legs = self.__load_config(legs_config)
