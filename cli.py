@@ -4,6 +4,17 @@ from app.bot import Body
 body = Body()
 
 
+def find_leg(leg):
+    selected_leg = body.select_leg(leg)
+    if selected_leg is not None:
+        click.echo("Using {} Leg".format(leg))
+        return selected_leg
+    click.echo("Could not find leg, possible choices are: ")
+    for l in body.legs:
+        click.echo(l["position"])
+    exit()
+
+
 @click.group()
 def cli():
     pass
@@ -26,29 +37,12 @@ def walk_forward(steps):
     click.echo("Moving Forward")
     body.walk_forward(int(steps))
 
-@cli.command()
-def leg_up():
-    click.echo("Moving Leg up")
-    body.leg_up({
-        "position": "leftmiddle",
-        "upper": 11,
-        "lower": 14
-    })
 
 @cli.command()
-def leg_down():
-    click.echo("Moving Leg up")
-    body.leg_up({
-        "position": "leftmiddle",
-        "upper": 11,
-        "lower": 14
-    })
-
-
-@cli.command()
-def init():
-    click.echo('Setting All Legs to Initial State')
-    body.set_all_initial()
+@click.argument('movement')
+@click.argument('leg')
+def mv_leg(movement, leg):
+    body.leg_move(movement, find_leg(leg))
 
 
 @cli.command()
@@ -56,6 +50,12 @@ def init():
 @click.argument('angle')
 def servo(channel, angle):
     body.test_servo(int(channel), int(angle))
+
+
+@cli.command()
+def init():
+    click.echo('Setting All Legs to Initial State')
+    body.set_all_initial()
 
 
 if __name__ == '__main__':

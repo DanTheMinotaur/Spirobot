@@ -2,6 +2,7 @@ from adafruit_servokit import ServoKit
 from time import sleep
 import json
 
+
 class Body:
     SERVO_MAX = 160
     SERVO_MIN = 10
@@ -24,7 +25,7 @@ class Body:
 
     def select_leg(self, name):
         """
-        Selects Leg by name and returns if, mainly for testing purposes.
+        Selects Leg by name and returns if, mainly used for testing purposes.
         :param name: Name of leg aka position
         :return: Leg dictionary or None if nothing matches.
         """
@@ -68,6 +69,46 @@ class Body:
 
         self.set_all_initial()
 
+    def leg_move(self, movement, leg, limit=0):
+        """
+        Moves leg in a desired direction based off a string value
+        :param movement: String of what way to move the leg
+        :param leg: Leg dict object
+        :param limit: optional limit of distance to move the leg.
+        :return: None
+        """
+        servo_max = self.SERVO_MAX - limit
+        servo_min = self.SERVO_MIN + limit
+        if movement in ["up", "down"]:
+            servo = self.kit.servo[leg["lower"]]
+        else:
+            servo = self.kit.servo[leg["upper"]]
+
+        if "up" in movement:
+            if "left" in leg["position"]:
+                servo.angle = servo_max
+            else:
+                servo.angle = servo_min
+        elif "down" in movement:
+            servo.angle = self.SERVO_MID
+            """
+            if "left" in leg["position"]:
+                servo.angle = servo_min
+            else:
+                servo.angle = servo_max
+            """
+        elif "forward" in movement:
+            if "left" in leg["position"]:
+                servo.angle = servo_min
+            else:
+                servo.angle = servo_max
+        elif "backward" in movement:
+            if "left" in leg["position"]:
+                servo.angle = servo_max
+            else:
+                servo.angle = servo_min
+
+
     def leg_up(self, leg, limit=0):
         servo_max = self.SERVO_MAX - limit
         servo_min = self.SERVO_MIN + limit
@@ -84,8 +125,7 @@ class Body:
         else:
             self.kit.servo[leg["lower"]].angle = servo_max
 
-
-    def move_leg(self, leg, forward=True, limit=45):
+    def move_leg(self, leg, limit=45):
         leg_pos = str(leg["position"]).lower()
         servo_max = self.SERVO_MAX - limit
         servo_min = self.SERVO_MIN + limit
@@ -104,6 +144,12 @@ class Body:
         self.kit.servo[leg["lower"]].angle = self.SERVO_MID  # Move leg to ground
 
     def test_servo(self, channel, angle=10):
+        """
+        For specifically testing the servo motor
+        :param channel: int Servo Channel
+        :param angle: int angle to move motor to
+        :return: None
+        """
         self.kit.servo[channel].angle = angle
 
 
