@@ -1,6 +1,7 @@
 // Import Styles
-require( './scss/my_sexy_style.scss');
+require( './scss/style.scss');
 import 'bulma/bulma.sass'
+
 const loginTemplate = require('./js/login.html.handlebars');
 const adminTemplate = require('./js/control-panel.html.handlebars');
 
@@ -9,30 +10,57 @@ document.addEventListener("DOMContentLoaded", event => {
     const appJS = document.getElementById("app");
     try {
         let app = firebase.app();
+
+        // Check if user is logged in.
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
-                console.log("User is signed in" + user.displayName);
-                console.log(adminTemplate);
+                console.log("User is signed in" + user.photoURL);
                 appJS.innerHTML = adminTemplate(user);
+
+                const bot = new BotController(app);
+
+                bot.move("forward");
+
+
             } else {
                 console.log("Not Signed in");
                 appJS.innerHTML = loginTemplate({});
+                addLoginListeners();
             }
-
         });
     } catch (e) {
         console.error(e);
     }
-
-    addEventListeners();
 });
 
-function handlebarsCompiler(template, data) {
-    let compiledTemplate = Handlebars.compile(template);
-    return compiledTemplate(data);
+
+/**
+ * Class for controlling bot functionality using firebase live Database
+ * @constructor Firebase Instance
+ */
+class BotController{
+    constructor(firebase) {
+        this.database = firebase.database();
+    }
+
+    /**
+     * Method will send movement
+     * @param movement Direction of movement to send
+     */
+    move(movement = null) {
+        console.log("Moving Bot: " + movement);
+        this.database.ref('/').update(
+            {
+                "move": movement
+            }
+        );
+    }
 }
 
-function addEventListeners() {
+/**
+ * Add Listener events for login screen
+ */
+function addLoginListeners() {
     document.getElementById("googleLogin").addEventListener("click", loginGoogle);
 }
 
@@ -45,8 +73,6 @@ function loginGoogle() {
     firebase.auth().signInWithPopup(provider).then(loginResult => {
         const user = loginResult.user;  // User Auth Successful
         console.log(user);
-        document.getElementById("display-name").innerText = user.displayName;
-        document.write(user);
     }).catch(e => {
         console.log(e); // Log Error
     });
