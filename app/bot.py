@@ -108,23 +108,6 @@ class Body:
             else:
                 servo.angle = servo_min
 
-
-    def leg_up(self, leg, limit=0):
-        servo_max = self.SERVO_MAX - limit
-        servo_min = self.SERVO_MIN + limit
-        if "left" in leg["position"]:
-            self.kit.servo[leg["lower"]].angle = servo_max
-        else:
-            self.kit.servo[leg["lower"]].angle = servo_min
-
-    def leg_down(self, leg, limit=0):
-        servo_max = self.SERVO_MAX - limit
-        servo_min = self.SERVO_MIN + limit
-        if "left" in leg["position"]:
-            self.kit.servo[leg["lower"]].angle = servo_min
-        else:
-            self.kit.servo[leg["lower"]].angle = servo_max
-
     def move_leg(self, leg, limit=45):
         leg_pos = str(leg["position"]).lower()
         servo_max = self.SERVO_MAX - limit
