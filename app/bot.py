@@ -11,13 +11,6 @@ class Body:
 
     kit = ServoKit(channels=16)
 
-    def __organise_legs(self):
-        for leg in self.legs:
-            if "left" in leg["position"]:
-                self.left.append(leg)
-            else:
-                self.right.append(leg)
-
     @staticmethod
     def __load_config(file):
         with open(file) as json_file:
@@ -36,9 +29,6 @@ class Body:
 
     def __init__(self, legs_config="config/legs.json"):
         self.legs = self.__load_config(legs_config)
-        self.left = list()
-        self.right = list()
-        self.__organise_legs()
 
     def set_all_initial(self):
         """ Sets ALL motors to middle positions aka initial position """
