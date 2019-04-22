@@ -53,6 +53,16 @@ def servo(channel, angle):
 
 
 @cli.command()
+@click.argument('steps')
+def walk(steps):
+    for step in range(int(steps)):
+        click.echo("Step {}".format(step + 1))
+        body.step_forward2()
+    click.echo("Setting Initial")
+    body.set_all_initial()
+
+
+@cli.command()
 def init():
     click.echo('Setting All Legs to Initial State')
     body.set_all_initial()

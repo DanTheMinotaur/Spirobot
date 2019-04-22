@@ -2,17 +2,17 @@
   {
     "position": "rightfront",
     "upper": 1,
-    "lower": 4
+    "lower": 15
   },
   {
     "position": "rightmiddle",
     "upper": 6,
-    "lower": 5
+    "lower": 7
   },
   {
     "position": "rightback",
-    "upper": 8,
-    "lower": 7
+    "upper": 10,
+    "lower": 11
   },
   {
     "position": "leftfront",
@@ -22,11 +22,11 @@
   {
     "position": "leftback",
     "upper": 9,
-    "lower": 10
+    "lower": 8
   },
   {
     "position": "leftmiddle",
-    "upper": 11,
-    "lower": 14
+    "upper": 4,
+    "lower": 5
   }
 ]

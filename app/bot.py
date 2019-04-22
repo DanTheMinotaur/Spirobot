@@ -50,10 +50,6 @@ class Body:
         for step in range(steps):
             self.step_forward()
 
-    def step_forward2(self):
-        for leg in self.legs:
-            pass
-
     def step_forward(self):
         for leg in self.left:
             leg_pos = str(leg["position"])
@@ -69,12 +65,42 @@ class Body:
 
         self.set_all_initial()
 
-    def leg_move(self, movement, leg, limit=0):
+    def step_forward2(self):
+        step_instructions = (
+            ["up", 0, 0.1],
+            ["forward", 35, 0],
+            ["down", 0, 0],
+        )
+        legs_sequence = ("rightfront", "rightback", "leftmiddle", "leftfront", "leftback", "rightmiddle")
+
+        self.__run_movement_sequence(legs_sequence, step_instructions)
+
+        step_instructions = (
+            ["backward", 30, 0.1],
+        )
+
+        self.__run_movement_sequence(legs_sequence, step_instructions)
+
+        # for leg in legs_sequence:
+        #     for step in step_instructions:
+        #         self.leg_move(step[0], self.select_leg(leg), limit=step[1], wait=step[2])
+        #     #sleep(self.DEFAULT_TIMEOUT)
+
+        #self.set_all_initial()
+
+    def __run_movement_sequence(self, legs_sequence, step_instructions):
+        for leg in legs_sequence:
+            for step in step_instructions:
+                self.leg_move(step[0], self.select_leg(leg), limit=step[1], wait=step[2])
+
+
+    def leg_move(self, movement, leg, limit=0, wait=0):
         """
         Moves leg in a desired direction based off a string value
         :param movement: String of what way to move the leg
         :param leg: Leg dict object
         :param limit: optional limit of distance to move the leg.
+        :param wait: optional time to delay program
         :return: None
         """
         servo_max = self.SERVO_MAX - limit
@@ -107,6 +133,8 @@ class Body:
                 servo.angle = servo_max
             else:
                 servo.angle = servo_min
+        if wait is not None or wait != 0:
+            sleep(wait)
 
     def move_leg(self, leg, limit=45):
         leg_pos = str(leg["position"]).lower()
