@@ -21,17 +21,6 @@ def cli():
 
 
 @cli.command()
-@click.argument('leg')
-def mv_lg(leg):
-    selected_leg = body.select_leg(leg)
-    if selected_leg is not None:
-        click.echo("Moving {}".format(leg))
-        body.move_leg(selected_leg)
-    else:
-        click.echo("Could not find leg: {}".format(leg))
-
-
-@cli.command()
 @click.argument('steps')
 def walk_forward(steps):
     click.echo("Moving Forward")
@@ -55,9 +44,7 @@ def servo(channel, angle):
 @cli.command()
 @click.argument('steps')
 def walk(steps):
-    for step in range(int(steps)):
-        click.echo("Step {}".format(step + 1))
-        body.step_forward2()
+    body.walk_forward(int(steps))
     click.echo("Setting Initial")
     body.set_all_initial()
 
