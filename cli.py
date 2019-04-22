@@ -35,6 +35,11 @@ def mv_leg(movement, leg):
 
 
 @cli.command()
+def turn_left():
+    body.turn_left()
+
+
+@cli.command()
 @click.argument('channel')
 @click.argument('angle')
 def servo(channel, angle):

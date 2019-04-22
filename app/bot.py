@@ -11,6 +11,13 @@ class Body:
 
     kit = ServoKit(channels=16)
 
+    def __init__(self, legs_config="config/legs.json"):
+        """
+        Constructor, takes legs config json file.
+        :param legs_config:
+        """
+        self.legs = self.__load_config(legs_config)
+
     @staticmethod
     def __load_config(file):
         with open(file) as json_file:
@@ -27,9 +34,6 @@ class Body:
                 return leg
         return None
 
-    def __init__(self, legs_config="config/legs.json"):
-        self.legs = self.__load_config(legs_config)
-
     def set_all_initial(self):
         """ Sets ALL motors to middle positions aka initial position """
         for channel in range(len(self.kit.servo)):
@@ -39,6 +43,38 @@ class Body:
     def walk_forward(self, steps=2):
         for step in range(steps):
             self.step_forward()
+
+    def turn_left(self):
+        step_instructions = (
+            ["up", 0, 0.1],
+            ["forward", 20, 0]
+        )
+        legs_sequence = (
+            "leftfront",
+            "leftback"
+        )
+
+        self.__run_movement_sequence(legs_sequence, step_instructions)
+
+        step_instructions = (
+            ["up", 0, 0],
+        )
+        legs_sequence = (
+            "rightmiddle",
+        )
+
+        self.__run_movement_sequence(legs_sequence, step_instructions)
+
+        step_instructions = (
+            ["down", 0, 0],
+            ["backward", 30, 0],
+        )
+        legs_sequence = (
+            "leftfront",
+            "leftback",
+        )
+        self.__run_movement_sequence(legs_sequence, step_instructions)
+
 
     def step_forward(self):
         step_instructions = (
@@ -94,6 +130,8 @@ class Body:
                 servo.angle = servo_max
             else:
                 servo.angle = servo_min
+        elif "middle" in movement:
+            servo.angle = self.SERVO_MID
         if wait is not None or wait != 0:
             sleep(wait)
 

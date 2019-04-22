@@ -1,0 +1,11 @@
+{
+  "move": [
+    "forward",
+    "backward",
+    "left",
+    "right"
+    ],
+  "ping": {
+    ""
+  }
+}
