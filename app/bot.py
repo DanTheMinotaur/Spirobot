@@ -94,12 +94,6 @@ class Body:
                 servo.angle = servo_min
         elif "down" in movement:
             servo.angle = self.SERVO_MID
-            """
-            if "left" in leg["position"]:
-                servo.angle = servo_min
-            else:
-                servo.angle = servo_max
-            """
         elif "forward" in movement:
             if "left" in leg["position"]:
                 servo.angle = servo_min
