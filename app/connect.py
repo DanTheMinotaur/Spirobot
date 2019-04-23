@@ -49,7 +49,7 @@ class Communicate(Common):
 
     def ping(self):
         """ Sets ping status of bot to verify its on. """
-        self.__ping.update(True)
+        self.ref.update({"ping": True})
 
     def get_move_command(self):
         valid_movements = [
@@ -59,12 +59,16 @@ class Communicate(Common):
             "right"
         ]
         current_move = self.__move.get()
+        self.ref.update({"move": False})
         if current_move:
             if isinstance(current_move, str):
                 current_move = current_move.lower()
                 if current_move in valid_movements:
                     return current_move
         self.add_event("Invalid Move Command: {}".format(current_move))
+
+    def set_status(self, status):
+        self.__status.update(status)
 
     def set_video(self, value=False):
         """
