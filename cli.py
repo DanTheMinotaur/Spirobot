@@ -1,6 +1,10 @@
 import click
 from app.bot import Body
 
+"""
+    Script for CLI(Command Line Interfacing) of bot and communication mechanisms
+"""
+
 body = Body()
 
 
@@ -49,6 +53,7 @@ def servo(channel, angle):
 @cli.command()
 @click.argument('steps')
 def walk(steps):
+    """ CL"""
     body.walk_forward(int(steps))
     click.echo("Setting Initial")
     body.set_all_initial()

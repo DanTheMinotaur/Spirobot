@@ -1,9 +1,10 @@
 from adafruit_servokit import ServoKit
 from time import sleep
-import json
+from app.utils import Common
 
 
-class Body:
+class Body(Common):
+    """ Initial Constants for Servo Motots"""
     SERVO_MAX = 160
     SERVO_MIN = 10
     SERVO_MID = 90
@@ -16,12 +17,7 @@ class Body:
         Constructor, takes legs config json file.
         :param legs_config:
         """
-        self.legs = self.__load_config(legs_config)
-
-    @staticmethod
-    def __load_config(file):
-        with open(file) as json_file:
-            return json.load(json_file)
+        self.legs = Common.load_config(legs_config)
 
     def select_leg(self, name):
         """

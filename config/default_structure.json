@@ -1,6 +1,7 @@
 {
-  "move": null,
+  "move": false,
   "ping": true,
-  "video": null,
-  "status": "waiting"
+  "video": false,
+  "status": "waiting",
+  "events": []
 }
