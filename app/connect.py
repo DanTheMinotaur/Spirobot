@@ -26,7 +26,7 @@ class Communicate(Common):
         repopulates
         """
         config = self.ref.get()  # Current Firebase Config Document
-        default_config = Common.load_config("./config/default_structure.json")
+        default_config = Common.load_config("./config/default_structure.json")  # Default config for bot.
         if config is not None:
             for config_item in default_config:
                 if config_item not in config:
@@ -50,6 +50,21 @@ class Communicate(Common):
     def ping(self):
         """ Sets ping status of bot to verify its on. """
         self.__ping.update(True)
+
+    def get_move_command(self):
+        valid_movements = [
+            "forward",
+            "backward",
+            "left",
+            "right"
+        ]
+        current_move = self.__move.get()
+        if current_move:
+            if isinstance(current_move, str):
+                current_move = current_move.lower()
+                if current_move in valid_movements:
+                    return current_move
+        self.add_event("Invalid Move Command: {}".format(current_move))
 
     def set_video(self, value=False):
         """

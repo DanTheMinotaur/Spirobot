@@ -12,8 +12,12 @@ class Common:
         :param file: JSON file to be loaded.
         :return: dictionary object of file
         """
-        with open(file) as json_file:
-            return json.load(json_file)
+        try:
+            with open(file) as json_file:
+                return json.load(json_file)
+        except FileNotFoundError:
+            print("Could not find '{}', ending application.".format(file))
+            exit()
 
     @staticmethod
     def bool_to_on_off(boolean):
