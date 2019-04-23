@@ -1,11 +1,16 @@
 {
-  "move": [
-    "forward",
-    "backward",
-    "left",
-    "right"
-    ],
-  "ping": {
-    ""
-  }
+  "move": null,
+  "ping": true,
+  "video": null,
+  "status": "waiting",
+  "events": [
+    {
+      "datetime": "19-09-2019:12:00:00",
+      "message": "Video Stream Enabled"
+    },
+    {
+      "datetime": "19-09-2019:12:30:00",
+      "message": "Patrol Mode Set"
+    }
+  ]
 }
