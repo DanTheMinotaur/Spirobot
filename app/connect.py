@@ -52,6 +52,10 @@ class Communicate(Common):
         self.ref.update({"ping": True})
 
     def get_move_command(self):
+        """
+        Checks if there is a move command waiting then checks if it is valid,
+        :return: valid move string, or None if invalid or no move command.
+        """
         valid_movements = [
             "forward",
             "backward",
@@ -60,12 +64,12 @@ class Communicate(Common):
         ]
         current_move = self.__move.get()
         self.ref.update({"move": False})
-        if current_move:
-            if isinstance(current_move, str):
-                current_move = current_move.lower()
-                if current_move in valid_movements:
-                    return current_move
+        if current_move and isinstance(current_move, str):
+            current_move = current_move.lower()
+            if current_move in valid_movements:
+                return current_move
         self.add_event("Invalid Move Command: {}".format(current_move))
+        return None
 
     def set_status(self, status):
         self.__status.update(status)
