@@ -93,7 +93,6 @@ class Communicate(Common):
         else:
             self.add_event("Invalid Video Must be boolean".format(Common.bool_to_on_off(video_status)))
             self.__video.update(False)
-            return False
 
     def set_video(self, value=False):
         """
@@ -105,6 +104,9 @@ class Communicate(Common):
             self.add_event("Video Mode Switched {}".format(Common.bool_to_on_off(value)))
         else:
             raise ValueError("Video can only take a boolean value")
+
+    def clear_events(self):
+        self.__events.set({})
 
     def add_event(self, event):
         """ Adds an event message """
