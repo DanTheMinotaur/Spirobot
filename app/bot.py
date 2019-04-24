@@ -4,7 +4,10 @@ from app.utils import Common
 
 
 class Body(Common):
-    """ Initial Constants for Servo Motots"""
+    """
+    Class contains methods for controlling bot physical actions,
+    """
+    """ Initial Constants for Servo Motors """
     SERVO_MAX = 160
     SERVO_MIN = 10
     SERVO_MID = 90
@@ -35,6 +38,9 @@ class Body(Common):
         for channel in range(len(self.kit.servo)):
             self.kit.servo[channel].angle = self.SERVO_MID
         sleep(self.DEFAULT_TIMEOUT)
+
+    def move(self, move):
+        pass  # TODO add functionality for movements
 
     def walk_forward(self, steps=2):
         for step in range(steps):

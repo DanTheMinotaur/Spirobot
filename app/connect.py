@@ -1,8 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, db
 from app.utils import Common
-from datetime import datetime
-
 
 class Communicate(Common):
     """
@@ -72,7 +70,18 @@ class Communicate(Common):
         return None
 
     def set_status(self, status):
+        """ Sets current status of device """
         self.__status.update(status)
+
+    def get_video(self):
+        video_status = self.__video.get()
+        if isinstance(video_status, bool):
+            self.add_event("Video Mode Switched {}, Streaming on Youtube".format(Common.bool_to_on_off(video_status)))
+            return video_status
+        else:
+            self.add_event("Invalid Video Must be boolean".format(Common.bool_to_on_off(video_status)))
+            self.__video.update(False)
+            return False
 
     def set_video(self, value=False):
         """
