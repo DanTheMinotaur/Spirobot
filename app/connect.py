@@ -17,6 +17,7 @@ class Communicate(Common):
         self.__move = db.reference("move")
         self.__status = db.reference("status")
         self.__video = db.reference("video")
+        self.__video_state = None
 
     def __verify_control_details(self):
         """
@@ -45,9 +46,12 @@ class Communicate(Common):
             "message": str(message)
         }
 
-    def ping(self):
+    def ping(self, do_ping=None):
         """ Sets ping status of bot to verify its on. """
-        self.ref.update({"ping": True})
+        if do_ping is None:
+            self.ref.update({"ping": True})
+        else:
+            return self.__ping.get()
 
     def get_move_command(self):
         """
@@ -66,8 +70,12 @@ class Communicate(Common):
             current_move = current_move.lower()
             if current_move in valid_movements:
                 return current_move
-        self.add_event("Invalid Move Command: {}".format(current_move))
-        return None
+        elif not current_move:
+            return None
+        else:
+            self.add_event("Invalid Move Command: {}".format(current_move))
+            return None
+
 
     def set_status(self, status):
         """ Sets current status of device """
@@ -76,7 +84,11 @@ class Communicate(Common):
     def get_video(self):
         video_status = self.__video.get()
         if isinstance(video_status, bool):
-            self.add_event("Video Mode Switched {}, Streaming on Youtube".format(Common.bool_to_on_off(video_status)))
+            if self.__video_state is None:
+                self.__video_state = video_status
+            if video_status != self.__video_state:
+                self.__video_state = video_status
+                self.add_event("Video Mode Switched {}.".format(Common.bool_to_on_off(video_status)))
             return video_status
         else:
             self.add_event("Invalid Video Must be boolean".format(Common.bool_to_on_off(video_status)))
@@ -96,4 +108,5 @@ class Communicate(Common):
 
     def add_event(self, event):
         """ Adds an event message """
+        print(event)
         self.__events.push(self.__format_event(event))
