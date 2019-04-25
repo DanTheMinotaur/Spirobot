@@ -147,3 +147,11 @@ class Body(Common):
         self.kit.servo[channel].angle = angle
 
 
+class Movements(Common):
+    """ Class will be used to load and render movement json files. Will also potentially contain controls for generating movement files. """
+    movements = {}
+
+    def load_movement(self, movement_file):
+        pass
+
+    def
