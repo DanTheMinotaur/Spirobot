@@ -11,19 +11,18 @@ class Communicate(Common):
         firebase_admin.initialize_app(credentials.Certificate(private_key), {
             "databaseURL": firebase_url
         })
-        self.ref = db.reference("/")
+        self.root = db.reference("/")
         self.__verify_control_details()
-        self.__ping = db.reference("ping")
+        self.__controls = db.reference("controls")
+        self.__ping = db.reference("controls/ping")
         self.__events = db.reference("events")
-        self.__move = db.reference("move")
+        self.__move = db.reference("controls/move")
         self.__status = db.reference("status")
-        self.__video = db.reference("video")
+        self.__video = db.reference("controls/video")
         self.__video_state = None
 
     @staticmethod
     def __valid_config(current_config, correct_config):
-        print(current_config)
-        print(correct_config)
         for config_item in correct_config:
             if config_item not in current_config:
                 return False
@@ -34,19 +33,17 @@ class Communicate(Common):
         Method Checks Current Firebase Document to see if it is complete, if it is missing or incomplete then it
         repopulates
         """
-        config = self.ref.get()  # Current Firebase Config Document
+        config = self.root.get()  # Current Firebase Config Document
         default_config = Common.load_config("./config/default_structure.json")  # Default config for bot.
         if config is not None:
             for config_item, config_value in default_config.items():
                 if config_item not in config or (isinstance(config_value, dict) and not self.__valid_config(config[config_item], default_config[config_item])):
-                    self.ref.update({
+                    self.root.update({
                         config_item: default_config[config_item]
                     })
         else:
             default_config["events"] = self.__format_event("Bot Reconfigured Firebase")
-            self.ref.set(default_config)
-
-        exit()
+            self.root.set(default_config)
 
     @staticmethod
     def __format_event(message):
@@ -59,7 +56,7 @@ class Communicate(Common):
     def ping(self, do_ping=None):
         """ Sets ping status of bot to verify its on. """
         if do_ping is not None:
-            self.ref.update({"ping": True})
+            self.__controls.update({"ping": True})
         else:
             return self.__ping.get()
 
@@ -75,7 +72,7 @@ class Communicate(Common):
             "right"
         ]
         current_move = self.__move.get()
-        self.ref.update({"move": False})
+        self.__move.update(False)
         if current_move and isinstance(current_move, str):
             current_move = current_move.lower()
             if current_move in valid_movements:
@@ -85,7 +82,6 @@ class Communicate(Common):
         else:
             self.add_event("Invalid Move Command: {}".format(current_move))
             return None
-
 
     def set_status(self, status):
         """ Sets current status of device """
