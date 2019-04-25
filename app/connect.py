@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 from app.utils import Common
 
+
 class Communicate(Common):
     """
     Class handles communication with Firebase live database
@@ -19,6 +20,15 @@ class Communicate(Common):
         self.__video = db.reference("video")
         self.__video_state = None
 
+    @staticmethod
+    def __valid_config(current_config, correct_config):
+        print(current_config)
+        print(correct_config)
+        for config_item in correct_config:
+            if config_item not in current_config:
+                return False
+        return True
+
     def __verify_control_details(self):
         """
         Method Checks Current Firebase Document to see if it is complete, if it is missing or incomplete then it
@@ -27,16 +37,16 @@ class Communicate(Common):
         config = self.ref.get()  # Current Firebase Config Document
         default_config = Common.load_config("./config/default_structure.json")  # Default config for bot.
         if config is not None:
-            for config_item in default_config:
-                if config_item not in config:
+            for config_item, config_value in default_config.items():
+                if config_item not in config or (isinstance(config_value, dict) and not self.__valid_config(config[config_item], default_config[config_item])):
                     self.ref.update({
                         config_item: default_config[config_item]
                     })
         else:
-            default_config["events"].append(
-                self.__format_event("Bot Reconfigured Firebase")
-            )
+            default_config["events"] = self.__format_event("Bot Reconfigured Firebase")
             self.ref.set(default_config)
+
+        exit()
 
     @staticmethod
     def __format_event(message):
