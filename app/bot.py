@@ -3,7 +3,7 @@ from time import sleep
 from app.utils import Common
 
 
-class Body(Common):
+class Legs(Common):
     """
     Class contains methods for controlling bot physical actions,
     """
@@ -147,11 +147,31 @@ class Body(Common):
         self.kit.servo[channel].angle = angle
 
 
-class Movements(Common):
-    """ Class will be used to load and render movement json files. Will also potentially contain controls for generating movement files. """
+class Movements(Legs):
+    """
+    Class will be used to load and render movement json files. Will also potentially contain controls for
+    generating movement files.
+    """
     movements = {}
+
+    def __init__(self):
+        """ Load Leg Constructor """
+        super().__init__()
 
     def load_movement(self, movement_file):
         pass
 
-    def
+    @staticmethod
+    def __validate_instruction(instruction):
+        return "movement" in instruction and isinstance(instruction["movement"], str)
+
+    @staticmethod
+    def __validate_movement(movement_config):
+        if isinstance(movement_config, list) and len(movement_config) > 0: # Check if list of instructions
+            for movement in movement_config:
+                if isinstance(movement, dict) \
+                and ("instructions" in movement and "sequence" in movement_config): # check if keys are correct
+
+
+
+

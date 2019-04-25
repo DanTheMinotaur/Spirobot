@@ -1,11 +1,11 @@
 import click
-from app.bot import Body
+from app.bot import Legs
 
 """
     Script for CLI(Command Line Interfacing) of bot and communication mechanisms
 """
 
-body = Body()
+body = Legs()
 
 
 def find_leg(leg):
