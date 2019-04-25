@@ -48,7 +48,7 @@ class Communicate(Common):
 
     def ping(self, do_ping=None):
         """ Sets ping status of bot to verify its on. """
-        if do_ping is None:
+        if do_ping is not None:
             self.ref.update({"ping": True})
         else:
             return self.__ping.get()

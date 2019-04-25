@@ -25,17 +25,25 @@ class Controller:
             else:
                 print("Stopping Video Streaming")
 
+    def __check_ping(self):
+        """
+        Checks the status of the ping and turns if on if its off
+        """
+        if not self.communications.ping():
+            self.communications.ping(True)
+
     def check_commands(self):
         self.__check_video()
         self.__check_move()
+        self.__check_ping()
 
     def mode_auto(self):
-        print("Placeholder for Auto Mode")
-        pass
+        self.communications.add_event("Auto Mode Set")
+        print("Placeholder")
 
     def mode_manual(self):
-        print("Placeholder for Manual Mode")
-        pass
+        self.communications.add_event("Manual Mode Set")
+        print("Placeholder")
 
     def run(self, timeout=3):
         while True:
