@@ -146,7 +146,6 @@ class Legs(Common):
         """
         self.kit.servo[channel].angle = angle
 
-
 class Movements(Legs):
     """
     Class will be used to load and render movement json files. Will also potentially contain controls for
@@ -161,17 +160,17 @@ class Movements(Legs):
     def load_movement(self, movement_file):
         pass
 
-    @staticmethod
-    def __validate_instruction(instruction):
+    def validate_instruction(self, instruction):
         return "movement" in instruction and isinstance(instruction["movement"], str)
 
     @staticmethod
-    def __validate_movement(movement_config):
+    def validate_movement(movement_config):
         if isinstance(movement_config, list) and len(movement_config) > 0: # Check if list of instructions
             for movement in movement_config:
                 if isinstance(movement, dict) \
                 and ("instructions" in movement and "sequence" in movement_config): # check if keys are correct
+                    return True
 
 
 
-
+        return False

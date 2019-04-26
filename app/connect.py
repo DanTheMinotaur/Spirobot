@@ -9,7 +9,7 @@ class Communicate(Common):
     """
     def __init__(self, private_key="./certs/admin-key.json", firebase_url="https://spirobot-d9387.firebaseio.com/"):
         firebase_admin.initialize_app(credentials.Certificate(private_key), {
-            "databaseURL": firebase_url
+            "databaseURL": firebase_url 
         })
         self.root = db.reference("/")
         self.__verify_control_details()
