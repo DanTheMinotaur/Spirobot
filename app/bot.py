@@ -1,7 +1,7 @@
 from adafruit_servokit import ServoKit
 from time import sleep
 from app.utils import Common
-from os.path import splitext
+from os.path import splitext, basename
 from os import listdir
 
 
@@ -160,16 +160,23 @@ class Movements(Legs):
         """ Load Leg Constructor """
         super().__init__()
 
+    def make_move(self):
+        pass
+
     def load_movement_files(self, src_path="./config/movements/"):
+        """
+        Scans a directory loading any json files within it
+        :param src_path:
+        :return:
+        """
         for file in listdir(src_path):
             if ".json" in file:
                 self.load_movement(src_path + file)
 
-
     def load_movement(self, movement_file):
         movement_config = self.load_config(movement_file)
         if self.validate_instructions(movement_config):
-            self.movements[splitext(movement_file)] = movement_config
+            self.movements[splitext(basename(movement_file))[0]] = movement_config
         else:
             print("Invalid Movement Configuration: {}".format(movement_file))
 
@@ -184,7 +191,6 @@ class Movements(Legs):
         if isinstance(movement_config, list) and len(movement_config) > 0:  # Check if list of instructions
             valid_motions = ["movement", "limit", "wait"]
             for movement in movement_config:
-                print(movement)
                 if isinstance(movement, dict) and "instructions" in movement and "sequence" in movement:  # check if keys are correct
                     if isinstance(movement["instructions"], list) and len(movement["instructions"]) > 0:
                         for motion in movement["instructions"]:

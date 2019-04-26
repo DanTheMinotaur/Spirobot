@@ -48,7 +48,9 @@ class TestMovement(unittest.TestCase):
     def test_load_movements(self):
         m = Movements()
         m.load_movement_files()
+        print(m.movements)
         self.assertIsNotNone(m.movements)
+
 
 if __name__ == '__main__':
     unittest.main()
