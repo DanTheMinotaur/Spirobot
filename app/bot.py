@@ -1,6 +1,8 @@
 from adafruit_servokit import ServoKit
 from time import sleep
 from app.utils import Common
+from os.path import splitext
+from os import listdir
 
 
 class Legs(Common):
@@ -146,6 +148,7 @@ class Legs(Common):
         """
         self.kit.servo[channel].angle = angle
 
+
 class Movements(Legs):
     """
     Class will be used to load and render movement json files. Will also potentially contain controls for
@@ -157,20 +160,38 @@ class Movements(Legs):
         """ Load Leg Constructor """
         super().__init__()
 
-    def load_movement(self, movement_file):
-        pass
+    def load_movement_files(self, src_path="./config/movements/"):
+        for file in listdir(src_path):
+            if ".json" in file:
+                self.load_movement(src_path + file)
 
-    def validate_instruction(self, instruction):
-        return "movement" in instruction and isinstance(instruction["movement"], str)
+
+    def load_movement(self, movement_file):
+        movement_config = self.load_config(movement_file)
+        if self.validate_instructions(movement_config):
+            self.movements[splitext(movement_file)] = movement_config
+        else:
+            print("Invalid Movement Configuration: {}".format(movement_file))
+
 
     @staticmethod
-    def validate_movement(movement_config):
-        if isinstance(movement_config, list) and len(movement_config) > 0: # Check if list of instructions
+    def validate_instructions(movement_config):
+        """
+        Validates an instruction for the bot
+        :param movement_config: Dictionary/JSON object with instructions
+        :return: Boolean value if config is valid
+        """
+        if isinstance(movement_config, list) and len(movement_config) > 0:  # Check if list of instructions
+            valid_motions = ["movement", "limit", "wait"]
             for movement in movement_config:
-                if isinstance(movement, dict) \
-                and ("instructions" in movement and "sequence" in movement_config): # check if keys are correct
-                    return True
+                print(movement)
+                if isinstance(movement, dict) and "instructions" in movement and "sequence" in movement:  # check if keys are correct
+                    if isinstance(movement["instructions"], list) and len(movement["instructions"]) > 0:
+                        for motion in movement["instructions"]:
+                            for key in motion:
+                                if key not in valid_motions:
+                                    return False
+                    if not isinstance(movement["sequence"], list):
+                        return False
+        return True
 
-
-
-        return False

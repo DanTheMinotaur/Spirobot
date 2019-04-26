@@ -9,7 +9,7 @@ except NotImplementedError:
 # Test Movement Validation
 class TestMovement(unittest.TestCase):
     def test_validate_movement_config(self):
-        movement_config = {
+        movement_config = [{
             "instructions": [
                 {
                     "movement": "up",
@@ -35,11 +35,20 @@ class TestMovement(unittest.TestCase):
                 "leftback",
                 "rightmiddle"
             ]
-        }
+        }]
         m = Movements()
-        self.assertTrue(m.validate_instruction(movement_config), "Leg Config Method Working")
+        self.assertTrue(m.validate_instructions(movement_config), "Leg Config Method Working")
 
+    def test_load_config(self):
+        m = Movements()
 
+        self.assertIsNotNone(m.load_config("./config/movements/walk-forward.json"),
+                             "Could not load and validate config file")
+
+    def test_load_movements(self):
+        m = Movements()
+        m.load_movement_files()
+        self.assertIsNotNone(m.movements)
 
 if __name__ == '__main__':
     unittest.main()
