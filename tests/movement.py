@@ -8,48 +8,63 @@ except NotImplementedError:
 
 # Test Movement Validation
 class TestMovement(unittest.TestCase):
+    movement_config = [{
+        "instructions": [
+            {
+                "movement": "up",
+                "limit": 0,
+                "wait": 0.1
+            },
+            {
+                "movement": "forward",
+                "limit": 0,
+                "wait": 0.1
+            },
+            {
+                "movement": "down",
+                "limit": 0,
+                "wait": 0
+            }
+        ],
+        "sequence": [
+            "rightfront",
+            "rightback",
+            "leftmiddle",
+            "leftfront",
+            "leftback",
+            "rightmiddle"
+        ]
+    }]
+    # Test Movement Validator
     def test_validate_movement_config(self):
-        movement_config = [{
-            "instructions": [
-                {
-                    "movement": "up",
-                    "limit": 0,
-                    "wait": 0.1
-                },
-                {
-                    "movement": "forward",
-                    "limit": 0,
-                    "wait": 0.1
-                },
-                {
-                    "movement": "down",
-                    "limit": 0,
-                    "wait": 0
-                }
-            ],
-            "sequence": [
-                "rightfront",
-                "rightback",
-                "leftmiddle",
-                "leftfront",
-                "leftback",
-                "rightmiddle"
-            ]
-        }]
-        m = Movements()
-        self.assertTrue(m.validate_instructions(movement_config), "Leg Config Method Working")
 
+        m = Movements()
+        self.assertTrue(m.validate_instructions(self.movement_config), "Leg Config Method Working")
+
+    # Test Loading Configs
     def test_load_config(self):
         m = Movements()
 
         self.assertIsNotNone(m.load_config("./config/movements/walk-forward.json"),
                              "Could not load and validate config file")
 
+    # Test load multiple configs
     def test_load_movements(self):
         m = Movements()
         m.load_movement_files()
-        print(m.movements)
+        #print(m.movements)
         self.assertIsNotNone(m.movements)
+
+    def test_movement(self):
+        m = Movements()
+        m.make_move("walk-forward")
+        self.assertTrue(True)
+
+    def test_save_config(self):
+        m = Movements()
+        self.assertTrue(m.save_new_movement(self.movement_config, "testconfig"))
+        m.set_all_initial()
+
 
 
 if __name__ == '__main__':

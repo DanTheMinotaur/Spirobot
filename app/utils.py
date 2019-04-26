@@ -20,6 +20,11 @@ class Common:
             exit()
 
     @staticmethod
+    def save_config(file_name, data_dict):
+        with open(file_name, 'w') as json_file:
+            json.dump(data_dict, json_file)
+
+    @staticmethod
     def bool_to_on_off(boolean):
         """ Method Return String of boolean value"""
         if boolean:

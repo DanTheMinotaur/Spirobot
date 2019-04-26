@@ -41,9 +41,6 @@ class Legs(Common):
             self.kit.servo[channel].angle = self.SERVO_MID
         sleep(self.DEFAULT_TIMEOUT)
 
-    def move(self, move):
-        pass  # TODO add functionality for movements
-
     def walk_forward(self, steps=2):
         for step in range(steps):
             self.step_forward()
@@ -58,7 +55,7 @@ class Legs(Common):
             "leftback"
         )
 
-        self.__run_movement_sequence(legs_sequence, step_instructions)
+        self._run_movement_sequence(legs_sequence, step_instructions)
 
         step_instructions = (
             ["up", 0, 0],
@@ -67,7 +64,7 @@ class Legs(Common):
             "rightmiddle",
         )
 
-        self.__run_movement_sequence(legs_sequence, step_instructions)
+        self._run_movement_sequence(legs_sequence, step_instructions)
 
         step_instructions = (
             ["down", 0, 0],
@@ -77,7 +74,7 @@ class Legs(Common):
             "leftfront",
             "leftback",
         )
-        self.__run_movement_sequence(legs_sequence, step_instructions)
+        self._run_movement_sequence(legs_sequence, step_instructions)
 
 
     def step_forward(self):
@@ -88,18 +85,23 @@ class Legs(Common):
         )
         legs_sequence = ("rightfront", "rightback", "leftmiddle", "leftfront", "leftback", "rightmiddle")
 
-        self.__run_movement_sequence(legs_sequence, step_instructions)
+        self._run_movement_sequence(legs_sequence, step_instructions)
 
         step_instructions = (
             ["backward", 30, 0.1],
         )
 
-        self.__run_movement_sequence(legs_sequence, step_instructions)
+        self._run_movement_sequence(legs_sequence, step_instructions)
 
-    def __run_movement_sequence(self, legs_sequence, step_instructions):
+    def _run_movement_sequence(self, legs_sequence, step_instructions):
+        print(legs_sequence)
+        print(step_instructions)
         for leg in legs_sequence:
             for step in step_instructions:
-                self.leg_move(step[0], self.select_leg(leg), limit=step[1], wait=step[2])
+                if isinstance(step, list):
+                    self.leg_move(step[0], self.select_leg(leg), limit=step[1], wait=step[2])
+                elif isinstance(step, dict):
+                    self.leg_move(step["movement"], self.select_leg(leg), step["limit"], step["wait"])
 
     def leg_move(self, movement, leg, limit=0, wait=0):
         """
@@ -156,30 +158,45 @@ class Movements(Legs):
     """
     movements = {}
 
-    def __init__(self):
+    def __init__(self, movements_src="./config/movements/"):
         """ Load Leg Constructor """
         super().__init__()
+        self.movements_src = movements_src
 
-    def make_move(self):
-        pass
+    def make_move(self, move, repeat=1):
+        if self.movements and move in self.movements:
+            for interation in range(repeat):
+                for current_sequence in self.movements[move]:
+                    self._run_movement_sequence(current_sequence["sequence"], current_sequence["instructions"])
+        else:
+            print("No movement for that action found")
 
-    def load_movement_files(self, src_path="./config/movements/"):
+    def load_movement_files(self):
         """
         Scans a directory loading any json files within it
-        :param src_path:
-        :return:
+        :param src_path: path of directory to search for files
         """
-        for file in listdir(src_path):
+        for file in listdir(self.movements_src):
             if ".json" in file:
-                self.load_movement(src_path + file)
+                self.load_movement(self.movements_src + file)
 
     def load_movement(self, movement_file):
+        """
+        Loads a movement file and validates it, if valid it will assign as a valid movement with file name as key.
+        :param movement_file:
+        """
         movement_config = self.load_config(movement_file)
         if self.validate_instructions(movement_config):
             self.movements[splitext(basename(movement_file))[0]] = movement_config
         else:
             print("Invalid Movement Configuration: {}".format(movement_file))
 
+    def save_new_movement(self, movement_data, movement_name):
+        if self.validate_instructions(movement_data):
+            self.save_config("{}{}.json".format(self.movements_src, movement_name), movement_data)
+            self.movements[movement_name] = movement_data
+            return True
+        return False
 
     @staticmethod
     def validate_instructions(movement_config):
