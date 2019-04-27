@@ -14,19 +14,24 @@ class Communicate(Common):
         self.root = db.reference("/")
         self.__verify_control_details()
         self.__controls = db.reference("controls")
-        self.__ping = db.reference("controls/ping")
         self.__events = db.reference("events")
-        self.__move = db.reference("controls/move")
         self.__status = db.reference("status")
         self.__video = db.reference("controls/video")
         self.__video_state = None
         self.communication_controls = {}
 
     def check_controls(self):
+        """ Assigns all controls to instance variable to reduce GET requests """
         self.communication_controls = self.__controls.get()
 
     @staticmethod
     def __valid_config(current_config, correct_config):
+        """
+        Validates a configuration against what config it should be
+        :param current_config: The configuration to check
+        :param correct_config: The configuration that is correct
+        :return: Boolean
+        """
         for config_item in correct_config:
             if config_item not in current_config:
                 return False
@@ -62,7 +67,7 @@ class Communicate(Common):
         if do_ping is not None:
             self.__controls.update({"ping": True})
         else:
-            return self.__ping.get()
+            return self.communication_controls["ping"]
 
     def get_move_command(self):
         """
@@ -75,8 +80,8 @@ class Communicate(Common):
             "left",
             "right"
         ]
-        current_move = self.__move.get()
-        self.__move.update(False)
+        current_move = self.communication_controls["move"]
+        self.__controls.update({"move": False})
         if current_move and isinstance(current_move, str):
             current_move = current_move.lower()
             if current_move in valid_movements:
@@ -92,7 +97,7 @@ class Communicate(Common):
         self.__status.update(status)
 
     def get_video(self):
-        video_status = self.__video.get()
+        video_status = self.communication_controls["video"]
         if isinstance(video_status, bool):
             if self.__video_state is None:
                 self.__video_state = video_status
@@ -102,7 +107,7 @@ class Communicate(Common):
             return video_status
         else:
             self.add_event("Invalid Video Must be boolean".format(Common.bool_to_on_off(video_status)))
-            self.__video.update(False)
+            self.__controls.update({"Video": False})
 
     def set_video(self, value=False):
         """
@@ -110,7 +115,7 @@ class Communicate(Common):
         :param value: Boolean value to indicate whether video is being switched on or off.
         """
         if isinstance(value, bool):
-            self.__video.update(value)
+            self.__controls.update({"Video": True})
             self.add_event("Video Mode Switched {}".format(Common.bool_to_on_off(value)))
         else:
             raise ValueError("Video can only take a boolean value")
