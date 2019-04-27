@@ -1,0 +1,98 @@
+[
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0.1
+      },
+      {
+        "movement": "forward",
+        "limit": 25,
+        "wait": 0
+      },
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0.1
+      },
+      {
+        "movement": "backward",
+        "limit": 25,
+        "wait": 0
+      },
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightmiddle",
+      "leftfront",
+      "leftback"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0.1
+      },
+      {
+        "movement": "forward",
+        "limit": 25,
+        "wait": 0
+      },
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightmiddle",
+      "leftfront",
+      "leftback"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0.1
+      },
+      {
+        "movement": "backward",
+        "limit": 25,
+        "wait": 0
+      },
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ]
+  }
+]

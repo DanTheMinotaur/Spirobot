@@ -162,10 +162,18 @@ class Movements(Legs):
         """ Load Leg Constructor """
         super().__init__()
         self.movements_src = movements_src
+        self.load_movement_files()
 
-    def make_move(self, move, repeat=1):
+    def make_move(self, move: str, repeat: int = 1):
+        """
+        Method takes a movement string and runs the corresponding movement configuration.
+        :param move: String of movement
+        :param repeat:
+        :return:
+        """
         if self.movements and move in self.movements:
-            for interation in range(repeat):
+            for iteration in range(repeat):
+                print("Performing instruction {}".format(repeat))
                 for current_sequence in self.movements[move]:
                     self._run_movement_sequence(current_sequence["sequence"], current_sequence["instructions"])
         else:

@@ -1,0 +1,103 @@
+[
+  {
+    "_comment": "Move legs up to allow for opposites to move",
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 15,
+        "wait": 0.075
+      },
+      {
+        "movement": "backward",
+        "limit": 40,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  },
+  {
+    "_comment": "Move legs up to allow for opposites to move",
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 15,
+        "wait": 0.075
+      },
+      {
+        "movement": "forward",
+        "limit": 40,
+        "wait": 0
+      },
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftmiddle",
+      "rightback",
+      "rightfront"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "forward",
+        "limit": 40,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "backward",
+        "limit": 40,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftmiddle",
+      "rightback",
+      "rightfront"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 20,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftmiddle",
+      "rightback",
+      "rightfront"
+    ]
+  }
+]

@@ -1,11 +1,11 @@
 import click
-from app.bot import Legs
+from app.bot import Movements
 
 """
     Script for CLI(Command Line Interfacing) of bot and communication mechanisms
 """
 
-body = Legs()
+body = Movements()
 
 
 def find_leg(leg):
@@ -63,6 +63,21 @@ def walk(steps):
 def init():
     click.echo('Setting All Legs to Initial State')
     body.set_all_initial()
+
+
+@cli.command()
+@click.argument('movement_name')
+@click.argument('repeat')
+def mv(movement_name, repeat=1):
+    body.make_move(movement_name, int(repeat))
+    #body.set_all_initial()
+
+
+@cli.command()
+def ls_mv():
+    click.echo('Possible Movements')
+    for move in body.movements:
+        click.echo(move)
 
 
 if __name__ == '__main__':
