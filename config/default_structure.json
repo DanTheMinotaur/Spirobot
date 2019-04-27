@@ -2,7 +2,8 @@
   "controls": {
     "move": false,
     "ping": true,
-    "video": false
+    "video": false,
+    "picture": false
   },
   "status": "waiting",
   "events": 0

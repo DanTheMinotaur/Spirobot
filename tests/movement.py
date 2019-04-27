@@ -52,7 +52,6 @@ class TestMovement(unittest.TestCase):
     def test_load_movements(self):
         m = Movements()
         m.load_movement_files()
-        #print(m.movements)
         self.assertIsNotNone(m.movements)
 
     def test_movement(self):
