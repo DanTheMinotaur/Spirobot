@@ -175,7 +175,11 @@ class Movements(Legs):
             for iteration in range(repeat):
                 print("Performing instruction {}".format(repeat))
                 for current_sequence in self.movements[move]:
+                    print("Current SQ: {}".format(current_sequence))
                     self._run_movement_sequence(current_sequence["sequence"], current_sequence["instructions"])
+                    if "wait" in current_sequence and (isinstance(current_sequence["wait"], int) or
+                    isinstance(current_sequence["wait"], float) and current_sequence["wait"] != 0):
+                        sleep(current_sequence["wait"])
         else:
             print("No movement for that action found")
 
