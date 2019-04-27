@@ -36,7 +36,8 @@
     "sequence": [
       "rightfront",
       "rightback"
-    ]
+    ],
+    "wait": 0.25
   },
   {
     "instructions": [
@@ -50,14 +51,13 @@
       "leftmiddle",
       "rightfront",
       "rightback"
-    ],
-    "wait": 1
+    ]
   },
   {
     "instructions": [
       {
         "movement": "up",
-        "limit": 25,
+        "limit": 15,
         "wait": 0
       }
     ],
@@ -71,7 +71,7 @@
     "instructions": [
       {
         "movement": "forward",
-        "limit": 25,
+        "limit": 15,
         "wait": 0
       }
     ],
@@ -83,21 +83,35 @@
     "instructions": [
       {
         "movement": "backward",
-        "limit": 25,
+        "limit": 15,
         "wait": 0
       }
     ],
     "sequence": [
       "leftfront",
       "leftback"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "forward",
+        "limit": 15,
+        "wait": 0
+      }
     ],
-    "wait": 1
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "leftmiddle"
+    ],
+    "wait": 0.25
   },
   {
     "instructions": [
       {
         "movement": "backward",
-        "limit": 25,
+        "limit": 15,
         "wait": 0
       }
     ],
@@ -105,19 +119,66 @@
       "rightfront",
       "rightback",
       "rightmiddle"
-    ]
+    ],
+    "wait": 0.1
   },
   {
     "instructions": [
       {
-        "movement": "forward",
-        "limit": 25,
+        "movement": "down",
+        "limit": 0,
         "wait": 0
       }
     ],
     "sequence": [
       "leftfront",
       "leftback",
+      "rightmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 15,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "middle",
+        "limit": 25,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle",
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ],
+    "wait": 0.2
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
       "leftmiddle"
     ]
   }
