@@ -8,10 +8,10 @@
       }
     ],
     "sequence": [
-      "leftmiddle",
-      "rightfront",
-      "rightback"
-    ] 
+      "rightmiddle",
+      "leftfront",
+      "leftback"
+    ]
   },
   {
     "instructions": [
@@ -22,10 +22,9 @@
       }
     ],
     "sequence": [
-      "leftmiddle"
+      "rightmiddle"
     ]
-  },
-  {
+  },{
     "instructions": [
       {
         "movement": "forward",
@@ -34,8 +33,8 @@
       }
     ],
     "sequence": [
-      "rightfront",
-      "rightback"
+      "leftfront",
+      "leftback"
     ],
     "wait": 0.25
   },
@@ -44,20 +43,6 @@
       {
         "movement": "down",
         "limit": 0,
-        "wait": 0
-      }
-    ],
-    "sequence": [
-      "leftmiddle",
-      "rightfront",
-      "rightback"
-    ]
-  },
-  {
-    "instructions": [
-      {
-        "movement": "up",
-        "limit": 15,
         "wait": 0
       }
     ],
@@ -70,13 +55,27 @@
   {
     "instructions": [
       {
+        "movement": "up",
+        "limit": 15,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftmiddle",
+      "rightfront",
+      "rightback"
+    ]
+  },
+  {
+    "instructions": [
+      {
         "movement": "forward",
         "limit": 15,
         "wait": 0
       }
     ],
     "sequence": [
-      "rightmiddle"
+      "leftmiddle"
     ]
   },
   {
@@ -88,8 +87,8 @@
       }
     ],
     "sequence": [
-      "leftfront",
-      "leftback"
+      "rightfront",
+      "rightback"
     ]
   },
   {
@@ -101,9 +100,9 @@
       }
     ],
     "sequence": [
-      "leftfront",
-      "leftback",
-      "leftmiddle"
+      "rightfront",
+      "rightback",
+      "rightmiddle"
     ],
     "wait": 0.25
   },
@@ -116,13 +115,12 @@
       }
     ],
     "sequence": [
-      "rightfront",
-      "rightback",
-      "rightmiddle"
+      "leftfront",
+      "leftback",
+      "leftmiddle"
     ],
     "wait": 0.1
-  },
-  {
+  }, {
     "instructions": [
       {
         "movement": "down",
@@ -131,9 +129,9 @@
       }
     ],
     "sequence": [
-      "leftfront",
-      "leftback",
-      "rightmiddle"
+      "rightfront",
+      "rightback",
+      "leftmiddle"
     ]
   },
   {
@@ -145,9 +143,9 @@
       }
     ],
     "sequence": [
-      "rightfront",
-      "rightback",
-      "leftmiddle"
+      "leftfront",
+      "leftback",
+      "rightmiddle"
     ]
   },
   {
@@ -177,9 +175,9 @@
       }
     ],
     "sequence": [
-      "rightfront",
-      "rightback",
-      "leftmiddle"
+      "leftfront",
+      "leftback",
+      "rightmiddle"
     ]
   }
 ]
