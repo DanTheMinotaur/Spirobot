@@ -13,7 +13,7 @@ class TestCamera:
 
     def test_take_picture(self):
         c = Camera()
-        c.take_picture(2.5)
+        print(c.take_picture(2.5))
 
 
 tc = TestCamera()

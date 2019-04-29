@@ -1,15 +1,17 @@
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials, db, storage
 from app.utils import Common
+from os.path import basename
 
 
 class Communicate(Common):
     """
     Class handles communication with Firebase live database
     """
-    def __init__(self, private_key="./certs/admin-key.json", firebase_url="https://spirobot-d9387.firebaseio.com/"):
+    def __init__(self, private_key: str = "./certs/admin-key.json", firebase_url: str = "https://spirobot-d9387.firebaseio.com/", storage_bucket_url: str = "spirobot-d9387.appspot.com"):
         firebase_admin.initialize_app(credentials.Certificate(private_key), {
-            "databaseURL": firebase_url
+            "databaseURL": firebase_url,
+            "storageBucket": storage_bucket_url
         })
         self.root = db.reference("/")
         self.__verify_control_details()
@@ -19,13 +21,24 @@ class Communicate(Common):
         self.__video = db.reference("controls/video")
         self.__video_state = None
         self.communication_controls = {}
+        self.storage_bucket = storage.bucket()
+
+    def upload_image(self, image_location: str, image_name: str = None):
+        if image_name is None:
+            image_name = basename(image_location)
+        print(image_location)
+        print(image_name)
+
+        image_blob = self.storage_bucket.blob(image_name)
+        image_blob.upload_from_filename(image_location)
+        return image_blob.public_url
 
     def check_controls(self):
         """ Assigns all controls to instance variable to reduce GET requests """
         self.communication_controls = self.__controls.get()
 
     @staticmethod
-    def __valid_config(current_config, correct_config):
+    def __valid_config(current_config: dict, correct_config: dict):
         """
         Validates a configuration against what config it should be
         :param current_config: The configuration to check

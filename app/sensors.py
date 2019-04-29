@@ -61,7 +61,7 @@ class Camera:
         camera.rotation = 270
         camera.start_preview()
         if camera_wake_up is not None:
-            sleep(2.5)
+            sleep(camera_wake_up)
         camera.capture(file_location)
         camera.stop_preview()
         return file_location
