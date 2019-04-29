@@ -35,9 +35,9 @@ class Camera:
     """
     def __init__(self, file_folder: str = "./images"):
         self.__local_image_folder = self.__check_dir(file_folder)
-        self.__camera = PiCamera()
-        self.__camera.resolution = (600, 600)
-        self.__camera.rotation = 270
+        # self.__camera = PiCamera()
+        # self.__camera.resolution = (600, 600)
+        # self.__camera.rotation = 270
 
     @staticmethod
     def __check_dir(directory: str):
@@ -52,12 +52,16 @@ class Camera:
             makedirs(directory)
         return directory
 
-    def take_picture(self):
+    def take_picture(self, camera_wake_up: float or int = None):
         current_time = datetime.now()
         sub_folder = self.__check_dir(self.__local_image_folder + current_time.strftime('%Y.%m.%d'))
         file_location = "{}{}.jpg".format(sub_folder, current_time)
-        self.__camera.start_preview()
-        sleep(2.5)
-        self.__camera.capture(file_location)
-        self.__camera.stop_preview()
+        camera = PiCamera()
+        camera.resolution = (2592, 1944)
+        camera.rotation = 270
+        camera.start_preview()
+        if camera_wake_up is not None:
+            sleep(2.5)
+        camera.capture(file_location)
+        camera.stop_preview()
         return file_location
