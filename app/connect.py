@@ -18,18 +18,21 @@ class Communicate(Common):
         self.__controls = db.reference("controls")
         self.__events = db.reference("events")
         self.__status = db.reference("status")
-        self.__video = db.reference("controls/video")
         self.__video_state = None
         self.communication_controls = {}
-        self.storage_bucket = storage.bucket()
+        self.__storage_bucket = storage.bucket()
 
     def upload_image(self, image_location: str, image_name: str = None):
+        """
+        Uploads and image to Google Cloud Storage
+        :param image_location: The location on device where the image is stored.
+        :param image_name: option name for image, if none then will take image filename
+        :return: the public URL of the image being uploaded.
+        """
         if image_name is None:
             image_name = basename(image_location)
-        print(image_location)
-        print(image_name)
 
-        image_blob = self.storage_bucket.blob(image_name)
+        image_blob = self.__storage_bucket.blob(image_name)
         image_blob.upload_from_filename(image_location)
         return image_blob.public_url
 

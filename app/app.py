@@ -1,6 +1,7 @@
 # from app.bot import Body
 from app.connect import Communicate
 from time import sleep
+from app.sensors import ProximitySensors, Camera
 
 
 class Controller:

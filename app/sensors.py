@@ -3,7 +3,47 @@ from time import sleep
 from os.path import isdir
 from os import makedirs
 from datetime import datetime
-from gpiozero import DistanceSensor
+from gpiozero import DistanceSensor, MotionSensor
+
+
+class MotionArray:
+    """
+    Class reads an array of Passive Infrared Sensor
+    """
+    def __init__(self):
+        self.__motion_sensors = {
+            "right": MotionSensor(25),
+            "left": MotionSensor(20),
+            "rear": MotionSensor(4),
+            "front": MotionSensor(22)
+        }
+
+    def detect_motion(self, read_times: int, wait_time: float or int = 0.5):
+        """
+        Reads all motion sensors in array, for a desired time and returns the results if they are triggered
+        :param read_times: The number of times it should read from the sensors
+        :param wait_time: The time it should wait between sensor readings.
+        :return: dictionary of what sensors have been triggered, if none have been triggered returns empty dict
+        """
+        results = {}
+        for check in range(read_times):
+            sleep(wait_time)
+            for sensor, sensor_object in self.__motion_sensors.items():
+                detected = sensor_object.motion_detected
+                if detected:
+                    results[sensor] = detected
+        return results
+
+    def read_sensor(self, sensor: str):
+        """
+        Reads a single sensor and returns its value
+        :param sensor: Key of sensor to read, "front", "rear", "left" and "right"
+        :return: value of sensor or error dictionary
+        """
+        try:
+            return self.__motion_sensors[sensor]
+        except KeyError:
+            return {"invalid": "{} Is not a valid sensor, valid sensors are: {}".format(sensor, self.__motion_sensors)}
 
 
 class ProximitySensors:
@@ -12,7 +52,7 @@ class ProximitySensors:
     """
     def __init__(self):
         self.__front_sensor = DistanceSensor(23, 24)
-        self.__rear_sensor = DistanceSensor(0, 0)
+        self.__rear_sensor = DistanceSensor(17, 18)
 
     def read_sensors(self, front: bool = True, rear: bool = True):
         """
@@ -35,9 +75,6 @@ class Camera:
     """
     def __init__(self, file_folder: str = "./images"):
         self.__local_image_folder = self.__check_dir(file_folder)
-        # self.__camera = PiCamera()
-        # self.__camera.resolution = (600, 600)
-        # self.__camera.rotation = 270
 
     @staticmethod
     def __check_dir(directory: str):
@@ -53,6 +90,12 @@ class Camera:
         return directory
 
     def take_picture(self, camera_wake_up: float or int = None):
+        """
+        Takes a picture with the camera sensor.
+        :param camera_wake_up: Specify time to give activate camera sensor to activate, specify None if camera
+        is already active
+        :return: relative file location
+        """
         current_time = datetime.now()
         sub_folder = self.__check_dir(self.__local_image_folder + current_time.strftime('%Y.%m.%d'))
         file_location = "{}{}.jpg".format(sub_folder, current_time)
