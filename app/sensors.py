@@ -3,6 +3,31 @@ from time import sleep
 from os.path import isdir
 from os import makedirs
 from datetime import datetime
+from gpiozero import DistanceSensor
+
+
+class ProximitySensors:
+    """
+    Class for controlling access to the front and rear distance sensors
+    """
+    def __init__(self):
+        self.__front_sensor = DistanceSensor(23, 24)
+        self.__rear_sensor = DistanceSensor(0, 0)
+
+    def read_sensors(self, front: bool = True, rear: bool = True):
+        """
+        Reads distance sensor values and returns them
+        :param front: bool read front distance
+        :param rear: bool read rear distance
+        :return: Dictionary of front and rear sensor readings
+        """
+        sensor_data = {}
+        if front:
+            sensor_data["front"] = self.__front_sensor.distance
+        if rear:
+            sensor_data["rear"] = self.__rear_sensor.distance
+        return sensor_data
+
 
 class Camera:
     """
@@ -11,6 +36,7 @@ class Camera:
     def __init__(self, file_folder: str = "./images"):
         self.__local_image_folder = self.__check_dir(file_folder)
         self.__camera = PiCamera()
+        self.__camera.resolution = (600, 600)
         self.__camera.rotation = 270
 
     @staticmethod
