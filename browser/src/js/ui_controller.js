@@ -20,10 +20,11 @@ export class UIController{
          * Firebase DB refs
          * @type {firebase.database.Database | * | never}
          */
+
         this.database = firebase.database();
         this.controls = this.database.ref('/controls/');
         this.events = this.database.ref('/events/');
-        this.status = this.database.ref('/status/')
+        this.status = this.database.ref('/status/');
 
         this.notificationObject = window.createNotification({
             closeOnClick: true,
@@ -72,14 +73,16 @@ export class UIController{
      * @param eventsTableElem the event table to be updated
      */
     updateEvents(eventsTableElem = this.ui_elements.eventsTable) {
+        let self = this;
 
-        function addRow(icon, message, datetime) {
+        function addRow(icon, message, datetime, notifyUI = true) {
             console.log("Adding Row for message:" + message);
             let row = eventsTableElem.insertRow(0);
             row.insertCell(0).innerHTML = icon;
             row.insertCell(1).innerHTML = message;
             row.insertCell(2).innerHTML = datetime;
         }
+
 
         this.events.on('value', function (eventsData) {
             eventsData = eventsData.val();
@@ -97,7 +100,9 @@ export class UIController{
         this.events.on('child_added', function (newChildData) {
             console.log(newChildData.val());
             try {
-                addRow('<i class="fa fa-bell-o">', newChildData.val().message, newChildData.val().datetime);
+                let message = newChildData.val().message;
+                addRow('<i class="fa fa-bell-o">', message, newChildData.val().datetime);
+                self.notificationAlert("New Notification",  message);
             } catch (e) {
                 console.log("Error in data keys ");
                 console.log(e);
@@ -116,7 +121,7 @@ export class UIController{
         this.updateEvents();
     }
 
-    createNotification(title, message) {
+    notificationAlert(title, message) {
         this.notificationObject({
             title: title,
             message: message
