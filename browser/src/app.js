@@ -2,8 +2,8 @@
 require( './scss/style.scss');
 
 import 'bulma/bulma.sass'
-import {createJoystick} from './js/joystick';
 import {BotController} from './js/bot_contoller';
+import {UIController} from "./js/ui_controller";
 
 const loginTemplate = require('./templates/login.html.handlebars');
 const adminTemplate = require('./templates/control-panel.html.handlebars');
@@ -20,12 +20,9 @@ document.addEventListener("DOMContentLoaded", event => {
                 console.log("User is signed in" + user.photoURL);
                 appJS.innerHTML = adminTemplate(user);
 
-                const bot = new BotController(app);
-                const joystick = createJoystick(document.getElementById("joystick"));
-                setInterval(() => console.log(joystick.getPosition()), 16);
-
-                bot.move("forward");
-
+                //const bot = new BotController(app);
+                const ui = new UIController(app);
+                ui.setListeners();
 
             } else {
                 console.log("Not Signed in");
