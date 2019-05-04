@@ -1,8 +1,7 @@
 // Import Styles
 require( './scss/style.scss');
 
-import 'bulma/bulma.sass'
-import {BotController} from './js/bot_contoller';
+import 'bulma/bulma.sass';
 import {UIController} from "./js/ui_controller";
 
 const loginTemplate = require('./templates/login.html.handlebars');

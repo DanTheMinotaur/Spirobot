@@ -6,14 +6,9 @@
 export class BotController{
     constructor(firebase) {
         this.database = firebase.database();
-        this.control_path = this.database.ref('/controls/');
-        this.camera_button = document.getElementById("camera-button");
+        this.controls = this.database.ref('/controls/');
+        this.events = this.database.ref('/events/');
     }
-
-    getStatusDetails() {
-        
-    }
-
 
     /**
      * Method will send movement
@@ -21,7 +16,7 @@ export class BotController{
      */
     move(movement = null) {
         console.log("Moving Bot: " + movement);
-        this.control_path.update(
+        this.controls.update(
             {
                 "move": movement
             }
@@ -31,15 +26,42 @@ export class BotController{
     videoState(active) {
         if (typeof active == 'boolean') {
             console.log("Switching video to " + active);
-            this.control_path.update({
+            this.controls.update({
                 "video": active
             });
         }
     }
 
     takePicture() {
-        this.control_path.update({
+        this.controls.update({
             "picture": true
+        });
+    }
+
+    /**
+     *
+     * @param eventsElem the event table to be updated
+     */
+    updateEvents(eventsTableElem) {
+        console.log("Events Called");
+        console.log(eventsTableElem);
+        this.events.on('value', function (eventsData) {
+            eventsData = eventsData.val();
+
+            console.log(typeof eventsData);
+
+            for (let key in eventsData) {
+                console.log(key);
+                console.log(eventsData[key].message);
+                let row = eventsTableElem.insertRow(0);
+                row.insertCell(0).innerHTML = '<i class="fa fa-bell-o">';
+                row.insertCell(1).innerHTML = eventsData[key].message;
+                row.insertCell(2).innerHTML = eventsData[key].datetime;
+                // eventsElem.appendChild(
+                //     `<tr><td><i class="fa fa-bell-o"></i></td><td>${eventsData[key].message}</td><td>${eventsData[key].message}</td></tr>`
+                // );
+            }
+
         });
     }
 }
