@@ -32,6 +32,9 @@ export class BotController{
         }
     }
 
+    /**
+     * Send command to firebase to instruct the bot to take a picture
+     */
     takePicture() {
         this.controls.update({
             "picture": true
@@ -39,29 +42,42 @@ export class BotController{
     }
 
     /**
-     *
-     * @param eventsElem the event table to be updated
+     * Handles event updates from Firebase live database. 
+     * @param eventsTableElem the event table to be updated
      */
     updateEvents(eventsTableElem) {
+
+        function addRow(icon, message, datetime) {
+            let row = eventsTableElem.insertRow(0);
+            row.insertCell(0).innerHTML = icon;
+            row.insertCell(1).innerHTML = message;
+            row.insertCell(2).innerHTML = datetime;
+        }
         console.log("Events Called");
-        console.log(eventsTableElem);
+        //console.log(eventsTableElem);
         this.events.on('value', function (eventsData) {
             eventsData = eventsData.val();
 
             console.log(typeof eventsData);
 
             for (let key in eventsData) {
-                console.log(key);
-                console.log(eventsData[key].message);
-                let row = eventsTableElem.insertRow(0);
-                row.insertCell(0).innerHTML = '<i class="fa fa-bell-o">';
-                row.insertCell(1).innerHTML = eventsData[key].message;
-                row.insertCell(2).innerHTML = eventsData[key].datetime;
-                // eventsElem.appendChild(
-                //     `<tr><td><i class="fa fa-bell-o"></i></td><td>${eventsData[key].message}</td><td>${eventsData[key].message}</td></tr>`
-                // );
-            }
+                try {
+                    addRow('<i class="fa fa-bell-o">', eventsData[key].message, eventsData[key].datetime);
+                } catch (e) {
+                    console.log("Error in data keys ");
+                    console.log(e);
+                }
 
+            }
+        });
+        this.events.on('child_added', function (newChildData) {
+            console.log(newChildData.val());
+            try {
+                addRow('<i class="fa fa-bell-o">', newChildData.val().message, newChildData.val().datetime);
+            } catch (e) {
+                console.log("Error in data keys ");
+                console.log(e);
+            }
         });
     }
 }

@@ -27,7 +27,7 @@ module.exports = (env, args) => ({
                 loader: "babel-loader"
             },
             {
-                test: [/\.scss$/, /\.sass$/ ],
+                test: [/\.scss$/, /\.sass$/, /\.css$/ ],
                 use: [
                     args.mode === 'production' ? MiniCssExtractPlugin.loader : "style-loader",
                     "css-loader",

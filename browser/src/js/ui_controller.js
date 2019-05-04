@@ -1,6 +1,8 @@
 
 import {createJoystick} from './joystick';
 import {BotController} from "./bot_contoller";
+require ('../packages/notifications/notifications');
+import '../packages/notifications/notifications.css';
 
 export class UIController{
     constructor(firebase) {
@@ -11,10 +13,16 @@ export class UIController{
             "eventsTable": document.getElementById("events-table")
 
         };
+        this.notificationObject = window.createNotification({
+            closeOnClick: true,
+            displayCloseButton: false,
+            positionClass: 'nfc-bottom-right',
+            onclick: false,
+            showDuration: 3500,
+            theme: 'success'
+        });
         this.joystick = document.getElementById("joystick");
         createJoystick(this.joystick);
-        console.log(this.bot_controller);
-        console.log(this.ui_elements);
         this.bot_controller.updateEvents(this.ui_elements.eventsTable);
     }
 
@@ -28,30 +36,15 @@ export class UIController{
         });
     }
 
-    eventRowFormatter(icon, message, datetime){
-
+    createNotification(title, message) {
+        this.notificationObject({
+            title: title,
+            message: message
+        })
     }
 
     setUIStatus() {
         return null;
     }
 
-
-    // _updateEvents() {
-    //     this.bot_controller.events.on('value', function (eventsData) {
-    //         eventsData = eventsData.val();
-    //
-    //         console.log(typeof eventsData);
-    //
-    //
-    //         for (let key in eventsData) {
-    //             console.log(key);
-    //             console.log(eventsData[key].message);
-    //             this.ui_elements.eventsTable.appendChild(
-    //                 `<tr><td><i class="fa fa-bell-o"></i></td><td>${eventsData[key].message}</td><td>${eventsData[key].message}</td></tr>`
-    //             );
-    //         }
-    //
-    //     });
-    // }
 }

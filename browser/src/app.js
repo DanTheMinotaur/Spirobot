@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", event => {
                 //const bot = new BotController(app);
                 const ui = new UIController(app);
                 ui.setListeners();
+                ui.createNotification("Test", "Hello");
 
             } else {
                 console.log("Not Signed in");
