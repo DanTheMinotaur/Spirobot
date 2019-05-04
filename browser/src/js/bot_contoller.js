@@ -8,6 +8,7 @@ export class BotController{
         this.database = firebase.database();
         this.controls = this.database.ref('/controls/');
         this.events = this.database.ref('/events/');
+        this.status = this.database.ref('/status/')
     }
 
     /**
