@@ -36,7 +36,7 @@ class Controller:
 
     def check_picture(self):
         if self.communications.picture():
-            print("Taking Picture")
+            self.communications.set_status("Taking Picture")
             if self.__last_video_streaming:
                 image_path = self.camera.take_picture()
             else:
@@ -44,7 +44,7 @@ class Controller:
             if image_path is not None:
                 image_url = self.communications.upload_image(image_path)
                 if image_url:
-                    self.communications.add_event("Image Capture Successful, {}".format(image_url))
+                    self.communications.add_event("Image Capture Successful")
 
     def check_commands(self):
         self.communications.check_controls()
@@ -59,6 +59,7 @@ class Controller:
 
     def mode_manual(self):
         self.communications.add_event("Manual Mode Set")
+        self.communications.set_status("")
         print("Placeholder")
 
     def run(self, timeout=3):

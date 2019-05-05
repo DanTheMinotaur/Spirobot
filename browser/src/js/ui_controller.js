@@ -1,8 +1,10 @@
 
 import {createJoystick} from './joystick';
-import {BotController} from "./bot_contoller";
 require ('../packages/notifications/notifications');
 import '../packages/notifications/notifications.css';
+
+
+import '../packages/slide-out/slide-out';
 
 export class UIController{
     constructor(firebase) {
@@ -13,8 +15,6 @@ export class UIController{
             "eventsTable": document.getElementById("events-table"),
             "joystick": document.getElementById("joystick-control"),
             "statusUpdate": document.getElementById("status-update"),
-            // "manualSwitch": document.getElementById("manual-switch"),
-            // "autoSwitch": document.getElementById("auto-switch")
             "modeSelect": document.getElementById("mode-select")
         };
 
@@ -39,6 +39,20 @@ export class UIController{
             theme: 'success'
         });
         createJoystick(this.ui_elements.joystick);
+
+        this.testButton = document.getElementById("test");
+
+        this.slide_bar = new Slideout({
+            'panel': document.getElementById('panel'),
+            'menu': this.ui_elements.eventsTable,
+            'padding': 256,
+            'tolerance': 70
+        });
+
+        this.testButton.addEventListener("click", () => {
+            console.log("Clicked");
+            this.slide_bar.toggle();
+        });
     }
 
     /**
@@ -127,20 +141,17 @@ export class UIController{
             this.controls.update({"video": this.ui_elements.autoSwitch.checked});
         });
 
-
-        this.updateEvents();
-        this._modeListener()
-        this.checkStatus();
-        this.setSwitchCurrentValues();
-    }
-
-    _modeListener() {
         this.ui_elements.modeSelect.addEventListener("click", () => {
             let selected_res = (this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value === "true");
             console.log("Selected Option: " + selected_res);
             this.controls.update({"auto_mode": selected_res})
         });
+
+        this.updateEvents();
+        this.checkStatus();
+        this.setSwitchCurrentValues();
     }
+
 
 
     /**

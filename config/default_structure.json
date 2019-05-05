@@ -3,9 +3,9 @@
     "move": false,
     "ping": false,
     "video": false,
-    "picture": false
+    "picture": false,
+    "auto_mode": 0
   },
   "status": false,
-  "events": 0,
-  "mode": 0
+  "events": 0
 }
