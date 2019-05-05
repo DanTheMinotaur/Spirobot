@@ -8,7 +8,10 @@ import '../packages/slide-out/slide-out';
 
 export class UIController{
     constructor(firebase) {
-        //this.bot_controller = new BotController(firebase);
+        /**
+         * UI Element objects
+         * @type {{controlPanel: HTMLElement, eventsPanel: HTMLElement, statusUpdate: HTMLElement, eventsTable: HTMLElement, joystick: HTMLElement, eventsMenuButton: HTMLElement, cameraButton: HTMLElement, videoSwitch: HTMLElement, modeSelect: HTMLElement}}
+         */
         this.ui_elements = {
             "videoSwitch": document.getElementById("video-switch"),
             "cameraButton": document.getElementById("camera-button"),
@@ -20,7 +23,6 @@ export class UIController{
             "eventsPanel": document.getElementById('events-panel'),
             "eventsMenuButton": document.getElementById("event-menu-trigger")
         };
-
 
         /**
          * Firebase DB refs
@@ -41,9 +43,7 @@ export class UIController{
             showDuration: 3500,
             theme: 'success'
         });
-        createJoystick(this.ui_elements.joystick);
-
-        this.testButton = document.getElementById("test");
+        this.joystickController = createJoystick(this.ui_elements.joystick);
 
         this.slide_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
@@ -51,15 +51,45 @@ export class UIController{
             'padding': 0,
             'tolerance': 70
         });
+        this.handleJoystickMovements(1000);
+    }
 
+    /**
+     * Method sends movements from the joystick to Firebase, assigns an interval to keep transmitting movements at a certain time
+     * @param interval delay between transmission of movements
+     * @param threshold amount of movement for data to be transmitted
+     */
+    handleJoystickMovements(interval = 1000, threshold = 25) {
+        let self = this;
+        /**
+         * Inner function which hanles movements from the joystick and transmits them to firebase.
+         * up == y > 25
+         * down == y < -25
+         * left == x < -25
+         * right == x > 25
+         */
 
+        function checkMovements(threshold = 25) {
+            let currentPosition = self.joystickController.getPosition();
+            if (currentPosition.y >= threshold) {
+                self.move("forward");
+            } else if (currentPosition.y <= -threshold) {
+                self.move("backward");
+            } else if (currentPosition.x <= -threshold) {
+                self.move("left");
+            } else if (currentPosition.x >= threshold) {
+                self.move("right");
+            }
+        }
+
+        this.joystickWatcher = setInterval( () => checkMovements(threshold), interval);
     }
 
     /**
      * Method will send movement
      * @param movement Direction of movement to send
      */
-    move(movement = null) {
+    move(movement = false) {
         console.log("Moving Bot: " + movement);
         this.controls.update(
             {

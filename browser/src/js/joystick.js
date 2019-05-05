@@ -3,7 +3,7 @@
 // setInterval(() => console.log(joystick.getPosition()), 16);
 
 export function createJoystick(parent) {
-    const maxDiff = 25;
+    const maxDiff = 35;
     const stick = document.createElement('div');
     stick.classList.add('joystick');
 
@@ -47,7 +47,7 @@ export function createJoystick(parent) {
         const xNew = distance * Math.cos(angle);
         const yNew = distance * Math.sin(angle);
         stick.style.transform = `translate3d(${xNew}px, ${yNew}px, 0px)`;
-        currentPos = { x: xNew, y: yNew };
+        currentPos = { x: xNew, y: yNew * -1 };
     }
 
     function handleMouseUp(event) {
