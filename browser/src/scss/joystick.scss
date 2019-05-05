@@ -9,6 +9,10 @@
 }
 
 #joystick {
+  background-color: #2c5eec;
+  border-radius: 15%;
+  border: 1px solid #6161ef;
+
   i {
     font-size: 5rem;
   }
@@ -25,7 +29,6 @@
 
 #joystick-control {
   margin: 2rem auto 2rem auto;
-  border: 1px solid black;
   width: 100px;
   height: 100px;
   padding: 10px;

@@ -15,7 +15,10 @@ export class UIController{
             "eventsTable": document.getElementById("events-table"),
             "joystick": document.getElementById("joystick-control"),
             "statusUpdate": document.getElementById("status-update"),
-            "modeSelect": document.getElementById("mode-select")
+            "modeSelect": document.getElementById("mode-select"),
+            "controlPanel": document.getElementById("control-panel"),
+            "eventsPanel": document.getElementById('events-panel'),
+            "eventsMenuButton": document.getElementById("event-menu-trigger")
         };
 
 
@@ -43,16 +46,13 @@ export class UIController{
         this.testButton = document.getElementById("test");
 
         this.slide_bar = new Slideout({
-            'panel': document.getElementById('panel'),
-            'menu': this.ui_elements.eventsTable,
-            'padding': 256,
+            'panel': this.ui_elements.controlPanel,
+            'menu': this.ui_elements.eventsPanel,
+            'padding': 0,
             'tolerance': 70
         });
 
-        this.testButton.addEventListener("click", () => {
-            console.log("Clicked");
-            this.slide_bar.toggle();
-        });
+
     }
 
     /**
@@ -145,6 +145,18 @@ export class UIController{
             let selected_res = (this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value === "true");
             console.log("Selected Option: " + selected_res);
             this.controls.update({"auto_mode": selected_res})
+        });
+
+        this.ui_elements.controlPanel.addEventListener("click", () => {
+            console.log("Control Listener Triggere");
+            if (this.slide_bar.isOpen()) {
+                this.slide_bar.toggle();
+            }
+        });
+
+        this.ui_elements.eventsMenuButton.addEventListener("click", () => {
+            console.log("Clicked");
+            this.slide_bar.toggle();
         });
 
         this.updateEvents();

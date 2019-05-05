@@ -1,27 +1,43 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
+            <img src="{{ photoURL }}" class="is-rounded">
+        </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item">Hi, {{ displayName }}</a>
+        </div>
+
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    <button class="button is-primary" id="event-menu-trigger">
+                        <strong>Events</strong>
+                        <span class="icon">
+                            <i class="fa fa-envelope-o"></i>
+                        </span>
+                    </button>
+                    <a class="button is-link" id="image-gallery">
+                        <strong>Gallery</strong>
+                        <span class="icon">
+                            <i class="fa fa-picture-o"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
 <article id="control-panel">
     <div class="columns">
         <div class="column is-12">
-            <section class="hero is-info welcome is-small">
-                <div class="hero-body">
-                    <div class="is-pulled-left">
-                        <h1 class="title">
-                            Hello, {{ displayName }}
-                        </h1>
-                        <h2 class="subtitle">
-                            I hope you are having a great day!
-                        </h2>
-                    </div>
-                    <div class="is-pulled-right">
-                        <figure class="image is-64x64 is-pulled-right">
-                            <img src="{{ photoURL }}" class="is-rounded">
-                        </figure>
-                    </div>
-                </div>
-            </section>
             <section class="info-tiles">
                 <div class="tile is-ancestor has-text-centered">
                     <div class="tile is-parent">
-                        <article class="tile is-child box">
+                        <article class="tile is-child box pink">
                             <p class="title">Video</p>
                             <label class="switch">
                                 <input type="checkbox" id="video-switch">
@@ -30,7 +46,7 @@
                         </article>
                     </div>
                     <div class="tile is-parent">
-                        <article class="tile is-child box">
+                        <article class="tile is-child box yellow">
                             <p class="title">Picture</p>
                             <a class="button is-large" id="camera-button">
                                 <span class="icon is-large">
@@ -40,7 +56,7 @@
                         </article>
                     </div>
                     <div class="tile is-parent">
-                        <article class="tile is-child box">
+                        <article class="tile is-child box light-blue">
                             <p class="title">Status</p>
                             <div id="status-update">
                                 <p class="subtitle">Pinging...</p>
@@ -48,7 +64,7 @@
                         </article>
                     </div>
                     <div class="tile is-parent">
-                        <article class="tile is-child box">
+                        <article class="tile is-child box red">
                             <p class="title">Mode</p>
                             <div class="select">
                                 <select id="mode-select">
@@ -63,52 +79,28 @@
             </section>
             <section class="info-tiles">
                 <div class="tile is-ancestor has-text-centered">
-                    <div class="tile is-parent">
+                    <div class="tile is-parent is-9">
                         <article class="tile is-child box">
-                            <div class="card events-card">
-                                <header class="card-header">
-                                    <p class="card-header-title">Events</p>
-                                    <a href="#" class="card-header-icon" aria-label="more options">
-                            <span class="icon">
-                                <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                                    </a>
-                                </header>
-                                <div class="card-table">
-                                    <div class="content">
-                                        <table class="table is-fullwidth is-striped" id="events-table">
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <footer class="card-footer">
-                                    <a href="#" class="card-footer-item">View All</a>
-                                </footer>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="tile is-parent is-6">
-                        <article class="tile is-child box">
-                            <embed src="https://www.youtube.com/embed/82vNwi8VA40" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                            <embed id="live-stream-frame" src="https://www.youtube.com/embed/82vNwi8VA40" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                             <!--<iframe id="live-stream-frame" width="560" height="349"  src="https://www.youtube.com/embed/live_stream?channel=UC5TaG-84yWqkwYU1NA1x5JQ" frameborder="0" allowfullscreen></iframe>-->
                         </article>
                     </div>
                     <div class="tile is-parent">
-                        <article class="tile is-child box">
+                        <article class="tile is-child box blue">
                             <div id="joystick">
                                 <div class="columns is-mobile is-centered is-gapless">
-                                    <div class="column is-three-fifths" style="border: 1px solid blue;"><i class="fa fa-caret-up"></i></div>
+                                    <div class="column is-three-fifths"><i class="fa fa-caret-up"></i></div>
                                 </div>
                                 <div class="columns is-mobile is-centered is-gapless">
-                                    <div class="column is-one-fifth" style="border: 1px solid blue;"><i class="fa fa-caret-left"></i></div>
-                                    <div class="column is-three-fifths" style="border: 1px solid blue;">
+                                    <div class="column is-one-fifth"><i class="fa fa-caret-left"></i></div>
+                                    <div class="column is-three-fifths">
                                         <div id="joystick-control"></div>
                                     </div>
 
-                                    <div class="column is-one-fifth" style="border: 1px solid blue;"><i class="fa fa-caret-right"></i></div>
+                                    <div class="column is-one-fifth"><i class="fa fa-caret-right"></i></div>
                                 </div>
                                 <div class="columns is-mobile is-centered is-gapless">
-                                    <div class="column is-three-fifths" style="border: 1px solid blue;"><i class="fa fa-caret-down"></i></div>
+                                    <div class="column is-three-fifths"><i class="fa fa-caret-down"></i></div>
                                 </div>
                             </div>
                         </article>
@@ -118,3 +110,20 @@
         </div>
     </div>
 </article>
+<aside class="box" id="events-panel">
+    <div class="card events-card">
+        <header class="card-header">
+            <p class="card-header-title">Events</p>
+        </header>
+        <div class="card-table">
+            <div class="content">
+                <table class="table is-fullwidth is-striped" id="events-table">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <footer class="card-footer">
+            <a href="#" class="card-footer-item">View All</a>
+        </footer>
+    </div>
+</aside>
