@@ -1,5 +1,6 @@
 .joystick {
-  background-color: blue;
+  background: rgb(0,212,255);
+  background: radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(2,0,36,1) 100%, rgba(106,106,218,1) 100%);
   border-radius: 100%;
   cursor: pointer;
   height: 100%;
@@ -8,7 +9,24 @@
 }
 
 #joystick {
+  i {
+    font-size: 5rem;
+  }
+
+  .fa-caret-left, .fa-caret-right {
+    position: relative;
+    top: 25%;
+  }
+
+  .columns {
+    margin-bottom: 0;
+  }
+}
+
+#joystick-control {
+  margin: 2rem auto 2rem auto;
   border: 1px solid black;
-  width: 300px;
-  height: 300px;
+  width: 100px;
+  height: 100px;
+  padding: 10px;
 }

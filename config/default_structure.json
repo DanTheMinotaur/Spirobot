@@ -5,6 +5,7 @@
     "video": false,
     "picture": false
   },
-  "status": "waiting",
-  "events": 0
+  "status": false,
+  "events": 0,
+  "mode": 0
 }

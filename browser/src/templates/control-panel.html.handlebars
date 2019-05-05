@@ -42,7 +42,9 @@
                     <div class="tile is-parent">
                         <article class="tile is-child box">
                             <p class="title">Status</p>
-                            <p class="subtitle">Waiting...</p>
+                            <div id="status-update">
+                                <p class="subtitle">Pinging...</p>
+                            </div>
                         </article>
                     </div>
                     <div class="tile is-parent">
@@ -90,8 +92,24 @@
                     </div>
                     <div class="tile is-parent">
                         <article class="tile is-child box">
-                            <div id="joystick"></div>
+                            <div id="joystick">
+                                <div class="columns is-mobile is-centered is-gapless">
+                                    <div class="column is-three-fifths" style="border: 1px solid blue;"><i class="fa fa-caret-up"></i></div>
+                                </div>
+                                <div class="columns is-mobile is-centered is-gapless">
+                                    <div class="column is-one-fifth" style="border: 1px solid blue;"><i class="fa fa-caret-left"></i></div>
+                                    <div class="column is-three-fifths" style="border: 1px solid blue;">
+                                        <div id="joystick-control"></div>
+                                    </div>
+
+                                    <div class="column is-one-fifth" style="border: 1px solid blue;"><i class="fa fa-caret-right"></i></div>
+                                </div>
+                                <div class="columns is-mobile is-centered is-gapless">
+                                    <div class="column is-three-fifths" style="border: 1px solid blue;"><i class="fa fa-caret-down"></i></div>
+                                </div>
+                            </div>
                         </article>
+
                     </div>
                 </div>
             </section>

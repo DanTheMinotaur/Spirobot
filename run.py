@@ -1,3 +1,4 @@
+print("Run")
 from app.app import Controller
 
 try:

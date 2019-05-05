@@ -11,7 +11,8 @@ export class UIController{
             "videoSwitch": document.getElementById("video-switch"),
             "cameraButton": document.getElementById("camera-button"),
             "eventsTable": document.getElementById("events-table"),
-            "joystick": document.getElementById("joystick")
+            "joystick": document.getElementById("joystick-control"),
+            "statusUpdate": document.getElementById("status-update")
 
         };
 
@@ -35,6 +36,8 @@ export class UIController{
             theme: 'success'
         });
         createJoystick(this.ui_elements.joystick);
+
+
     }
 
     /**
@@ -75,8 +78,8 @@ export class UIController{
     updateEvents(eventsTableElem = this.ui_elements.eventsTable) {
         let self = this;
 
-        function addRow(icon, message, datetime, notifyUI = true) {
-            console.log("Adding Row for message:" + message);
+        function addRow(icon, message, datetime) {
+            //console.log("Adding Row for message:" + message);
             let row = eventsTableElem.insertRow(0);
             row.insertCell(0).innerHTML = icon;
             row.insertCell(1).innerHTML = message;
@@ -116,20 +119,72 @@ export class UIController{
     setListeners() {
         this.ui_elements.cameraButton.addEventListener("click", () => {
             console.log("Clicked Camera");
-            this.bot_controller.takePicture();
+            this.takePicture();
         });
+
+        let videoSwitch = this.ui_elements.videoSwitch;
+
+        videoSwitch.addEventListener("change", (value) =>{
+            this.controls.update({
+                "video": videoSwitch.checked
+            });
+        });
+
         this.updateEvents();
     }
 
-    notificationAlert(title, message) {
+    /**
+     * Creates notifcation for display
+     * @param title The title of the
+     * @param message the message to display in the notification.
+     * @param type The type of message being displayed
+     */
+    notificationAlert(title, message, type = "success") {
         this.notificationObject({
             title: title,
             message: message
+        });
+    }
+
+    /**
+     * Pings bot to check if its online
+     */
+    pingBot() {
+        console.log("Ping Bot");
+        this.controls.update({
+            "ping": false
         })
     }
 
-    setUIStatus() {
-        return null;
+    /**
+     * Checks the current status of the bot.
+     */
+    checkStatus() {
+        let status_elm = this.ui_elements.statusUpdate;
+        this.status.on('value', function (status_details) {
+            let status_value = status_details.val();
+            let status__tag = status_elm.getElementsByTagName("p")[0];
+            if (status_value === false) {
+                status__tag.innerText = "Waiting for status...";
+            } else {
+                status__tag.innerText = status_value;
+            }
+        })
+    }
+    /**
+     * Sets values set from the Firebase Database, will overide any UI elements.
+     */
+    setCurrentValues() {
+        let self = this;
+        this.controls.child('video').on('value', function (video_value) {
+            self.ui_elements.videoSwitch.checked = video_value.val();
+        })
     }
 
+    static boolToString(bool) {
+        if (bool) {
+            return "On";
+        }
+        return "Off"
+    }
 }
