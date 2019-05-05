@@ -32,6 +32,6 @@ class Common:
         return "off"
 
     @staticmethod
-    def time_string():
+    def time_string(date_split: str = '/'):
         """ Returns Preformatted datetime string of current time"""
-        return datetime.now().strftime("%d/%m/%YT%H:%M:%S")
+        return datetime.now().strftime("%d||%m||%YT%H:%M:%S").replace('||', date_split)

@@ -12,8 +12,10 @@ export class UIController{
             "cameraButton": document.getElementById("camera-button"),
             "eventsTable": document.getElementById("events-table"),
             "joystick": document.getElementById("joystick-control"),
-            "statusUpdate": document.getElementById("status-update")
-
+            "statusUpdate": document.getElementById("status-update"),
+            // "manualSwitch": document.getElementById("manual-switch"),
+            // "autoSwitch": document.getElementById("auto-switch")
+            "modeSelect": document.getElementById("mode-select")
         };
 
 
@@ -26,6 +28,7 @@ export class UIController{
         this.controls = this.database.ref('/controls/');
         this.events = this.database.ref('/events/');
         this.status = this.database.ref('/status/');
+        this.mode = this.database.ref('/auto_mode/');
 
         this.notificationObject = window.createNotification({
             closeOnClick: true,
@@ -36,8 +39,6 @@ export class UIController{
             theme: 'success'
         });
         createJoystick(this.ui_elements.joystick);
-
-
     }
 
     /**
@@ -122,20 +123,29 @@ export class UIController{
             this.takePicture();
         });
 
-        let videoSwitch = this.ui_elements.videoSwitch;
-
-        videoSwitch.addEventListener("change", (value) =>{
-            this.controls.update({
-                "video": videoSwitch.checked
-            });
+        this.ui_elements.videoSwitch.addEventListener("change", () =>{
+            this.controls.update({"video": this.ui_elements.autoSwitch.checked});
         });
 
+
         this.updateEvents();
+        this._modeListener()
+        this.checkStatus();
+        this.setSwitchCurrentValues();
     }
+
+    _modeListener() {
+        this.ui_elements.modeSelect.addEventListener("click", () => {
+            let selected_res = (this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value === "true");
+            console.log("Selected Option: " + selected_res);
+            this.controls.update({"auto_mode": selected_res})
+        });
+    }
+
 
     /**
      * Creates notifcation for display
-     * @param title The title of the
+     * @param title The title of the notification
      * @param message the message to display in the notification.
      * @param type The type of message being displayed
      */
@@ -172,19 +182,17 @@ export class UIController{
         })
     }
     /**
-     * Sets values set from the Firebase Database, will overide any UI elements.
+     * Sets switch values set from the Firebase Database, will overide any UI elements.
      */
-    setCurrentValues() {
+    setSwitchCurrentValues() {
         let self = this;
+
         this.controls.child('video').on('value', function (video_value) {
             self.ui_elements.videoSwitch.checked = video_value.val();
-        })
-    }
-
-    static boolToString(bool) {
-        if (bool) {
-            return "On";
-        }
-        return "Off"
+        });
+        // Sets switch auto/manual mode from Firebase.
+        this.controls.child('auto_mode').on('value', function (mode_val) {
+            self.ui_elements.modeSelect.value = mode_val.val();
+        });
     }
 }

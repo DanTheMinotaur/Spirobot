@@ -4,6 +4,7 @@ from os.path import isdir
 from os import makedirs
 from datetime import datetime
 from gpiozero import DistanceSensor, MotionSensor
+from app.utils import Common
 
 
 class MotionArray:
@@ -69,7 +70,7 @@ class ProximitySensors:
         return sensor_data
 
 
-class Camera:
+class Camera(Common):
     """
     Class is used for controlling the built in camera
     """
@@ -98,7 +99,7 @@ class Camera:
         """
         current_time = datetime.now()
         sub_folder = self.__check_dir(self.__local_image_folder + current_time.strftime('%Y.%m.%d'))
-        file_location = "{}{}.jpg".format(sub_folder, current_time)
+        file_location = "{}{}.jpg".format(sub_folder, Common.time_string(date_split='-'))
         camera = PiCamera()
         camera.resolution = (2592, 1944)
         camera.rotation = 270

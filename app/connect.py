@@ -131,10 +131,17 @@ class Communicate(Common):
         :param value: Boolean value to indicate whether video is being switched on or off.
         """
         if isinstance(value, bool):
-            self.__controls.update({"Video": True})
+            self.__controls.update({"video": True})
             self.add_event("Video Mode Switched {}".format(Common.bool_to_on_off(value)))
         else:
             raise ValueError("Video can only take a boolean value")
+
+    def picture(self):
+        if "picture" in self.communication_controls and self.communication_controls["picture"]:
+            self.__controls.update({
+                "picture": False
+            })
+            return True
 
     def clear_events(self):
         self.__events.set({})
