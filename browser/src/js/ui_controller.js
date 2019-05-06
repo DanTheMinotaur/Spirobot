@@ -16,12 +16,15 @@ export class UIController{
             "videoSwitch": document.getElementById("video-switch"),
             "cameraButton": document.getElementById("camera-button"),
             "eventsTable": document.getElementById("events-table"),
-            "joystick": document.getElementById("joystick-control"),
+            "joystickController": document.getElementById("joystick-control"),
+            "joystick": document.getElementById("joystick"),
             "statusUpdate": document.getElementById("status-update"),
             "modeSelect": document.getElementById("mode-select"),
             "controlPanel": document.getElementById("control-panel"),
             "eventsPanel": document.getElementById('events-panel'),
-            "eventsMenuButton": document.getElementById("event-menu-trigger")
+            "eventsMenuButton": document.getElementById("event-menu-trigger"),
+            "videoContainer": document.getElementById("video-container"),
+            "controlContainer": document.getElementById("controls-container")
         };
 
         /**
@@ -43,7 +46,7 @@ export class UIController{
             showDuration: 3500,
             theme: 'success'
         });
-        this.joystickController = createJoystick(this.ui_elements.joystick);
+        this.joystickController = createJoystick(this.ui_elements.joystickController);
 
         this.slide_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
@@ -69,20 +72,39 @@ export class UIController{
          * right == x > 25
          */
 
+        let caretElements = {
+            forward: self.ui_elements.joystick.getElementsByClassName("fa-caret-up")[0],
+            backward: self.ui_elements.joystick.getElementsByClassName("fa-caret-down")[0],
+            left: self.ui_elements.joystick.getElementsByClassName("fa-caret-left")[0],
+            right: self.ui_elements.joystick.getElementsByClassName("fa-caret-right")[0],
+        };
+        let highlightClass = "highlight-caret";
+
         function checkMovements(threshold = 25) {
             let currentPosition = self.joystickController.getPosition();
+            let highlightedArrow = document.querySelector("." + highlightClass);
+
+            if (highlightedArrow != null) {
+                highlightedArrow.classList.remove(highlightClass);
+            }
+
             if (currentPosition.y >= threshold) {
                 self.move("forward");
+                caretElements.forward.classList.add(highlightClass);
             } else if (currentPosition.y <= -threshold) {
                 self.move("backward");
+                self.ui_elements.joystick.getElementsByClassName("fa-caret-down");
+                caretElements.backward.classList.add(highlightClass);
             } else if (currentPosition.x <= -threshold) {
                 self.move("left");
+                caretElements.left.classList.add(highlightClass);
             } else if (currentPosition.x >= threshold) {
                 self.move("right");
+                caretElements.right.classList.add(highlightClass);
             }
         }
 
-        this.joystickWatcher = setInterval( () => checkMovements(threshold), interval);
+        setInterval( () => checkMovements(threshold), interval);
     }
 
     /**
@@ -96,15 +118,6 @@ export class UIController{
                 "move": movement
             }
         );
-    }
-
-    videoState(active) {
-        if (typeof active == 'boolean') {
-            console.log("Switching video to " + active);
-            this.controls.update({
-                "video": active
-            });
-        }
     }
 
     /**
@@ -145,8 +158,8 @@ export class UIController{
             }
         });
         this.events.off();
-        this.events.on('child_added', function (newChildData) {
-            console.log(newChildData.val());
+        this.events.limitToLast(1).on('child_added', function (newChildData) {
+            //console.log(newChildData.val());
             try {
                 let message = newChildData.val().message;
                 addRow('<i class="fa fa-bell-o">', message, newChildData.val().datetime);
@@ -168,7 +181,7 @@ export class UIController{
         });
 
         this.ui_elements.videoSwitch.addEventListener("change", () =>{
-            this.controls.update({"video": this.ui_elements.autoSwitch.checked});
+            this.controls.update({"video": this.ui_elements.videoSwitch.checked});
         });
 
         this.ui_elements.modeSelect.addEventListener("click", () => {
@@ -191,7 +204,7 @@ export class UIController{
 
         this.updateEvents();
         this.checkStatus();
-        this.setSwitchCurrentValues();
+        this.setSwitchs();
     }
 
 
@@ -228,7 +241,7 @@ export class UIController{
             let status_value = status_details.val();
             let status__tag = status_elm.getElementsByTagName("p")[0];
             if (status_value === false) {
-                status__tag.innerText = "Waiting for status...";
+                status__tag.innerText = "Waiting for bot to come online...";
             } else {
                 status__tag.innerText = status_value;
             }
@@ -237,11 +250,19 @@ export class UIController{
     /**
      * Sets switch values set from the Firebase Database, will overide any UI elements.
      */
-    setSwitchCurrentValues() {
+    setSwitchs() {
         let self = this;
 
         this.controls.child('video').on('value', function (video_value) {
             self.ui_elements.videoSwitch.checked = video_value.val();
+            console.log(video_value.val());
+            if (!self.ui_elements.videoSwitch.checked) {
+                self.ui_elements.videoContainer.classList.remove("show");
+                self.ui_elements.videoContainer.classList.add("hide", "animate", "bounceOutLeft");
+            } else {
+                self.ui_elements.videoContainer.classList.remove("hide");
+                self.ui_elements.videoContainer.classList.add("show");
+            }
         });
         // Sets switch auto/manual mode from Firebase.
         this.controls.child('auto_mode').on('value', function (mode_val) {

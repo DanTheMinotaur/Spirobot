@@ -110,7 +110,7 @@ class Communicate(Common):
 
     def set_status(self, status):
         """ Sets current status of device """
-        self.__status.update(status)
+        self.root.update({"status": status})
 
     def get_video(self):
         video_status = self.communication_controls["video"]
