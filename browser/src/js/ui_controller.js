@@ -147,7 +147,7 @@ export class UIController{
 
         this.events.on('value', function (eventsData) {
             eventsData = eventsData.val();
-
+            console.log("Events Full Data: " + eventsData);
             for (let key in eventsData) {
                 try {
                     addRow('<i class="fa fa-bell-o">', eventsData[key].message, eventsData[key].datetime);
@@ -157,13 +157,13 @@ export class UIController{
                 }
             }
         });
-        this.events.off();
+        //this.events.off();
         this.events.limitToLast(1).on('child_added', function (newChildData) {
             //console.log(newChildData.val());
             try {
                 let message = newChildData.val().message;
                 addRow('<i class="fa fa-bell-o">', message, newChildData.val().datetime);
-                self.notificationAlert("New Notification",  message);
+                self.notificationAlert("Latest Notification",  message);
             } catch (e) {
                 console.log("Error in data keys ");
                 console.log(e);
