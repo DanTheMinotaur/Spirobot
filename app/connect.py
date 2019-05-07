@@ -5,15 +5,16 @@ from os.path import basename
 
 
 class Communicate(Common):
+    """
+    Class handles communication with Firebase live database
+    """
     valid_status_types = [
         "success",
         "info",
         "warning",
         "error"
     ]
-    """
-    Class handles communication with Firebase live database
-    """
+
     def __init__(self, private_key: str = "./certs/admin-key.json",
                  firebase_url: str = "https://spirobot-d9387.firebaseio.com/",
                  storage_bucket_url: str = "spirobot-d9387.appspot.com"):
@@ -147,16 +148,19 @@ class Communicate(Common):
             return True
 
     def clear_events(self):
+        """
+        Clears all events held in Firebase
+        """
         self.__events.set({})
 
     def add_event(self, event: str, status_type: str = "info"):
         """
         Adds an event message
         :param event: The event message to send
-        :param status_type:
+        :param status_type: Type of event being triggered, valid ones are: success, info, warning, error
         :return: None
         """
-        print(event)
+        print("{} Event: {}".format(status_type, event))
         if status_type not in self.valid_status_types:
             status_type = "success"
 
