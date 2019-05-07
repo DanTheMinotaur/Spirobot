@@ -5,17 +5,15 @@ from app.sensors import ProximitySensors, Camera, MotionArray
 import subprocess
 
 
-class AutoController:
+class BotController:
     pass
 
 
-class Controller(AutoController):
+class Controller(BotController):
     def __init__(self):
         self.communications = Communicate()
         self.camera = Camera()
-        # self.bot = Body()
         self.communications.add_event("Bot Started")
-        self.__auto_mode = None
         self.__mode = {
             "auto_mode": None,
             "last_mode": ""
