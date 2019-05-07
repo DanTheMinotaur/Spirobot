@@ -8,7 +8,10 @@ class Communicate(Common):
     """
     Class handles communication with Firebase live database
     """
-    def __init__(self, private_key: str = "./certs/admin-key.json", firebase_url: str = "https://spirobot-d9387.firebaseio.com/", storage_bucket_url: str = "spirobot-d9387.appspot.com"):
+    def __init__(self, private_key: str = "./certs/admin-key.json",
+                 firebase_url: str = "https://spirobot-d9387.firebaseio.com/",
+                 storage_bucket_url: str = "spirobot-d9387.appspot.com"):
+
         firebase_admin.initialize_app(credentials.Certificate(private_key), {
             "databaseURL": firebase_url,
             "storageBucket": storage_bucket_url
@@ -58,17 +61,19 @@ class Communicate(Common):
         Method Checks Current Firebase Document to see if it is complete, if it is missing or incomplete then it
         repopulates
         """
-        config = self.root.get()  # Current Firebase Config Document
+        root_config = self.root.get()  # Current Firebase Config Document
         default_config = Common.load_config("./config/default_structure.json")  # Default config for bot.
-        if config is not None:
+        if root_config is not None:
             for config_item, config_value in default_config.items():
-                if config_item not in config or (isinstance(config_value, dict) and not self.__valid_config(config[config_item], default_config[config_item])):
-                    self.root.update({
-                        config_item: default_config[config_item]
-                    })
+                if config_item == "events" and "events" in root_config:
+                    break
+                self.root.update({
+                    config_item: default_config[config_item]
+                })
         else:
-            default_config["events"] = self.__format_event("Bot Reconfigured Firebase")
             self.root.set(default_config)
+
+        self.set_status("Waiting...")
 
     @staticmethod
     def __format_event(message):

@@ -1,7 +1,7 @@
 {
   "controls": {
     "move": false,
-    "ping": false,
+    "ping": true,
     "video": false,
     "picture": false,
     "auto_mode": 0
