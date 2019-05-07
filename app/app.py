@@ -47,6 +47,11 @@ class Controller:
             self.communications.ping(True)
 
     def __check_picture(self):
+        """
+        Checks if the controlling application wants to take a picture and handles its capture and upload
+        Turns off the Live Streaming if enabled as bot can't use the camera at the same time.
+        :return:
+        """
         if self.communications.get_picture():
             self.communications.set_status("Taking Picture")
             if self.__video_status["in_use"]:
@@ -62,6 +67,10 @@ class Controller:
                     self.communications.add_event("Image Capture Successful", "success")
 
     def check_commands(self):
+        """
+        Checks all commands for bot operation.
+        :return:
+        """
         self.communications.check_controls()
         self.__check_ping()
         self.__check_video()

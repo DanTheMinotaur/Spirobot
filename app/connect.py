@@ -94,6 +94,21 @@ class Communicate(Common):
         else:
             return self.communication_controls["ping"]
 
+    def get_mode(self):
+        """
+        Gets the currently set mode of the bot and returns it, if invalid resets the mode to default
+        :return: 3 possible values for auto_mode true, false or none
+        """
+        if self.__check_control("auto_mode"):
+            selected_mode = self.communication_controls["auto_mode"]
+            if isinstance(selected_mode, bool):
+                return selected_mode
+            elif selected_mode == 0:
+                return None
+            else:
+                self.__controls.update({"auto_mode": 0})
+        return None
+
     def get_move(self):
         """
         Checks if there is a move command waiting then checks if it is valid,
