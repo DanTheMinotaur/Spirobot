@@ -57,3 +57,4 @@ function loginGoogle() {
         console.log(e); // Log Error
     });
 }
+

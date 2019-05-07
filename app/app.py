@@ -2,6 +2,7 @@
 from app.connect import Communicate
 from time import sleep
 from app.sensors import ProximitySensors, Camera
+import subprocess
 
 class Controller:
     def __init__(self):
@@ -12,6 +13,15 @@ class Controller:
         self.__auto_mode = None
         self.__last_video_streaming = False
 
+    def __live_video_stream(self, setting: bool):
+        """
+        Starts or stops the YouTube Live Stream Docker container and runs in the background.
+        :param setting: Boolean to indicate if video should be turned on/off
+        """
+        command = 'start' if setting else 'stop'
+        subprocess.Popen("sudo docker {} cam".format(command).split(), stdout=subprocess.PIPE)
+        self.communications.add_event("Live Streaming to YouTube {}ing.".format(command))
+
     def __check_move(self):
         move = self.communications.get_move()
         if move is not None:
@@ -21,10 +31,7 @@ class Controller:
         stream_status = self.communications.get_video()
         if self.__last_video_streaming != stream_status:  # Set initial video status
             self.__last_video_streaming = stream_status
-            if stream_status:
-                print("Running Youtube Live PLACEHOLDER FOR BASH COMMAND")
-            else:
-                print("Stopping Video Streaming")
+            self.__live_video_stream(stream_status)
 
     def __check_ping(self):
         """
@@ -61,7 +68,7 @@ class Controller:
         self.communications.set_status("")
         print("Placeholder")
 
-    def run(self, timeout=3):
+    def run(self, timeout=1):
         while True:
             print("Loop")
             self.check_commands()
