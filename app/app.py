@@ -1,4 +1,4 @@
-# from app.bot import Body
+from app.bot import Movements
 from app.connect import Communicate
 from time import sleep
 from app.sensors import ProximitySensors, Camera, MotionArray
@@ -6,13 +6,20 @@ import subprocess
 
 
 class BotController:
-    valid_movements = [
+    VALID_MOVEMENTS = [
         "forward",
         "backward",
         "left",
         "right"
     ]
-    pass
+
+    def __init__(self):
+        self.proximity_sensors = ProximitySensors()
+        self.motion_sensors = MotionArray()
+        self.bot = Movements()
+
+    def make_move(self, move: str):
+        self.bot.make_move(move)
 
 
 class Controller(BotController):
@@ -42,9 +49,9 @@ class Controller(BotController):
 
     def __check_move(self):
         move = self.communications.get_move()
-        print(move)
-        if move is not None and move in self.valid_movements:
+        if move is not None and move in self.VALID_MOVEMENTS:
             print("MOVING BOT {}".format(move))
+            self.make_move(move)
 
     def __check_video(self):
         """
