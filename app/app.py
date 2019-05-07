@@ -1,17 +1,25 @@
 # from app.bot import Body
 from app.connect import Communicate
 from time import sleep
-from app.sensors import ProximitySensors, Camera
+from app.sensors import ProximitySensors, Camera, MotionArray
 import subprocess
 
 
-class Controller:
+class AutoController:
+    pass
+
+
+class Controller(AutoController):
     def __init__(self):
         self.communications = Communicate()
         self.camera = Camera()
         # self.bot = Body()
         self.communications.add_event("Bot Started")
         self.__auto_mode = None
+        self.__mode = {
+            "auto_mode": None,
+            "last_mode": ""
+        }
         self.__video_status = {
             "last_video_streaming": False,
             "in_use": False
@@ -53,20 +61,23 @@ class Controller:
         """
         if self.communications.get_picture():
             self.communications.set_status("Taking Picture")
-            if self.__video_status["in_use"]:
-                self.__live_video_stream(False)  # Turn off Video Live Stream
-                sleep(13)
-                image_path = self.camera.take_picture(3)
-                self.__live_video_stream(True) # Turn Video Stream back on.
-            else:
-                image_path = self.camera.take_picture(3)
-            if image_path is not None:
-                image_url = self.communications.upload_image(image_path)
-                if image_url:
-                    self.communications.add_event("Image Capture Successful", "success")
+            try:
+                if self.__video_status["in_use"]:
+                    self.__live_video_stream(False)  # Turn off Video Live Stream
+                    sleep(13)
+                    image_path = self.camera.take_picture(3)
+                    self.__live_video_stream(True) # Turn Video Stream back on.
+                else:
+                    image_path = self.camera.take_picture(3)
+                if image_path is not None:
+                    image_url = self.communications.upload_image(image_path)
+                    if image_url:
+                        self.communications.add_event("Image Capture Successful", "success")
+            except ValueError:
+                self.communications.add_event("Could not capture image, try again", "error")
 
     def __check_mode(self):
-        self.__auto_mode = self.communications.get_mode()
+        self.__mode["auto_mode"] = self.communications.get_mode()
 
     def check_commands(self):
         """
@@ -78,23 +89,37 @@ class Controller:
         self.__check_mode()
         self.__check_video()
         self.__check_picture()
-        if self.__auto_mode:
+        if self.__mode["auto_mode"]:
             self.mode_auto()
-        elif self.__auto_mode is None: # Do Nothing
-            pass
+        elif self.__mode["auto_mode"] is None: # Do Nothing
+            self.mode_standby()
         else:
             self.mode_manual()
 
+    def mode_standby(self):
+        if self.__check_mode_change():
+            self.communications.set_status("Standing By")
+            print("Standby Mode Set")
+
     def mode_auto(self):
-        # self.communications.add_event("Auto Mode Set")
-        # self.communications.set_status("Bot Patrolling")
-        print("Auto Mode Set")
+        if self.__check_mode_change():
+            self.communications.set_status("Bot Auto Mode Set")
+            # self.communications.add_event("Auto Mode Set")
+            #
+            print("Auto Mode Set")
 
     def mode_manual(self):
-        # self.communications.add_event("Manual Mode Set")
-        # self.communications.set_status("Piloting Bot")
-        print("Manual Mode Set")
-        self.__check_move()
+        if self.__check_mode_change():
+            # self.communications.add_event("Manual Mode Set")
+            self.communications.set_status("Piloting Bot")
+            print("Manual Mode Set")
+            self.__check_move()
+
+    def __check_mode_change(self):
+        if self.__mode["auto_mode"] != self.__mode["last_mode"]:
+            self.__mode["last_mode"] = self.__mode["auto_mode"]
+            return True
+        return False
 
     def run(self, timeout=1):
         while True:
