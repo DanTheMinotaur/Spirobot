@@ -4,6 +4,7 @@ from time import sleep
 from app.sensors import ProximitySensors, Camera
 import subprocess
 
+
 class Controller:
     def __init__(self):
         self.communications = Communicate()
@@ -11,6 +12,10 @@ class Controller:
         # self.bot = Body()
         self.communications.add_event("Bot Started")
         self.__auto_mode = None
+        self.__video_status = {
+            "last_video_streaming": False,
+            "in_use": False
+        }
         self.__last_video_streaming = False
 
     def __live_video_stream(self, setting: bool):
@@ -19,6 +24,7 @@ class Controller:
         :param setting: Boolean to indicate if video should be turned on/off
         """
         command = 'start' if setting else 'stop'
+        self.__video_status["in_use"] = setting
         subprocess.Popen("sudo docker {} cam".format(command).split(), stdout=subprocess.PIPE)
         self.communications.add_event("Live Streaming to YouTube {}ing.".format(command))
 
@@ -29,8 +35,8 @@ class Controller:
 
     def __check_video(self):
         stream_status = self.communications.get_video()
-        if self.__last_video_streaming != stream_status:  # Set initial video status
-            self.__last_video_streaming = stream_status
+        if self.__video_status["last_video_streaming"] != stream_status:  # Set initial video status
+            self.__video_status["last_video_streaming"] = stream_status
             self.__live_video_stream(stream_status)
 
     def __check_ping(self):
@@ -43,14 +49,17 @@ class Controller:
     def __check_picture(self):
         if self.communications.get_picture():
             self.communications.set_status("Taking Picture")
-            if self.__last_video_streaming:
-                image_path = self.camera.take_picture()
+            if self.__video_status["in_use"]:
+                self.__live_video_stream(False)  # Turn off Video Live Stream
+                sleep(13)
+                image_path = self.camera.take_picture(3)
+                self.__live_video_stream(True) # Turn Video Stream back on.
             else:
                 image_path = self.camera.take_picture(3)
             if image_path is not None:
                 image_url = self.communications.upload_image(image_path)
                 if image_url:
-                    self.communications.add_event("Image Capture Successful")
+                    self.communications.add_event("Image Capture Successful", "success")
 
     def check_commands(self):
         self.communications.check_controls()
