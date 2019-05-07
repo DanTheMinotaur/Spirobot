@@ -14,12 +14,6 @@ class Communicate(Common):
         "warning",
         "error"
     ]
-    valid_movements = [
-        "forward",
-        "backward",
-        "left",
-        "right"
-    ]
 
     def __init__(self, private_key: str = "./certs/admin-key.json",
                  firebase_url: str = "https://spirobot-d9387.firebaseio.com/",
@@ -118,9 +112,7 @@ class Communicate(Common):
         current_move = self.communication_controls["move"]
         self.__controls.update({"move": False})
         if current_move and isinstance(current_move, str):
-            current_move = current_move.lower()
-            if current_move in self.valid_movements:
-                return current_move
+            return current_move.lower()
         elif not current_move:
             return None
         else:

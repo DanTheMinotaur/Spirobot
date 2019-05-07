@@ -6,11 +6,18 @@ import subprocess
 
 
 class BotController:
+    valid_movements = [
+        "forward",
+        "backward",
+        "left",
+        "right"
+    ]
     pass
 
 
 class Controller(BotController):
     def __init__(self):
+        super().__init__()
         self.communications = Communicate()
         self.camera = Camera()
         self.communications.add_event("Bot Started")
@@ -35,10 +42,15 @@ class Controller(BotController):
 
     def __check_move(self):
         move = self.communications.get_move()
-        if move is not None:
+        print(move)
+        if move is not None and move in self.valid_movements:
             print("MOVING BOT {}".format(move))
 
     def __check_video(self):
+        """
+        Checks the current video status and compares it if its not currently active then starts/stops live streaming
+        :return:
+        """
         stream_status = self.communications.get_video()
         if self.__video_status["last_video_streaming"] != stream_status:  # Set initial video status
             self.__video_status["last_video_streaming"] = stream_status
@@ -111,7 +123,7 @@ class Controller(BotController):
             # self.communications.add_event("Manual Mode Set")
             self.communications.set_status("Piloting Bot")
             print("Manual Mode Set")
-            self.__check_move()
+        self.__check_move()
 
     def __check_mode_change(self):
         if self.__mode["auto_mode"] != self.__mode["last_mode"]:
