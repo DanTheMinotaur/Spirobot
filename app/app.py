@@ -16,7 +16,6 @@ class Controller:
             "last_video_streaming": False,
             "in_use": False
         }
-        self.__last_video_streaming = False
 
     def __live_video_stream(self, setting: bool):
         """
@@ -66,6 +65,9 @@ class Controller:
                 if image_url:
                     self.communications.add_event("Image Capture Successful", "success")
 
+    def __check_mode(self):
+        self.__auto_mode = self.communications.get_mode()
+
     def check_commands(self):
         """
         Checks all commands for bot operation.
@@ -73,18 +75,26 @@ class Controller:
         """
         self.communications.check_controls()
         self.__check_ping()
+        self.__check_mode()
         self.__check_video()
-        self.__check_move()
         self.__check_picture()
+        if self.__auto_mode:
+            self.mode_auto()
+        elif self.__auto_mode is None: # Do Nothing
+            pass
+        else:
+            self.mode_manual()
 
     def mode_auto(self):
-        self.communications.add_event("Auto Mode Set")
-        print("Placeholder")
+        # self.communications.add_event("Auto Mode Set")
+        # self.communications.set_status("Bot Patrolling")
+        print("Auto Mode Set")
 
     def mode_manual(self):
-        self.communications.add_event("Manual Mode Set")
-        self.communications.set_status("")
-        print("Placeholder")
+        # self.communications.add_event("Manual Mode Set")
+        # self.communications.set_status("Piloting Bot")
+        print("Manual Mode Set")
+        self.__check_move()
 
     def run(self, timeout=1):
         while True:

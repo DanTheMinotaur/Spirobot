@@ -97,7 +97,7 @@ class Communicate(Common):
     def get_mode(self):
         """
         Gets the currently set mode of the bot and returns it, if invalid resets the mode to default
-        :return: 3 possible values for auto_mode true, false or none
+        # :return: 3 possible values for auto_mode true, false or none
         """
         if self.__check_control("auto_mode"):
             selected_mode = self.communication_controls["auto_mode"]

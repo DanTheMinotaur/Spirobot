@@ -158,11 +158,20 @@ class Movements(Legs):
     """
     movements = {}
 
-    def __init__(self, movements_src="./config/movements/"):
+    def __init__(self, core_movements_src: str = "./config/movements/core/", user_movements_src: str = "./config/movements/" ):
         """ Load Leg Constructor """
         super().__init__()
-        self.movements_src = movements_src
-        self.load_movement_files()
+        self.load_movement_files(core_movements_src)
+        self.load_movement_files(user_movements_src)
+
+    def load_movement_files(self, movements: str):
+        """
+        Scans a directory loading any json files within it
+        :param src_path: path of directory to search for files
+        """
+        for file in listdir(movements):
+            if ".json" in file:
+                self.load_movement(movements + file)
 
     def make_move(self, move: str, repeat: int = 1):
         """
@@ -182,15 +191,6 @@ class Movements(Legs):
                         sleep(current_sequence["wait"])
         else:
             print("No movement for that action found")
-
-    def load_movement_files(self):
-        """
-        Scans a directory loading any json files within it
-        :param src_path: path of directory to search for files
-        """
-        for file in listdir(self.movements_src):
-            if ".json" in file:
-                self.load_movement(self.movements_src + file)
 
     def load_movement(self, movement_file):
         """

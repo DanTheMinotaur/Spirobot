@@ -1,0 +1,46 @@
+[
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0.1
+      },
+      {
+        "movement": "forward",
+        "limit": 25,
+        "wait": 0
+      },
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle",
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "backward",
+        "limit": 30,
+        "wait": 0.1
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle",
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  }
+]
