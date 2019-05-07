@@ -17,14 +17,14 @@ class Legs(Common):
 
     kit = ServoKit(channels=16)
 
-    def __init__(self, legs_config="config/legs.json"):
+    def __init__(self, legs_config: str = "config/legs.json"):
         """
         Constructor, takes legs config json file.
         :param legs_config:
         """
         self.legs = Common.load_config(legs_config)
 
-    def select_leg(self, name):
+    def select_leg(self, name: str):
         """
         Selects Leg by name and returns if, mainly used for testing purposes.
         :param name: Name of leg aka position
@@ -41,59 +41,13 @@ class Legs(Common):
             self.kit.servo[channel].angle = self.SERVO_MID
         sleep(self.DEFAULT_TIMEOUT)
 
-    def walk_forward(self, steps=2):
-        for step in range(steps):
-            self.step_forward()
-
-    def turn_left(self):
-        step_instructions = (
-            ["up", 0, 0.1],
-            ["forward", 20, 0]
-        )
-        legs_sequence = (
-            "leftfront",
-            "leftback"
-        )
-
-        self._run_movement_sequence(legs_sequence, step_instructions)
-
-        step_instructions = (
-            ["up", 0, 0],
-        )
-        legs_sequence = (
-            "rightmiddle",
-        )
-
-        self._run_movement_sequence(legs_sequence, step_instructions)
-
-        step_instructions = (
-            ["down", 0, 0],
-            ["backward", 30, 0],
-        )
-        legs_sequence = (
-            "leftfront",
-            "leftback",
-        )
-        self._run_movement_sequence(legs_sequence, step_instructions)
-
-
-    def step_forward(self):
-        step_instructions = (
-            ["up", 0, 0.1],
-            ["forward", 35, 0],
-            ["down", 0, 0],
-        )
-        legs_sequence = ("rightfront", "rightback", "leftmiddle", "leftfront", "leftback", "rightmiddle")
-
-        self._run_movement_sequence(legs_sequence, step_instructions)
-
-        step_instructions = (
-            ["backward", 30, 0.1],
-        )
-
-        self._run_movement_sequence(legs_sequence, step_instructions)
-
     def _run_movement_sequence(self, legs_sequence, step_instructions):
+        """
+        Runs a movement sequence.
+        :param legs_sequence: the legs to run the instruction
+        :param step_instructions:
+        :return:
+        """
         print(legs_sequence)
         print(step_instructions)
         for leg in legs_sequence:
@@ -158,16 +112,16 @@ class Movements(Legs):
     """
     movements = {}
 
-    def __init__(self, core_movements_src: str = "./config/movements/core/", user_movements_src: str = "./config/movements/" ):
+    def __init__(self, user_movements_src: str = "./config/movements/"):
         """ Load Leg Constructor """
         super().__init__()
-        self.load_movement_files(core_movements_src)
+        self.load_movement_files("./config/movements/core/")
         self.load_movement_files(user_movements_src)
 
     def load_movement_files(self, movements: str):
         """
         Scans a directory loading any json files within it
-        :param src_path: path of directory to search for files
+        :param movements: path of directory to search for files
         """
         for file in listdir(movements):
             if ".json" in file:
@@ -186,13 +140,12 @@ class Movements(Legs):
                 for current_sequence in self.movements[move]:
                     print("Current SQ: {}".format(current_sequence))
                     self._run_movement_sequence(current_sequence["sequence"], current_sequence["instructions"])
-                    if "wait" in current_sequence and (isinstance(current_sequence["wait"], int) or
-                    isinstance(current_sequence["wait"], float) and current_sequence["wait"] != 0):
+                    if "wait" in current_sequence and (isinstance(current_sequence["wait"], int) or isinstance(current_sequence["wait"], float) and current_sequence["wait"] != 0):
                         sleep(current_sequence["wait"])
         else:
             print("No movement for that action found")
 
-    def load_movement(self, movement_file):
+    def load_movement(self, movement_file: str):
         """
         Loads a movement file and validates it, if valid it will assign as a valid movement with file name as key.
         :param movement_file:
@@ -204,6 +157,12 @@ class Movements(Legs):
             print("Invalid Movement Configuration: {}".format(movement_file))
 
     def save_new_movement(self, movement_data, movement_name):
+        """
+        Method saves and validates new movement config files.
+        :param movement_data: dict with instructions
+        :param movement_name: The name to give the movement
+        :return: Boolean indicating if file was valid and saved.
+        """
         if self.validate_instructions(movement_data):
             self.save_config("{}{}.json".format(self.movements_src, movement_name), movement_data)
             self.movements[movement_name] = movement_data
@@ -211,7 +170,7 @@ class Movements(Legs):
         return False
 
     @staticmethod
-    def validate_instructions(movement_config):
+    def validate_instructions(movement_config: str):
         """
         Validates an instruction for the bot
         :param movement_config: Dictionary/JSON object with instructions

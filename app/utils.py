@@ -7,7 +7,7 @@ class Common:
     Class contains common methods for use across application
     """
     @staticmethod
-    def load_config(file):
+    def load_config(file: str):
         """
         :param file: JSON file to be loaded.
         :return: dictionary object of file
@@ -20,12 +20,12 @@ class Common:
             exit()
 
     @staticmethod
-    def save_config(file_name, data_dict):
+    def save_config(file_name: str, data_dict: dict):
         with open(file_name, 'w') as json_file:
             json.dump(data_dict, json_file)
 
     @staticmethod
-    def bool_to_on_off(boolean):
+    def bool_to_on_off(boolean: bool):
         """ Method Return String of boolean value"""
         if boolean:
             return "on"
