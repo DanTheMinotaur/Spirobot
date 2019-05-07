@@ -3,24 +3,23 @@ from app.connect import Communicate
 from time import sleep
 from app.sensors import ProximitySensors, Camera
 
-
 class Controller:
     def __init__(self):
         self.communications = Communicate()
         self.camera = Camera()
         # self.bot = Body()
-        self.communications.add_event("Device Started")
+        self.communications.add_event("Bot Started")
         self.__auto_mode = None
-        self.__last_video_streaming = None
+        self.__last_video_streaming = False
 
     def __check_move(self):
-        move = self.communications.get_move_command()
+        move = self.communications.get_move()
         if move is not None:
             print("MOVING BOT {}".format(move))
 
     def __check_video(self):
         stream_status = self.communications.get_video()
-        if self.__last_video_streaming is None or self.__last_video_streaming != stream_status:  # Set initial video status
+        if self.__last_video_streaming != stream_status:  # Set initial video status
             self.__last_video_streaming = stream_status
             if stream_status:
                 print("Running Youtube Live PLACEHOLDER FOR BASH COMMAND")
@@ -34,8 +33,8 @@ class Controller:
         if not self.communications.ping():
             self.communications.ping(True)
 
-    def check_picture(self):
-        if self.communications.picture():
+    def __check_picture(self):
+        if self.communications.get_picture():
             self.communications.set_status("Taking Picture")
             if self.__last_video_streaming:
                 image_path = self.camera.take_picture()
@@ -51,7 +50,7 @@ class Controller:
         self.__check_ping()
         self.__check_video()
         self.__check_move()
-        self.check_picture()
+        self.__check_picture()
 
     def mode_auto(self):
         self.communications.add_event("Auto Mode Set")

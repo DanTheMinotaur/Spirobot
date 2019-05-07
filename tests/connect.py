@@ -26,7 +26,7 @@ class TestControls(unittest.TestCase):
 
     def test_get_move(self):
         self.c.check_controls()
-        self.assertIsNone(self.c.get_move_command())
+        self.assertIsNone(self.c.get_move())
 
     def test_get_video(self):
         self.c.check_controls()
