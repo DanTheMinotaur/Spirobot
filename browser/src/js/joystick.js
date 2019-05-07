@@ -2,8 +2,8 @@
 
 // setInterval(() => console.log(joystick.getPosition()), 16);
 
-export function createJoystick(parent) {
-    const maxDiff = 35;
+export function createJoystick(parent, difference = 35) {
+    const maxDiff = difference;
     const stick = document.createElement('div');
     stick.classList.add('joystick');
 

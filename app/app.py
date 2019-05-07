@@ -10,7 +10,7 @@ class Controller:
         self.camera = Camera()
         # self.bot = Body()
         self.communications.add_event("Device Started")
-        self.__manual_mode = None
+        self.__auto_mode = None
         self.__last_video_streaming = None
 
     def __check_move(self):
