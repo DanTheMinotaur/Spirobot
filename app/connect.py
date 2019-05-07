@@ -5,6 +5,12 @@ from os.path import basename
 
 
 class Communicate(Common):
+    valid_status_types = [
+        "success",
+        "info",
+        "warning",
+        "error"
+    ]
     """
     Class handles communication with Firebase live database
     """
@@ -75,14 +81,6 @@ class Communicate(Common):
 
         self.set_status("Waiting...")
 
-    @staticmethod
-    def __format_event(message):
-        """ Creates common formatting for messages being sent. """
-        return {
-            "datetime": Common.time_string(),
-            "message": str(message)
-        }
-
     def ping(self, do_ping=None):
         """ Sets ping status of bot to verify its on. """
         if do_ping is not None:
@@ -151,7 +149,19 @@ class Communicate(Common):
     def clear_events(self):
         self.__events.set({})
 
-    def add_event(self, event):
-        """ Adds an event message """
+    def add_event(self, event: str, status_type: str = "info"):
+        """
+        Adds an event message
+        :param event: The event message to send
+        :param status_type:
+        :return: None
+        """
         print(event)
-        self.__events.push(self.__format_event(event))
+        if status_type not in self.valid_status_types:
+            status_type = "success"
+
+        self.__events.push({
+            "datetime": Common.time_string(),
+            "message": event,
+            "type": status_type
+        })
