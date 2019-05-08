@@ -17,9 +17,10 @@ class BotController:
         self.proximity_sensors = ProximitySensors()
         self.motion_sensors = MotionArray()
         self.bot = Movements()
+        self.bot.set_all_initial()
 
     def make_move(self, move: str):
-        self.bot.make_move(move)
+        self.bot.make_move(move, repeat=3)
 
 
 class Controller(BotController):

@@ -23,9 +23,11 @@ export class UIController{
             "controlPanel": document.getElementById("control-panel"),
             "eventsPanel": document.getElementById('events-panel'),
             "eventsMenuButton": document.getElementById("event-menu-trigger"),
-            "videoContainer": document.getElementById("video-container"),
-            "controlContainer": document.getElementById("controls-container")
+            "controlContainer": document.getElementById("controls-container"),
+            "videoStreamContainer": document.getElementById("video-stream-container")
         };
+
+        this._disableEnableControls();
 
         /**
          * Firebase DB refs
@@ -55,6 +57,8 @@ export class UIController{
             'tolerance': 70
         });
         this.handleJoystickMovements(1000);
+        this.setListeners();
+        this.pingBot();
     }
 
     /**
@@ -161,9 +165,9 @@ export class UIController{
         this.events.limitToLast(1).on('child_added', function (newChildData) {
             //console.log(newChildData.val());
             try {
-                let message = newChildData.val().message;
-                addRow('<i class="fa fa-bell-o">', message, newChildData.val().datetime);
-                self.notificationAlert("Latest Notification",  message);
+                let event = newChildData.val();
+                addRow('<i class="fa fa-bell-o">', event.message, event.datetime);
+                self.notificationAlert("Latest Notification",  event.message, event.type);
             } catch (e) {
                 console.log("Error in data keys ");
                 console.log(e);
@@ -185,13 +189,20 @@ export class UIController{
         });
 
         this.ui_elements.modeSelect.addEventListener("click", () => {
-            let selected_res = (this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value === "true");
+            console.log(this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value);
+            let selected_res = this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value;
+            if (selected_res === "true") {
+                selected_res = true;
+            } else if (selected_res === "false") {
+                selected_res = false;
+            } else {
+                selected_res = 0;
+            }
             console.log("Selected Option: " + selected_res);
             this.controls.update({"auto_mode": selected_res})
         });
 
         this.ui_elements.controlPanel.addEventListener("click", () => {
-            console.log("Control Listener Triggere");
             if (this.slide_bar.isOpen()) {
                 this.slide_bar.toggle();
             }
@@ -226,10 +237,27 @@ export class UIController{
      * Pings bot to check if its online
      */
     pingBot() {
+        let self = this;
         console.log("Ping Bot");
         this.controls.update({
             "ping": false
+        });
+        this.status.set("Pinging Bot...");
+        this.controls.child('ping').on('value', (pingValue) => {
+            console.log(pingValue.val());
+            self._disableEnableControls(!pingValue.val());
         })
+    }
+
+    /**
+     * Disables/Enables UI controls
+     * @param disable boolean weather to enable or disable controls
+     * @private
+     */
+    _disableEnableControls(disable = true) {
+        this.ui_elements.videoSwitch.disabled = disable;
+        this.ui_elements.cameraButton.disabled = disable;
+        this.ui_elements.modeSelect.disabled = disable;
     }
 
     /**
@@ -239,7 +267,7 @@ export class UIController{
         let status_elm = this.ui_elements.statusUpdate;
         this.status.on('value', function (status_details) {
             let status_value = status_details.val();
-            let status__tag = status_elm.getElementsByTagName("p")[0];
+            let status__tag = status_elm.getElementsByTagName("span")[0];
             if (status_value === false) {
                 status__tag.innerText = "Waiting for bot to come online...";
             } else {
@@ -257,16 +285,25 @@ export class UIController{
             self.ui_elements.videoSwitch.checked = video_value.val();
             console.log(video_value.val());
             if (!self.ui_elements.videoSwitch.checked) {
-                self.ui_elements.videoContainer.classList.remove("show");
-                self.ui_elements.videoContainer.classList.add("hide", "animate", "bounceOutLeft");
+                self.ui_elements.videoStreamContainer.classList.remove("bounceInLeft");
+                self.ui_elements.videoStreamContainer.classList.add("bounceOutLeft");
             } else {
-                self.ui_elements.videoContainer.classList.remove("hide");
-                self.ui_elements.videoContainer.classList.add("show");
+                self.ui_elements.videoStreamContainer.classList.remove("bounceOutLeft");
+                self.ui_elements.videoStreamContainer.classList.add("bounceInLeft");
             }
         });
         // Sets switch auto/manual mode from Firebase.
         this.controls.child('auto_mode').on('value', function (mode_val) {
             self.ui_elements.modeSelect.value = mode_val.val();
+            console.log(mode_val.val());
+            if (mode_val.val() || mode_val.val() === 0) { // Auto Mode
+                self.ui_elements.controlContainer.classList.add("bounceOutRight");
+                self.ui_elements.controlContainer.classList.remove("bounceInRight");
+            } else {
+                self.ui_elements.controlContainer.classList.add("bounceInRight");
+                self.ui_elements.controlContainer.classList.remove("bounceOutRight");
+            }
+
         });
     }
 }
