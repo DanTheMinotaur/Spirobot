@@ -1,11 +1,18 @@
+$stick-color: #00c4a7;
+
 .joystick {
-  background: rgb(0,212,255);
-  background: radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(2,0,36,1) 100%, rgba(106,106,218,1) 100%);
+  background: $stick-color;
+  //background: radial-gradient(circle, rgba(0,212,255,1) 0%, rgba(2,0,36,1) 100%, rgba(106,106,218,1) 100%);
   border-radius: 100%;
   cursor: pointer;
   height: 100%;
   user-select: none;
   width: 100%;
+}
+
+
+.highlight-caret {
+  color: $stick-color;
 }
 
 #joystick {
@@ -25,11 +32,19 @@
   .columns {
     margin-bottom: 0;
   }
+
+  .fa-caret-right, .fa-caret-left, .fa-caret-up, .fa-caret-down {
+    cursor: pointer;
+
+    &:hover {
+      color: $stick-color;
+    }
+  }
 }
 
 #joystick-control {
   margin: 2rem auto 2rem auto;
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   padding: 10px;
 }

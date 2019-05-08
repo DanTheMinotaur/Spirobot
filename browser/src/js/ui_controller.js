@@ -84,6 +84,19 @@ export class UIController{
         };
         let highlightClass = "highlight-caret";
 
+        caretElements.forward.addEventListener("click", () => {
+            this.move("forward");
+        });
+        caretElements.backward.addEventListener("click", () => {
+            this.move("backward");
+        });
+        caretElements.right.addEventListener("click", () => {
+            this.move("right");
+        });
+        caretElements.left.addEventListener("click", () => {
+            this.move("left");
+        });
+
         function checkMovements(threshold = 25) {
             let currentPosition = self.joystickController.getPosition();
             let highlightedArrow = document.querySelector("." + highlightClass);
@@ -91,13 +104,11 @@ export class UIController{
             if (highlightedArrow != null) {
                 highlightedArrow.classList.remove(highlightClass);
             }
-
             if (currentPosition.y >= threshold) {
                 self.move("forward");
                 caretElements.forward.classList.add(highlightClass);
             } else if (currentPosition.y <= -threshold) {
                 self.move("backward");
-                self.ui_elements.joystick.getElementsByClassName("fa-caret-down");
                 caretElements.backward.classList.add(highlightClass);
             } else if (currentPosition.x <= -threshold) {
                 self.move("left");
@@ -191,10 +202,8 @@ export class UIController{
         this.ui_elements.modeSelect.addEventListener("click", () => {
             console.log(this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value);
             let selected_res = this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value;
-            if (selected_res === "true") {
-                selected_res = true;
-            } else if (selected_res === "false") {
-                selected_res = false;
+            if (selected_res === "true" || selected_res === "false") {
+                selected_res = (this.ui_elements.modeSelect[this.ui_elements.modeSelect.selectedIndex].value === "true");
             } else {
                 selected_res = 0;
             }
