@@ -1,5 +1,6 @@
 
 import {createJoystick} from './joystick';
+import {getYouTubeLiveStream} from "./youtube_live";
 require ('../packages/notifications/notifications');
 import '../packages/notifications/notifications.css';
 
@@ -27,6 +28,7 @@ export class UIController{
             "videoStreamContainer": document.getElementById("video-stream-container")
         };
 
+        getYouTubeLiveStream();
         this._disableEnableControls();
 
         /**

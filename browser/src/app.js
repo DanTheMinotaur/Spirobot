@@ -2,8 +2,6 @@
 require( './scss/style.scss');
 
 import 'bulma/bulma.sass';
-//import './packages/bulma-cyborg/cyborg.css';
-//import './packages/bulma-themes/darkly.css';
 import {UIController} from "./js/ui_controller";
 
 const loginTemplate = require('./templates/login.html.handlebars');
