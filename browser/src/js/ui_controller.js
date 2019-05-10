@@ -1,7 +1,7 @@
 
 import {createJoystick} from './joystick';
-import {getYouTubeLiveStream} from "./youtube_live";
 require ('../packages/notifications/notifications');
+import { LuminousGallery } from 'luminous-lightbox';
 import '../packages/notifications/notifications.css';
 
 
@@ -56,27 +56,12 @@ export class UIController{
         });
         this.joystickController = createJoystick(this.ui_elements.joystickController);
 
-        // this.events_bar = new Slideout({
-        //     'panel': this.ui_elements.controlPanel,
-        //     'menu': this.ui_elements.eventsPanel,
-        //     'padding': 0,
-        //     'tolerance': 70
-        // });
-        //
-        // this.gallery_bar = new Slideout({
-        //     'side': 'right',
-        //     'panel': this.ui_elements.controlPanel,
-        //     'menu': this.ui_elements.galleryPanel,
-        //     'padding': 0,
-        //     'tolerance': 70
-        //
-        // });
-
-        this.sidemenues()
+        this.sidemenues();
         this.handleJoystickMovements(1000);
         this.setListeners();
         this.pingBot();
         this.galleryLoaded = false;
+        this.gallery = null;
     }
 
     sidemenues() {
@@ -131,7 +116,7 @@ export class UIController{
                     <div class="card is-shady">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="${img_src}" alt="${img_title}" data-target="modal-image2">
+                            <img src="${img_src}" alt="${img_title}?w=1600" data-target="modal-image2">
                         </figure>
                     </div>
                     <div class="card-content">
@@ -153,9 +138,18 @@ export class UIController{
                     console.log(image_data);
                     let html = new DOMParser().parseFromString(buildGalleryElm(image_data.url, image_src), 'text/html');
                     image_list.appendChild(html.documentElement);
+                }).finally(() => {
+                    self.gallery = new LuminousGallery(document.querySelectorAll(".image-lightbox",
+                        {
+                            arrowNavigation: true,
+                            injectBaseStyles: false
+                        }));
                 });
             });
+
         });
+
+
     }
 
     /**
