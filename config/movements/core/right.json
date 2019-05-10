@@ -1,0 +1,139 @@
+[
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ],
+    "wait": 0.1
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ],
+    "wait": 0.1
+  },
+  {
+    "instructions": [
+      {
+        "movement": "forward",
+        "limit": 50,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ],
+    "wait": 0
+  },
+    {
+    "instructions": [
+      {
+        "movement": "backward",
+        "limit": 50,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ],
+    "wait": 0.1
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ],
+    "wait": 0.1
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ],
+    "wait": 0.1
+  },
+  {
+    "instructions": [
+      {
+        "movement": "forward",
+        "limit": 50,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ],
+    "wait": 0
+  },
+    {
+    "instructions": [
+      {
+        "movement": "backward",
+        "limit": 50,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ],
+    "wait": 0.1
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle",
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  }
+]

@@ -15,7 +15,7 @@
         "movement": "down",
         "limit": 0,
         "wait": 0
-      } 
+      }
     ],
     "sequence": [
       "rightfront",
