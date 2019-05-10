@@ -3,6 +3,7 @@ from app.connect import Communicate
 from time import sleep
 from app.sensors import ProximitySensors, Camera, MotionArray
 import subprocess
+from app.utils import Common
 
 
 class BotController:
@@ -16,23 +17,43 @@ class BotController:
     def __init__(self):
         self.proximity_sensors = ProximitySensors()
         self.motion_sensors = MotionArray()
+        self.communications = Communicate()
+        self.camera = Camera()
         self.bot = Movements()
         self.bot.set_all_initial()
+        self.auto_settings = Common.load_config('./config/auto_config.json')
+        self.mode = {
+            "auto_mode": None,
+            "last_mode": ""
+        }
 
     def make_move(self, move: str):
         self.bot.make_move(move, repeat=3)
+
+    def walk_forward(self, steps: int = 3):
+        for step in range(steps):
+            self.make_move("forward")
+
+    def turn_left(self):
+        self.make_move("left")
+
+    def patrol(self):
+        proximity_readings = self.proximity_sensors.read_sensors()
+        print("Proximity Readings: {}".format(proximity_readings))
+        if proximity_readings["front"] >= self.auto_settings["proximity_threshold"]:
+            self.walk_forward()
+        else:
+            print("Object Detected Moving Left")
+            self.turn_left()
+
+    def watch(self):
+        pass
 
 
 class Controller(BotController):
     def __init__(self):
         super().__init__()
-        self.communications = Communicate()
-        self.camera = Camera()
         self.communications.add_event("Bot Started")
-        self.__mode = {
-            "auto_mode": None,
-            "last_mode": ""
-        }
         self.__video_status = {
             "last_video_streaming": False,
             "in_use": False
@@ -84,7 +105,7 @@ class Controller(BotController):
                     self.__live_video_stream(False)  # Turn off Video Live Stream
                     sleep(13)
                     image_path = self.camera.take_picture(3)
-                    self.__live_video_stream(True) # Turn Video Stream back on.
+                    self.__live_video_stream(True)  # Turn Video Stream back on.
                 else:
                     image_path = self.camera.take_picture(3)
                 if image_path is not None:
@@ -95,7 +116,7 @@ class Controller(BotController):
                 self.communications.add_event("Could not capture image, try again", "error")
 
     def __check_mode(self):
-        self.__mode["auto_mode"] = self.communications.get_mode()
+        self.mode["auto_mode"] = self.communications.get_mode()
 
     def check_commands(self):
         """
@@ -107,9 +128,9 @@ class Controller(BotController):
         self.__check_mode()
         self.__check_video()
         self.__check_picture()
-        if self.__mode["auto_mode"]:
+        if self.mode["auto_mode"]:
             self.mode_auto()
-        elif self.__mode["auto_mode"] is None: # Do Nothing
+        elif self.mode["auto_mode"] is None: # Do Nothing
             self.mode_standby()
         else:
             self.mode_manual()
@@ -125,6 +146,7 @@ class Controller(BotController):
             # self.communications.add_event("Auto Mode Set")
             #
             print("Auto Mode Set")
+        self.patrol()
 
     def mode_manual(self):
         if self.__check_mode_change():
@@ -134,12 +156,12 @@ class Controller(BotController):
         self.__check_move()
 
     def __check_mode_change(self):
-        if self.__mode["auto_mode"] != self.__mode["last_mode"]:
-            self.__mode["last_mode"] = self.__mode["auto_mode"]
+        if self.mode["auto_mode"] != self.mode["last_mode"]:
+            self.mode["last_mode"] = self.mode["auto_mode"]
             return True
         return False
 
-    def run(self, timeout=1):
+    def run(self, timeout=0.25):
         while True:
             print("Loop")
             self.check_commands()

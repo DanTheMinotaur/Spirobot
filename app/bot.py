@@ -48,8 +48,8 @@ class Legs(Common):
         :param step_instructions:
         :return:
         """
-        print(legs_sequence)
-        print(step_instructions)
+        # print(legs_sequence)
+        # print(step_instructions)
         for leg in legs_sequence:
             for step in step_instructions:
                 if isinstance(step, list):
@@ -127,7 +127,7 @@ class Movements(Legs):
             if ".json" in file:
                 self.load_movement(movements + file)
 
-    def make_move(self, move: str, repeat: int = 1):
+    def make_move(self, move: str, repeat: int = 1, print_sequence: bool = False):
         """
         Method takes a movement string and runs the corresponding movement configuration.
         :param move: String of movement
@@ -136,9 +136,11 @@ class Movements(Legs):
         """
         if self.movements and move in self.movements:
             for iteration in range(repeat):
-                print("Performing instruction {}".format(repeat))
+                if print_sequence:
+                    print("Performing instruction {}".format(repeat))
                 for current_sequence in self.movements[move]:
-                    print("Current SQ: {}".format(current_sequence))
+                    if print_sequence:
+                        print("Current SQ: {}".format(current_sequence))
                     self._run_movement_sequence(current_sequence["sequence"], current_sequence["instructions"])
                     if "wait" in current_sequence and (isinstance(current_sequence["wait"], int) or isinstance(current_sequence["wait"], float) and current_sequence["wait"] != 0):
                         sleep(current_sequence["wait"])

@@ -34,6 +34,7 @@ class Communicate(Common):
         self.__controls = db.reference("controls")
         self.__events = db.reference("events")
         self.__status = db.reference("status")
+        self.__images = db.reference("images")
         self.__video_state = None
         self.communication_controls = {}
         self.__storage_bucket = storage.bucket()
@@ -180,6 +181,8 @@ class Communicate(Common):
 
         image_blob = self.__storage_bucket.blob(image_name)
         image_blob.upload_from_filename(image_location)
+        image_url = image_blob.public_url
+        self.__images.push(image_url)
         return image_blob.public_url
 
     def check_controls(self):

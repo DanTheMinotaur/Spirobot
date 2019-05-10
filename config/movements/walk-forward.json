@@ -3,13 +3,13 @@
     "instructions": [
       {
         "movement": "up",
-        "limit": 0,
-        "wait": 0.1
+        "limit": 15,
+        "wait": 0.07
       },
       {
         "movement": "forward",
         "limit": 25,
-        "wait": 0
+        "wait": 0.05
       },
       {
         "movement": "down",

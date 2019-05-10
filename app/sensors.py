@@ -104,9 +104,13 @@ class Camera(Common):
         camera = PiCamera()
         camera.resolution = (2592, 1944)
         camera.rotation = 270
-        camera.start_preview()
-        if camera_wake_up is not None:
-            sleep(camera_wake_up)
-        camera.capture(file_location)
-        camera.stop_preview()
+        try:
+            camera.start_preview()
+            if camera_wake_up is not None:
+                sleep(camera_wake_up)
+            camera.capture(file_location)
+        finally:
+            camera.stop_preview()
+            camera.close()
+
         return file_location
