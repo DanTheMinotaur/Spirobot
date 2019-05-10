@@ -69,12 +69,16 @@ def init():
 @click.argument('movement_name')
 @click.argument('repeat')
 def mv(movement_name, repeat=1):
-    body.make_move(movement_name, int(repeat))
+    body.make_move(movement_name, int(repeat), print_sequence=True)
     #body.set_all_initial()
 
 
 @cli.command()
 def ls_mv():
+    """
+    Lists all stored movement commands
+    :return:
+    """
     click.echo('Possible Movements')
     for move in body.movements:
         click.echo(move)

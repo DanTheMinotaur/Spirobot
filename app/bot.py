@@ -41,12 +41,12 @@ class Legs(Common):
             self.kit.servo[channel].angle = self.SERVO_MID
         sleep(self.DEFAULT_TIMEOUT)
 
-    def _run_movement_sequence(self, legs_sequence, step_instructions):
+    def _run_movement_sequence(self, legs_sequence: list, step_instructions: list or dict):
         """
         Runs a movement sequence.
         :param legs_sequence: the legs to run the instruction
-        :param step_instructions:
-        :return:
+        :param step_instructions: List or Dictionary of step movements to make on each leg
+        :return: None
         """
         # print(legs_sequence)
         # print(step_instructions)
@@ -59,7 +59,7 @@ class Legs(Common):
 
     def leg_move(self, movement, leg, limit=0, wait=0):
         """
-        Moves leg in a desired direction based off a string value
+        Moves leg in a desired direction based off a string value, used for CLI testing.
         :param movement: String of what way to move the leg
         :param leg: Leg dict object
         :param limit: optional limit of distance to move the leg.
@@ -131,17 +131,25 @@ class Movements(Legs):
         """
         Method takes a movement string and runs the corresponding movement configuration.
         :param move: String of movement
-        :param repeat:
+        :param repeat: the number of times to repeat the movement
+        :param print_sequence: print the raw data of each movement for debugging.
         :return:
         """
+        if print_sequence:
+            print("Using Movement Config: {}".format(move))
+
         if self.movements and move in self.movements:
             for iteration in range(repeat):
                 if print_sequence:
                     print("Performing instruction {}".format(repeat))
+
                 for current_sequence in self.movements[move]:
                     if print_sequence:
                         print("Current SQ: {}".format(current_sequence))
-                    self._run_movement_sequence(current_sequence["sequence"], current_sequence["instructions"])
+                    self._run_movement_sequence(
+                        current_sequence["sequence"],
+                        current_sequence["instructions"]
+                    )
                     if "wait" in current_sequence and (isinstance(current_sequence["wait"], int) or isinstance(current_sequence["wait"], float) and current_sequence["wait"] != 0):
                         sleep(current_sequence["wait"])
         else:
@@ -158,7 +166,7 @@ class Movements(Legs):
         else:
             print("Invalid Movement Configuration: {}".format(movement_file))
 
-    def save_new_movement(self, movement_data, movement_name):
+    def save_new_movement(self, movement_data: dict, movement_name: str):
         """
         Method saves and validates new movement config files.
         :param movement_data: dict with instructions
@@ -166,7 +174,7 @@ class Movements(Legs):
         :return: Boolean indicating if file was valid and saved.
         """
         if self.validate_instructions(movement_data):
-            self.save_config("{}{}.json".format(self.movements_src, movement_name), movement_data)
+            self.save_config("{}{}.json".format(movement_data, movement_name), movement_data)
             self.movements[movement_name] = movement_data
             return True
         return False
