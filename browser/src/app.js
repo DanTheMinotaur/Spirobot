@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", event => {
 
                 //const bot = new BotController(app);
                 const ui = new UIController(app);
+
+                logoutListener(appJS, app.auth());
             } else {
                 console.log("Not Signed in");
                 appJS.innerHTML = loginTemplate({});
@@ -36,7 +38,11 @@ document.addEventListener("DOMContentLoaded", event => {
  * Add Listener events for login screen
  */
 function addLoginListeners() {
-    document.getElementById("googleLogin").addEventListener("click", loginGoogle);
+    let googleLogin = document.getElementById("googleLogin");
+    googleLogin.addEventListener("click", (event) => {
+        event.preventDefault();
+        loginGoogle();
+    })
 }
 
 /**
@@ -53,3 +59,10 @@ function loginGoogle() {
     });
 }
 
+function logoutListener(app, firebaseAuth) {
+    document.getElementById("logout").addEventListener("click", () => {
+        firebaseAuth.signOut().then(() => {
+            app.innerHTML = loginTemplate({});
+        });
+    })
+}
