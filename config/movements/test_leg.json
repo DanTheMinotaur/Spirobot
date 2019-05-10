@@ -1,0 +1,13 @@
+[
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 5,
+        "wait": 0.1
+      }
+    ],
+    "sequence": [],
+    "wait": 0
+  }
+]

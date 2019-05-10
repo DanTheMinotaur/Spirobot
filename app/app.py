@@ -43,7 +43,7 @@ class BotController:
         if proximity_readings["front"] >= self.auto_settings["proximity_threshold"]:
             self.walk_forward()
         else:
-            print("Object Detected Moving Left")
+            self.communications.set_status("Object Detected, Avoiding...")
             self.turn_left()
 
     def watch(self):

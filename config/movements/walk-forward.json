@@ -3,24 +3,16 @@
     "instructions": [
       {
         "movement": "up",
-        "limit": 15,
-        "wait": 0.07
+        "limit": 20,
+        "wait": 0.15
       },
       {
         "movement": "forward",
-        "limit": 25,
-        "wait": 0.05
-      },
-      {
-        "movement": "down",
-        "limit": 0,
-        "wait": 0
+        "limit": 40,
+        "wait": 0.02
       }
     ],
     "sequence": [
-      "rightfront",
-      "rightback",
-      "leftmiddle",
       "leftfront",
       "leftback",
       "rightmiddle"
@@ -30,17 +22,75 @@
     "instructions": [
       {
         "movement": "backward",
-        "limit": 30,
+        "limit": 40,
         "wait": 0.1
       }
     ],
     "sequence": [
       "rightfront",
       "rightback",
-      "leftmiddle",
+      "leftmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 0,
+        "wait": 0
+      }
+    ],
+    "sequence": [
       "leftfront",
       "leftback",
       "rightmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "up",
+        "limit": 20,
+        "wait": 0.15
+      },
+      {
+        "movement": "forward",
+        "limit": 40,
+        "wait": 0.02
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "backward",
+        "limit": 40,
+        "wait": 0.1
+      }
+    ],
+    "sequence": [
+      "leftfront",
+      "leftback",
+      "rightmiddle"
+    ]
+  },
+  {
+    "instructions": [
+      {
+        "movement": "down",
+        "limit": 20,
+        "wait": 0.15
+      }
+    ],
+    "sequence": [
+      "rightfront",
+      "rightback",
+      "leftmiddle"
     ]
   }
 ]

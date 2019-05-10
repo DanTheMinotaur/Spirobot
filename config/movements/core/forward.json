@@ -4,7 +4,7 @@
       {
         "movement": "up",
         "limit": 0,
-        "wait": 0.1
+        "wait": 0.15
       },
       {
         "movement": "forward",
@@ -30,7 +30,7 @@
     "instructions": [
       {
         "movement": "backward",
-        "limit": 30,
+        "limit": 40,
         "wait": 0.1
       }
     ],
