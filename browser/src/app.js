@@ -23,6 +23,15 @@ document.addEventListener("DOMContentLoaded", event => {
                 const ui = new UIController(app);
                 // ui.setListeners();
                 // ui.pingBot();
+                let storage = firebase.storage();
+                let imagesStorage = storage.ref("/");
+                imagesStorage.child("10-05-2019T13:44:45.jpg").getDownloadURL().then((url) => {
+                    fetch(url).then((data) => {
+                        console.log(data);
+                        let imageTest = document.getElementById("image-test");
+                        imageTest.src = data.url;
+                    })
+                })
 
             } else {
                 console.log("Not Signed in");

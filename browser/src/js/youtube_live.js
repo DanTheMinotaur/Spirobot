@@ -22,6 +22,6 @@ export function getYouTubeLiveStream(channel_id = "UC5TaG-84yWqkwYU1NA1x5JQ", ap
         console.log("Inner: " + innerDoc);
         let player = document.getElementById("player");
 
-        console.log("Player Elm: " + player);
+        console.log("Player Elm: " + player); // TODO Need to test with HTTPS
     });
 }

@@ -25,10 +25,13 @@ export class UIController{
             "eventsPanel": document.getElementById('events-panel'),
             "eventsMenuButton": document.getElementById("event-menu-trigger"),
             "controlContainer": document.getElementById("controls-container"),
-            "videoStreamContainer": document.getElementById("video-stream-container")
+            "videoStreamContainer": document.getElementById("video-stream-container"),
+            "imageGallery": document.getElementById("image-gallery-trigger"),
+            "imageGalleryContent": document.getElementById("gallery-content"),
+            "galleryPanel": document.getElementById("image-panel")
         };
 
-        getYouTubeLiveStream();
+        // getYouTubeLiveStream();
         this._disableEnableControls();
 
         /**
@@ -41,6 +44,7 @@ export class UIController{
         this.events = this.database.ref('/events/');
         this.status = this.database.ref('/status/');
         this.mode = this.database.ref('/auto_mode/');
+        this.images_storage = firebase.storage().ref('/');
 
         this.notificationObject = window.createNotification({
             closeOnClick: true,
@@ -52,15 +56,106 @@ export class UIController{
         });
         this.joystickController = createJoystick(this.ui_elements.joystickController);
 
-        this.slide_bar = new Slideout({
+        // this.events_bar = new Slideout({
+        //     'panel': this.ui_elements.controlPanel,
+        //     'menu': this.ui_elements.eventsPanel,
+        //     'padding': 0,
+        //     'tolerance': 70
+        // });
+        //
+        // this.gallery_bar = new Slideout({
+        //     'side': 'right',
+        //     'panel': this.ui_elements.controlPanel,
+        //     'menu': this.ui_elements.galleryPanel,
+        //     'padding': 0,
+        //     'tolerance': 70
+        //
+        // });
+
+        this.sidemenues()
+        this.handleJoystickMovements(1000);
+        this.setListeners();
+        this.pingBot();
+        this.galleryLoaded = false;
+    }
+
+    sidemenues() {
+        let events_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
             'menu': this.ui_elements.eventsPanel,
             'padding': 0,
             'tolerance': 70
         });
-        this.handleJoystickMovements(1000);
-        this.setListeners();
-        this.pingBot();
+
+        this.ui_elements.eventsMenuButton.addEventListener("click", () => {
+            events_bar.toggle();
+            events_bar.menu.style.zIndex = "2";
+        });
+
+        let gallery_bar = new Slideout({
+            'side': 'right',
+            'panel': this.ui_elements.controlPanel,
+            'menu': this.ui_elements.galleryPanel,
+            'padding': 0,
+            'tolerance': 70
+
+        });
+
+        this.ui_elements.imageGallery.addEventListener("click", () => {
+           gallery_bar.toggle();
+           gallery_bar.menu.style.zIndex = "2";
+           if (!this.galleryLoaded) {
+               this.loadImageGallery();
+               this.galleryLoaded = true;
+           }
+        });
+
+        this.ui_elements.controlPanel.addEventListener("click", () => {
+            if (events_bar.isOpen()) {
+                events_bar.toggle();
+                events_bar.menu.style.zIndex = "0";
+            }
+            if (gallery_bar.isOpen()) {
+                gallery_bar.toggle();
+                gallery_bar.menu.style.zIndex = "0";
+            }
+        });
+    }
+
+    loadImageGallery() {
+        let self = this;
+        let image_list = document.getElementById("image-list");
+
+        function buildGalleryElm(img_src, img_title) {
+            return `<a class="list-item image-lightbox" href="${img_src}">
+                    <div class="card is-shady">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src="${img_src}" alt="${img_title}" data-target="modal-image2">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <div class="content">
+                            <h4>${img_title}</h4>
+                        </div>
+                    </div>
+                </div></a>`
+        }
+
+        let images_ref = this.database.ref('/images');
+
+        images_ref.on('child_added', (image_details) => {
+            console.log(image_details.val());
+            let image_array = image_details.val().split('/');
+            let image_src = image_array[image_array.length - 1];
+            self.images_storage.child(image_src).getDownloadURL().then((url) => {
+                fetch(url).then((image_data) => {
+                    console.log(image_data);
+                    let html = new DOMParser().parseFromString(buildGalleryElm(image_data.url, image_src), 'text/html');
+                    image_list.appendChild(html.documentElement);
+                });
+            });
+        });
     }
 
     /**
@@ -213,16 +308,24 @@ export class UIController{
             this.controls.update({"auto_mode": selected_res})
         });
 
-        this.ui_elements.controlPanel.addEventListener("click", () => {
-            if (this.slide_bar.isOpen()) {
-                this.slide_bar.toggle();
-            }
-        });
-
-        this.ui_elements.eventsMenuButton.addEventListener("click", () => {
-            console.log("Clicked");
-            this.slide_bar.toggle();
-        });
+        // this.ui_elements.controlPanel.addEventListener("click", () => {
+        //     if (this.events_bar.isOpen()) {
+        //         this.events_bar.toggle();
+        //     }
+        //     if (this.gallery_bar.isOpen()) {
+        //         this.gallery_bar.toggle();
+        //     }
+        // });
+        //
+        // this.ui_elements.eventsMenuButton.addEventListener("click", () => {
+        //     this.events_bar.toggle();
+        // });
+        //
+        // this.ui_elements.imageGallery.addEventListener("click", () => {
+        //     //this.loadImageGallery();
+        //     this.gallery_bar.toggle();
+        //
+        // });
 
         this.updateEvents();
         this.checkStatus();

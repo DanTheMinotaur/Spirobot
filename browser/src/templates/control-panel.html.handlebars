@@ -1,7 +1,6 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-            <img src="https://drive.google.com/file/d/1Igx5ufLYKAYoD6jVIu0YOw47uSGiP8Fa/view?usp=sharing">
             <img src="{{ photoURL }}" class="is-rounded">
         </a>
     </div>
@@ -20,12 +19,12 @@
                             <i class="fa fa-envelope-o"></i>
                         </span>
                     </button>
-                    <a class="button is-link" id="image-gallery">
+                    <button class="button is-link" id="image-gallery-trigger">
                         <strong>Gallery</strong>
                         <span class="icon">
                             <i class="fa fa-picture-o"></i>
                         </span>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -33,7 +32,7 @@
 </nav>
 
 <article id="control-panel">
-    <div class="columns">
+    <div class="columns" id="control-panel1">
         <div class="column is-12">
             <section class="info-tiles">
                 <div class="tile is-ancestor has-text-centered">
@@ -124,6 +123,33 @@
                 <table class="table is-fullwidth is-striped" id="events-table">
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</aside>
+<aside class="box" id="image-panel">
+    <div class="card events-card">
+        <header class="card-header">
+            <p class="card-header-title">Images</p>
+        </header>
+        <div class="card-table">
+            <div class="content">
+                <div class="list" id="image-list">
+                    <a class="list-item">
+                        <div class="card is-shady">
+                            <div class="card-image">
+                                <figure class="image is-4by3">
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/spirobot-d9387.appspot.com/o/10-05-2019T13-57-27.jpg?alt=media&token=47187434-6bbf-4a5d-a4b9-b1517a2c6f36" alt="10-05-2019T13-57-27.jpg"" alt="${img_title}" data-target="modal-image2">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <div class="content">
+                                    <h4>10-05-2019T13-57-27</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

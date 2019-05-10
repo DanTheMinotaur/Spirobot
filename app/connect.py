@@ -181,6 +181,7 @@ class Communicate(Common):
 
         image_blob = self.__storage_bucket.blob(image_name)
         image_blob.upload_from_filename(image_location)
+        print(image_blob.path)
         image_url = image_blob.public_url
         self.__images.push(image_url)
         return image_blob.public_url
