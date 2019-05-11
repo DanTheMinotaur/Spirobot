@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, db, storage
 from app.utils import Common
 from os.path import basename
-
+from time import sleep
 
 class Communicate(Common):
     """
@@ -31,6 +31,7 @@ class Communicate(Common):
         })
         self.root = db.reference("/")
         self.__verify_control_details()
+        sleep(1)
         self.__controls = db.reference("controls")
         self.__events = db.reference("events")
         self.__status = db.reference("status")
