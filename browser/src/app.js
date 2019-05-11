@@ -12,11 +12,12 @@ document.addEventListener("DOMContentLoaded", event => {
     const appJS = document.getElementById("app");
     try {
         let app = firebase.app();
-
+        let title_name = document.title;
 
         // Check if user is logged in.
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
+                document.title = "Welcome " + title_name;
                 appJS.innerHTML = adminTemplate(user);
 
                 const ui = new UIController(app);
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", event => {
                 logoutListener(appJS, app.auth());
 
             } else {
+                document.title = "Login " + title_name;
                 console.log("Not Signed in");
                 appJS.innerHTML = loginTemplate({});
                 addLoginListeners();
@@ -42,7 +44,14 @@ function addLoginListeners() {
     googleLogin.addEventListener("click", (event) => {
         event.preventDefault();
         loginGoogle();
-    })
+    });
+    let emailLogin = document.getElementById("emailLogin");
+    emailLogin.addEventListener("click", (event) => {
+       event.preventDefault();
+       let email = document.getElementById("emailInput");
+       let password = document.getElementById("passwordInput");
+       loginEmail(email.value, password.value);
+    });
 }
 
 /**
@@ -54,9 +63,36 @@ function loginGoogle() {
     firebase.auth().signInWithPopup(provider).then(loginResult => {
         const user = loginResult.user;  // User Auth Successful
         console.log(user);
-    }).catch(e => {
-        console.log(e); // Log Error
+    }).catch((error) => {
+        console.log("Could Not Login: ", error); // Log Error
+        displayLoginError(error);
     });
+}
+
+function loginEmail(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+        console.log("Could Not Login: ", error);
+        displayLoginError(error);
+    });
+}
+
+function displayLoginError(error) {
+
+    let loginErrorDisplay = document.getElementById("loginError");
+        document.getElementById("closeLoginError").addEventListener("click", () => {
+            loginErrorDisplay.style.display = "none";
+    });
+    let header = loginErrorDisplay.getElementsByTagName("p")[0];
+    let body = loginErrorDisplay.getElementsByClassName("message-body")[0];
+    if (error.code === "auth/user-not-found") {
+        header.innerHTML = "No Account Found for User";
+    } else if (error.code === "auth/wrong-password") {
+        header.innerHTML = "Wrong Password";
+    } else {
+        header.innerHTML = "Login Error";
+    }
+    body.innerHTML = error.message;
+    loginErrorDisplay.style.display = "block";
 }
 
 /**

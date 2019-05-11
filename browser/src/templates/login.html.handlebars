@@ -2,22 +2,34 @@
     <div class="hero-body">
         <div class="container has-text-centered">
             <div class="column is-4 is-offset-4">
+
+                <figure class="image is-128x128 login-logo">
+                  <img src="./SpirobotLogo.png" alt="Spirobot Logo">
+                </figure>
                 <h3 class="title has-text-grey">Login</h3>
                 <p class="subtitle has-text-grey">Please login to proceed.</p>
+                <article class="message is-warning" id="loginError" style="display: none">
+                  <div class="message-header">
+                    <p></p>
+                    <button class="delete" aria-label="delete" id="closeLoginError"></button>
+                  </div>
+                  <div class="message-body">
+                  </div>
+                </article>
                 <div class="box">
                     <form>
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" type="email" placeholder="Your Email" autofocus="">
+                                <input class="input is-large" type="email" placeholder="Your Email" autofocus="" id="emailInput">
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="control">
-                                <input class="input is-large" type="password" placeholder="Your Password">
+                                <input class="input is-large" type="password" placeholder="Your Password" id="passwordInput">
                             </div>
                         </div>
-                        <button class="button is-block is-info is-large is-fullwidth">Login</button>
+                        <button class="button is-block is-info is-large is-fullwidth" id="emailLogin">Login</button>
                         <button class="button is-block is-primary is-large is-fullwidth" id="googleLogin">Login with Google</button>
                     </form>
                 </div>

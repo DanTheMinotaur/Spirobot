@@ -47,7 +47,7 @@ export class UIController{
         this.mode = this.database.ref('/auto_mode/');
         this.images_storage = firebase.storage().ref('/');
         this.galleryLoaded = false;
-        this.gallery = null;
+        this.eventsLoaded = false;
 
         this.notificationObject = null;
 
@@ -73,7 +73,7 @@ export class UIController{
             theme: 'success'
         });
 
-        // Check if user has given permission for browsers notifications
+        // Check if user has given permission for browsers notifications and assign device token to Firebase
         const messaging = firebase.messaging();
         messaging.requestPermission().then(() => {
             console.log("Notification Permission Granted");
@@ -87,6 +87,7 @@ export class UIController{
             console.log("Could not obtain permission for notifications" + error);
         });
 
+        // When a notification is recieved display it
         messaging.onMessage((payload) => {
             console.log('onMessage: ', payload);
             let notification_data = payload.notification;
@@ -94,6 +95,9 @@ export class UIController{
         });
     }
 
+    /**
+     * Create side menus for UI.
+     */
     sideMenus() {
         let events_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
@@ -103,7 +107,12 @@ export class UIController{
         });
 
         this.ui_elements.eventsMenuButton.addEventListener("click", () => {
+            if (!this.eventsLoaded) {
+                this.updateEvents();
+                this.eventsLoaded = true;
+            }
             events_bar.toggle();
+
             events_bar.menu.style.zIndex = "2";
         });
 
@@ -331,27 +340,7 @@ export class UIController{
             console.log("Selected Option: " + selected_res);
             this.controls.update({"auto_mode": selected_res})
         });
-
-        // this.ui_elements.controlPanel.addEventListener("click", () => {
-        //     if (this.events_bar.isOpen()) {
-        //         this.events_bar.toggle();
-        //     }
-        //     if (this.gallery_bar.isOpen()) {
-        //         this.gallery_bar.toggle();
-        //     }
-        // });
-        //
-        // this.ui_elements.eventsMenuButton.addEventListener("click", () => {
-        //     this.events_bar.toggle();
-        // });
-        //
-        // this.ui_elements.imageGallery.addEventListener("click", () => {
-        //     //this.loadImageGallery();
-        //     this.gallery_bar.toggle();
-        //
-        // });
-
-        this.updateEvents();
+        // this.updateEvents();
         this.checkStatus();
         this.setSwitchs();
     }

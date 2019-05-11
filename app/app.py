@@ -77,7 +77,8 @@ class BotController:
             return
         else:
             self.communications.set_status("Motion Detected, PANIC!")
-            self.communications.add_event("Motion Triggered on {}".format(monitor_results))
+            self.communications.add_event("Motion Triggered on {}".format(monitor_results.items()))
+            self.communications.send_notification("Motion Detected", monitor_results.items())
 
     def __live_video_stream(self, setting: bool):
         """
