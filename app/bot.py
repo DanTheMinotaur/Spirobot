@@ -111,6 +111,12 @@ class Movements(Legs):
     generating movement files.
     """
     movements = {}
+    CORE_MOVES = [
+        "forward",
+        "backward",
+        "left",
+        "right"
+    ]
 
     def __init__(self, user_movements_src: str = "./config/movements/"):
         """ Load Leg Constructor """
