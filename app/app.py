@@ -91,7 +91,7 @@ class BotController:
     def __check_move(self):
         move = self.communications.get_move()
         if move is not None and move in self.VALID_MOVEMENTS:
-            print("MOVING BOT {}".format(move))
+            self.communications.set_status("Moving Bot {}".format(move))
             self.make_move(move)
 
     def __check_video(self):
@@ -177,7 +177,6 @@ class BotController:
 
     def mode_manual(self):
         if self.__check_mode_change():
-            # self.communications.add_event("Manual Mode Set")
             self.communications.set_status("Piloting Bot")
             print("Manual Mode Set")
         self.__check_move()
