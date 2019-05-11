@@ -55,6 +55,10 @@ class ProximitySensors:
         self.__front_sensor = DistanceSensor(23, 24)
         self.__rear_sensor = DistanceSensor(17, 18)
 
+    @staticmethod
+    def __format_reading(reading):
+        return round(reading * 100, 2)
+
     def read_sensors(self, front: bool = True, rear: bool = True):
         """
         Reads distance sensor values and returns them
@@ -64,9 +68,9 @@ class ProximitySensors:
         """
         sensor_data = {}
         if front:
-            sensor_data["front"] = self.__front_sensor.distance
+            sensor_data["front"] = self.__format_reading(self.__front_sensor.distance)
         if rear:
-            sensor_data["rear"] = self.__rear_sensor.distance
+            sensor_data["rear"] = self.__format_reading(self.__rear_sensor.distance)
         return sensor_data
 
 

@@ -1,8 +1,7 @@
-print("Run")
-from app.app import Controller
+from app.app import BotController
 
 try:
-    c = Controller()
+    c = BotController()
     c.run()
 except KeyboardInterrupt:
     print("Closing from terminal...")

@@ -31,7 +31,7 @@ class Communicate(Common):
         })
         self.root = db.reference("/")
         self.__verify_control_details()
-        sleep(1)
+        sleep(1)  # Allows Live DB to be refreshed and stops old commands from being loaded.
         self.__controls = db.reference("controls")
         self.__events = db.reference("events")
         self.__status = db.reference("status")

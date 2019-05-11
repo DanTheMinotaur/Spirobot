@@ -1,5 +1,5 @@
 {
   "proximity_threshold": 25,
-  "monitor_time": 30,
+  "monitor_iterations": 30,
   "patrol_iterations": 20
 }
