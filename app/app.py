@@ -15,9 +15,9 @@ class BotController:
     ]
 
     def __init__(self):
+        self.communications = Communicate()
         self.proximity_sensors = ProximitySensors()
         self.motion_sensors = MotionArray()
-        self.communications = Communicate()
         self.camera = Camera()
         self.bot = Movements()
         self.bot.set_all_initial()
@@ -41,6 +41,7 @@ class BotController:
         proximity_readings = self.proximity_sensors.read_sensors()
         print("Proximity Readings: {}".format(proximity_readings))
         if proximity_readings["front"] >= self.auto_settings["proximity_threshold"]:
+            self.communications.set_status("Moving Forward")
             self.walk_forward()
         else:
             self.communications.set_status("Object Detected, Avoiding...")
@@ -143,9 +144,6 @@ class Controller(BotController):
     def mode_auto(self):
         if self.__check_mode_change():
             self.communications.set_status("Bot Auto Mode Set")
-            # self.communications.add_event("Auto Mode Set")
-            #
-            print("Auto Mode Set")
         self.patrol()
 
     def mode_manual(self):

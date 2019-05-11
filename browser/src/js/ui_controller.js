@@ -56,7 +56,7 @@ export class UIController{
         });
         this.joystickController = createJoystick(this.ui_elements.joystickController);
 
-        this.sidemenues();
+        this.SideMenus();
         this.handleJoystickMovements(1000);
         this.setListeners();
         this.pingBot();
@@ -64,7 +64,7 @@ export class UIController{
         this.gallery = null;
     }
 
-    sidemenues() {
+    SideMenus() {
         let events_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
             'menu': this.ui_elements.eventsPanel,

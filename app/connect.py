@@ -125,6 +125,7 @@ class Communicate(Common):
         Sets current status of device
         :param status String of current status.
         """
+        print("Status Update: {}".format(status))
         self.root.update({"status": status})
 
     def set_video(self, video_status: bool = False):
