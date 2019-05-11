@@ -57,10 +57,12 @@ export class UIController{
         this.handleJoystickMovements(1000);
         this.setListeners();
         this.pingBot();
-
         this.handleNotifications()
     }
 
+    /**
+     * Method creates and and controls browser notification elements.
+     */
     handleNotifications() {
         this.notificationObject = window.createNotification({
             closeOnClick: true,
@@ -77,7 +79,7 @@ export class UIController{
             return messaging.getToken();
         }).then((token) => {
             console.log("Token: " + token);
-            this.database.ref("token").update({
+            this.database.ref("/").update({
                 "token": token
             });
         }).catch((error) => {
@@ -85,7 +87,9 @@ export class UIController{
         });
 
         messaging.onMessage((payload) => {
-            console.log('onMessage: ', payload)
+            console.log('onMessage: ', payload);
+            let notification_data = payload.notification;
+            this.notificationAlert(notification_data.title, notification_data.body, "warning");
         });
     }
 
@@ -360,6 +364,8 @@ export class UIController{
      * @param type The type of message being displayed
      */
     notificationAlert(title, message, type = "success") {
+        this.notificationObject.theme = type;
+        console.log(this.notificationObject);
         this.notificationObject({
             title: title,
             message: message

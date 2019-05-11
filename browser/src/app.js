@@ -26,19 +26,6 @@ document.addEventListener("DOMContentLoaded", event => {
 
                 logoutListener(appJS, app.auth());
 
-                // const messaging = firebase.messaging();
-                // messaging.requestPermission().then(() => {
-                //     console.log("Notification Permission Granted");
-                //     return messaging.getToken();
-                // }).then((token) => {
-                //     console.log("Token: " + token);
-                // }).catch((error) => {
-                //     console.log("Could not obtain permission for notifications" + error);
-                // });
-                //
-                // messaging.onMessage((payload) => {
-                //     console.log('onMessage: ', payload)
-                // });
             } else {
                 console.log("Not Signed in");
                 appJS.innerHTML = loginTemplate({});
