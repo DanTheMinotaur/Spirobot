@@ -39,13 +39,29 @@ export class UIController{
          * @type {firebase.database.Database | * | never}
          */
 
+        this.firebase = firebase;
         this.database = firebase.database();
         this.controls = this.database.ref('/controls/');
         this.events = this.database.ref('/events/');
         this.status = this.database.ref('/status/');
         this.mode = this.database.ref('/auto_mode/');
         this.images_storage = firebase.storage().ref('/');
+        this.galleryLoaded = false;
+        this.gallery = null;
 
+        this.notificationObject = null;
+
+        this.joystickController = createJoystick(this.ui_elements.joystickController);
+
+        this.sideMenus();
+        this.handleJoystickMovements(1000);
+        this.setListeners();
+        this.pingBot();
+
+        this.handleNotifications()
+    }
+
+    handleNotifications() {
         this.notificationObject = window.createNotification({
             closeOnClick: true,
             displayCloseButton: false,
@@ -54,17 +70,26 @@ export class UIController{
             showDuration: 3500,
             theme: 'success'
         });
-        this.joystickController = createJoystick(this.ui_elements.joystickController);
 
-        this.SideMenus();
-        this.handleJoystickMovements(1000);
-        this.setListeners();
-        this.pingBot();
-        this.galleryLoaded = false;
-        this.gallery = null;
+        const messaging = firebase.messaging();
+        messaging.requestPermission().then(() => {
+            console.log("Notification Permission Granted");
+            return messaging.getToken();
+        }).then((token) => {
+            console.log("Token: " + token);
+            this.database.ref("token").update({
+                "token": token
+            });
+        }).catch((error) => {
+            console.log("Could not obtain permission for notifications" + error);
+        });
+
+        messaging.onMessage((payload) => {
+            console.log('onMessage: ', payload)
+        });
     }
 
-    SideMenus() {
+    sideMenus() {
         let events_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
             'menu': this.ui_elements.eventsPanel,

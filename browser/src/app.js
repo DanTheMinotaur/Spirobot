@@ -13,9 +13,11 @@ document.addEventListener("DOMContentLoaded", event => {
     try {
         let app = firebase.app();
 
+
         // Check if user is logged in.
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
+                // serviceWorkingPermission();
                 console.log("User is signed in" + user.photoURL);
                 appJS.innerHTML = adminTemplate(user);
 
@@ -23,6 +25,20 @@ document.addEventListener("DOMContentLoaded", event => {
                 const ui = new UIController(app);
 
                 logoutListener(appJS, app.auth());
+
+                // const messaging = firebase.messaging();
+                // messaging.requestPermission().then(() => {
+                //     console.log("Notification Permission Granted");
+                //     return messaging.getToken();
+                // }).then((token) => {
+                //     console.log("Token: " + token);
+                // }).catch((error) => {
+                //     console.log("Could not obtain permission for notifications" + error);
+                // });
+                //
+                // messaging.onMessage((payload) => {
+                //     console.log('onMessage: ', payload)
+                // });
             } else {
                 console.log("Not Signed in");
                 appJS.innerHTML = loginTemplate({});
@@ -66,3 +82,17 @@ function logoutListener(app, firebaseAuth) {
         });
     })
 }
+
+
+// function serviceWorkingPermission() {
+//     if ("serviceWorker" in navigator) {
+//         navigator.serviceWorker
+//             .register("./firebase-messaging-sw.js")
+//             .then(function(registration) {
+//                 console.log("Registration successful, scope is:", registration.scope);
+//             })
+//             .catch(function(err) {
+//                 console.log("Service worker registration failed, error:", err);
+//             });
+//     }
+// }
