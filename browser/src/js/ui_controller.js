@@ -73,6 +73,7 @@ export class UIController{
             theme: 'success'
         });
 
+        // Check if user has given permission for browsers notifications
         const messaging = firebase.messaging();
         messaging.requestPermission().then(() => {
             console.log("Notification Permission Granted");
