@@ -37,6 +37,7 @@ class Communicate(Common):
         self.__events = db.reference("events")
         self.__status = db.reference("status")
         self.__images = db.reference("images")
+        self.__message_token = db.reference("token")
         self.__video_state = None
         self.communication_controls = {}
         self.__storage_bucket = storage.bucket()
@@ -188,6 +189,18 @@ class Communicate(Common):
         image_url = image_blob.public_url
         self.__images.push(image_url)
         return image_blob.public_url
+
+    def send_notification(self, title, body):
+        message_token = self.__message_token.get()
+        if message_token is not None:
+            message = messaging.Message(notification=messaging.Notification(
+                title=title,
+                body=body
+            ), token=message_token)
+            response = messaging.send(message)
+            print("Browser Notification Send {}".format(response))
+        else:
+            print("No Message token available...")
 
     def check_controls(self):
         """ Assigns all controls to instance variable to reduce GET requests """

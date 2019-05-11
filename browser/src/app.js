@@ -62,7 +62,7 @@ function loginGoogle() {
 /**
  * Function for adding logout events to browser if a user is logged in.
  * @param app Firebase app object
- * @param firebaseAuth Firebase Auth Object. 
+ * @param firebaseAuth Firebase Auth Object.
  */
 function logoutListener(app, firebaseAuth) {
     document.getElementById("logout").addEventListener("click", () => {

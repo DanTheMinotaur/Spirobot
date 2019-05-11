@@ -442,7 +442,6 @@ export class UIController{
                 self.ui_elements.controlContainer.classList.add("bounceInRight");
                 self.ui_elements.controlContainer.classList.remove("bounceOutRight");
             }
-
         });
     }
 }
