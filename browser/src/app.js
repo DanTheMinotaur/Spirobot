@@ -17,11 +17,8 @@ document.addEventListener("DOMContentLoaded", event => {
         // Check if user is logged in.
         app.auth().onAuthStateChanged(function (user) {
             if (user) {
-                // serviceWorkingPermission();
-                console.log("User is signed in" + user.photoURL);
                 appJS.innerHTML = adminTemplate(user);
 
-                //const bot = new BotController(app);
                 const ui = new UIController(app);
 
                 logoutListener(appJS, app.auth());
@@ -62,6 +59,11 @@ function loginGoogle() {
     });
 }
 
+/**
+ * Function for adding logout events to browser if a user is logged in.
+ * @param app Firebase app object
+ * @param firebaseAuth Firebase Auth Object. 
+ */
 function logoutListener(app, firebaseAuth) {
     document.getElementById("logout").addEventListener("click", () => {
         firebaseAuth.signOut().then(() => {
@@ -69,17 +71,3 @@ function logoutListener(app, firebaseAuth) {
         });
     })
 }
-
-
-// function serviceWorkingPermission() {
-//     if ("serviceWorker" in navigator) {
-//         navigator.serviceWorker
-//             .register("./firebase-messaging-sw.js")
-//             .then(function(registration) {
-//                 console.log("Registration successful, scope is:", registration.scope);
-//             })
-//             .catch(function(err) {
-//                 console.log("Service worker registration failed, error:", err);
-//             });
-//     }
-// }
