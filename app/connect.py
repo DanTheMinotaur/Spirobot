@@ -85,10 +85,14 @@ class Communicate(Common):
         return control in self.communication_controls
 
     def set_custom_moves(self, custom_move_names: list):
+        """
+        Tales a list of movement names and uploads to firebase.
+        :param custom_move_names: List of names of movements
+        :return: the Firebase list of names with ID's
+        """
         for move in custom_move_names:
             self.__custom_moves.push(move)
         return self.__custom_moves.get()
-
 
     def ping(self, do_ping: bool = None):
         """

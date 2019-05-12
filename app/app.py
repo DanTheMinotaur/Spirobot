@@ -24,6 +24,7 @@ class BotController:
             "in_use": False
         }
         self.communications.add_event("Bot Started")
+        self.communications.set_custom_moves(self.bot.movements.keys())  # Send Valid Movements to Firebase
 
     def make_move(self, move: str, repeat: int = 3):
         """
@@ -92,7 +93,7 @@ class BotController:
 
     def __check_move(self):
         move = self.communications.get_move()
-        if move is not None and move in self.bot.CORE_MOVES:
+        if move is not None and move in self.bot.movements:
             self.communications.set_status("Moving Bot {}".format(move))
             self.make_move(move)
 
@@ -196,7 +197,6 @@ class BotController:
         """
         if self.__check_mode_change():
             self.communications.set_status("Piloting Bot")
-            print("Manual Mode Set")
         self.__check_move()
 
     def __check_mode_change(self):
@@ -216,6 +216,5 @@ class BotController:
         :return: None
         """
         while True:
-            print("Loop")
             self.check_commands()
             sleep(timeout)

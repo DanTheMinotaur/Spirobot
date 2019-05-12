@@ -47,7 +47,6 @@ export class UIController{
         this.mode = this.database.ref('/auto_mode/');
         this.images_storage = firebase.storage().ref('/');
         this.galleryLoaded = false;
-        this.eventsLoaded = false;
 
         this.notificationObject = null;
 
@@ -57,7 +56,31 @@ export class UIController{
         this.handleJoystickMovements(1000);
         this.setListeners();
         this.pingBot();
-        this.handleNotifications()
+        this.handleNotifications();
+        this.handleCustomMoves();
+        this.updateEvents();
+    }
+
+    handleCustomMoves() {
+        let custom_moves = this.database.ref("/custom_moves/");
+        let custom_moves_elm = document.getElementById("custom-moves");
+        let select_box = custom_moves_elm.getElementsByTagName("select")[0];
+        custom_moves.on("child_added", (move) => {
+            let move_name = move.val();
+            let option = document.createElement("option");
+            option.value = move_name;
+            option.text = move_name;
+            select_box.add(option);
+            if (custom_moves_elm.style.display === "none") {
+                custom_moves_elm.style.display = "flex";
+            }
+        });
+        custom_moves_elm.getElementsByTagName("button")[0].addEventListener("click", (event) => {
+            event.preventDefault();
+            let movement = select_box.options[select_box.selectedIndex].value;
+            console.log("Using Move: ", movement);
+            this.move(movement);
+        });
     }
 
     /**
@@ -96,7 +119,7 @@ export class UIController{
     }
 
     /**
-     * Create side menus for UI.
+     * Create side menus for UI and assigns listener events to add new data as it arrives. .
      */
     sideMenus() {
         let events_bar = new Slideout({
@@ -107,10 +130,7 @@ export class UIController{
         });
 
         this.ui_elements.eventsMenuButton.addEventListener("click", () => {
-            if (!this.eventsLoaded) {
-                this.updateEvents();
-                this.eventsLoaded = true;
-            }
+
             events_bar.toggle();
 
             events_bar.menu.style.zIndex = "2";
