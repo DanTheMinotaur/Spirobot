@@ -1,7 +1,9 @@
-//const joystick = createJoystick(document.getElementById('wrapper'));
-
-// setInterval(() => console.log(joystick.getPosition()), 16);
-
+/**
+ * Joystick Creation function
+ * @param parent The HTML element to attach the joystick to
+ * @param difference The amount the joystick can move around
+ * @returns {{getPosition: (function(): {x: number, y: number})}} the position the joystick is current in.
+ */
 export function createJoystick(parent, difference = 35) {
     const maxDiff = difference;
     const stick = document.createElement('div');

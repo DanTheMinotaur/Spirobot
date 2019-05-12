@@ -64,19 +64,27 @@ export class UIController{
     }
 
     /**
-     * Handles motion sensor interaction for proxmity sensors in the browser
+     * Handles receiving of sensor readings from firebase and displaying the details
      */
     handleSensorReadings() {
         let proximity_display = document.getElementById("proximity-readings");
+
+        /**
+         * Converts out of range value to string
+         * @param value motion sensor reading.
+         * @returns {string|*}
+         */
         function greaterThanThreshold(value) {
             if (value >= 100) {
                 return "Nothing";
             }
             return value;
         }
+        // Wait for data change in firebase and update the UI elements
         this.database.ref("proximity_data").on("value", (data) => {
             let proximity_data = data.val();
 
+            // Check if proximity data is set
             if (proximity_data) {
                 if (proximity_display.style.display === "none") {
                     proximity_display.style.display = "block";
@@ -90,6 +98,7 @@ export class UIController{
 
         let motion_display = document.getElementById("motion-sensor");
 
+        // Click event to tell bot to scan for motion
         this.ui_elements.motionSensorReadButton.addEventListener("click", () => {
             console.log("Reading Motion");
             this.controls.update({
@@ -97,6 +106,11 @@ export class UIController{
             });
         });
 
+        /**
+         * Changes motion boolean to string.
+         * @param motion Boolean of motion data.
+         * @returns {string}
+         */
         function motionToText(motion) {
             if (motion) {
                 return "Detected";
@@ -104,13 +118,13 @@ export class UIController{
             return "Not Detected";
         }
 
+        // Wait for motion data change in firebase.
         this.database.ref("motion_data").on("value", (data) => {
             let motion_data = data.val();
             if (motion_data) {
                 if (motion_display.style.display === "none") {
                     motion_display.style.display = "block";
                 }
-                console.log(motion_data);
                 document.getElementById("motion-rear").innerHTML = motionToText(motion_data.rear);
                 document.getElementById("motion-front").innerHTML = motionToText(motion_data.front);
                 document.getElementById("motion-left").innerHTML = motionToText(motion_data.left);
@@ -120,6 +134,7 @@ export class UIController{
             }
         });
 
+        // Listener to close motion data popup
         document.getElementById("close-motion").addEventListener("click", () => {
             this.database.ref("/").update({
                 "motion_data": false
@@ -127,10 +142,15 @@ export class UIController{
         });
     }
 
+    /**
+     * Handles the menu for loading custom made movements from firebase.
+     */
     handleCustomMoves() {
         let custom_moves = this.database.ref("/custom_moves/");
         let custom_moves_elm = document.getElementById("custom-moves");
         let select_box = custom_moves_elm.getElementsByTagName("select")[0];
+
+        // Listen for any new moves that are stored in the box and load them into dropdown menu
         custom_moves.on("child_added", (move) => {
             let move_name = move.val();
             let option = document.createElement("option");
@@ -141,6 +161,7 @@ export class UIController{
                 custom_moves_elm.style.display = "flex";
             }
         });
+        // Assign a listener to submit the custom movement.
         custom_moves_elm.getElementsByTagName("button")[0].addEventListener("click", (event) => {
             event.preventDefault();
             let movement = select_box.options[select_box.selectedIndex].value;
@@ -153,6 +174,7 @@ export class UIController{
      * Method creates and and controls browser notification elements.
      */
     handleNotifications() {
+        // Create a notification object for display
         this.notificationObject = window.createNotification({
             closeOnClick: true,
             displayCloseButton: false,
@@ -188,6 +210,7 @@ export class UIController{
      * Create side menus for UI and assigns listener events to add new data as it arrives. .
      */
     sideMenus() {
+        // Create sidebar for events
         let events_bar = new Slideout({
             'panel': this.ui_elements.controlPanel,
             'menu': this.ui_elements.eventsPanel,
@@ -195,13 +218,13 @@ export class UIController{
             'tolerance': 70
         });
 
+        // Set listener for events menu toggle
         this.ui_elements.eventsMenuButton.addEventListener("click", () => {
-
             events_bar.toggle();
-
             events_bar.menu.style.zIndex = "2";
         });
 
+        // Create Gallery Side bar
         let gallery_bar = new Slideout({
             'side': 'right',
             'panel': this.ui_elements.controlPanel,
@@ -211,6 +234,7 @@ export class UIController{
 
         });
 
+        // Add event listener for gallery button and load gallery
         this.ui_elements.imageGallery.addEventListener("click", () => {
            gallery_bar.toggle();
            gallery_bar.menu.style.zIndex = "2";
@@ -220,20 +244,21 @@ export class UIController{
            }
         });
 
+        // add toggles so sidebars close on clicking another area.
         this.ui_elements.controlPanel.addEventListener("click", () => {
-            if (events_bar.isOpen()) {
-                events_bar.toggle();
-                events_bar.menu.style.zIndex = "0";
+            function close(side_bar) {
+                if (side_bar.isOpen()) {
+                    events_bar.toggle();
+                    events_bar.menu.style.zIndex = "0";
+                }
             }
-            if (gallery_bar.isOpen()) {
-                gallery_bar.toggle();
-                gallery_bar.menu.style.zIndex = "0";
-            }
+            close(events_bar);
+            close(gallery_bar);
         });
     }
 
     /**
-     * Loads the image gallery when called and creates a lightbox gakkery effect for all images loaded
+     * Loads the image gallery when called and creates a lightbox gallery effect for all images loaded
      */
     loadImageGallery() {
         let self = this;
@@ -263,16 +288,18 @@ export class UIController{
 
         let images_ref = this.database.ref('/images');
 
+        // Set firebase listener for new images added via firebase
         images_ref.on('child_added', (image_details) => {
-            console.log(image_details.val());
             let image_array = image_details.val().split('/');
             let image_src = image_array[image_array.length - 1];
+            // Download the image and display in browser
             self.images_storage.child(image_src).getDownloadURL().then((url) => {
                 fetch(url).then((image_data) => {
                     console.log(image_data);
                     let html = new DOMParser().parseFromString(buildGalleryElm(image_data.url, image_src), 'text/html');
                     image_list.appendChild(html.documentElement);
                 }).finally(() => {
+                    // Create a gallery and assign to all new image elements loaded.
                     self.gallery = new LuminousGallery(document.querySelectorAll(".image-lightbox",
                         {
                             arrowNavigation: true,
@@ -321,6 +348,10 @@ export class UIController{
             this.move("left");
         });
 
+        /**
+         * Highlights the arrows on the interface.
+         * @param threshold
+         */
         function checkMovements(threshold = 25) {
             let currentPosition = self.joystickController.getPosition();
             let highlightedArrow = document.querySelector("." + highlightClass);
@@ -401,7 +432,7 @@ export class UIController{
             row.insertCell(2).innerHTML = datetime.split("T").join(" ").replace("-", ":").replace("-", ":");
         }
 
-
+        // Load all events from firebase
         this.events.on('value', function (eventsData) {
             eventsData = eventsData.val();
             for (let key in eventsData) {
@@ -413,6 +444,7 @@ export class UIController{
                 }
             }
         });
+        // Load new events from firebase
         this.events.limitToLast(1).on('child_added', function (newChildData) {
             try {
                 let event = newChildData.val();
@@ -454,7 +486,7 @@ export class UIController{
     }
 
     /**
-     * Creates notifcation for display
+     * Creates notification for display
      * @param title The title of the notification
      * @param message the message to display in the notification.
      * @param type The type of message being displayed
@@ -516,6 +548,7 @@ export class UIController{
     setSwitchs() {
         let self = this;
 
+        // Sets video listener to alter UI on
         this.controls.child('video').on('value', function (video_value) {
             self.ui_elements.videoSwitch.checked = video_value.val();
             console.log(video_value.val());
