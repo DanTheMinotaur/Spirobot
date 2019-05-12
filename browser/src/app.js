@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", event => {
                 const ui = new UIController(app);
 
                 logoutListener(appJS, app.auth());
-
             } else {
                 document.title = "Login " + title_name;
                 console.log("Not Signed in");

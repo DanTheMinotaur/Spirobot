@@ -37,6 +37,8 @@ class Communicate(Common):
         self.__events = db.reference("events")
         self.__status = db.reference("status")
         self.__images = db.reference("images")
+        self.__custom_moves = db.reference("custom_moves")
+        self.__sensor_data = db.reference("sensor_data")
         self.__message_token = db.reference("token")
         self.__video_state = None
         self.communication_controls = {}
@@ -64,8 +66,8 @@ class Communicate(Common):
         default_config = Common.load_config("./config/default_structure.json")  # Default config for bot.
         if root_config is not None:
             for config_item, config_value in default_config.items():
-                if config_item == "events" and "events" in root_config:
-                    break
+                if (config_item == "events" and "events" in root_config) or (config_item == "images" and "images" in root_config):
+                    continue
                 self.root.update({
                     config_item: default_config[config_item]
                 })
@@ -81,6 +83,12 @@ class Communicate(Common):
         :return: Boolean indicating if control is valid
         """
         return control in self.communication_controls
+
+    def set_custom_moves(self, custom_move_names: list):
+        for move in custom_move_names:
+            self.__custom_moves.push(move)
+        return self.__custom_moves.get()
+
 
     def ping(self, do_ping: bool = None):
         """

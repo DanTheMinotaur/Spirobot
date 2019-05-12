@@ -5,4 +5,5 @@
 # from tests.proximity import TestProximity
 # from tests.motion import TestMotion
 # from tests.default_config import TestDefaultConfig
-import tests.send_notifcation
+# import tests.send_notifcation
+from tests.custom_moves import TestCustomMoves

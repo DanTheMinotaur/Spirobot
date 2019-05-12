@@ -3,6 +3,9 @@ from app.connect import Communicate
 
 
 class TestControls(unittest.TestCase):
+    """
+    Class test various Firebase Communications mechanisms.
+    """
     c = Communicate()
 
     def test_object_creation(self):

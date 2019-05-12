@@ -3,6 +3,9 @@ import unittest
 
 
 class TestMotion(unittest.TestCase):
+    """
+    Tests motion array class, needs motion detected to be verified.
+    """
     def test_motion_array(self):
         m = MotionArray()
         results = m.detect_motion(10)
