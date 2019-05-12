@@ -26,7 +26,8 @@ Spirobot uses a number of other projects to work properly:
 * [Raspberry PI Zero] - The brains that run the bot.
 
 ## Bot
-
+###Hardware Diagram
+![Bot Hardware Diagram](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/Hardware%20Diagram_bb.png?raw=true)
 ## Screens
 ### Browser
 ![Browser in standby mode](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/Browser%20StandbyMode.png?raw=true)
