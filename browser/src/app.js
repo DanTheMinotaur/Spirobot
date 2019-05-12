@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", event => {
                 addLoginListeners();
             }
         });
-    } catch (e) {
-        console.error(e);
+    } catch (error) {
+        console.error(error);
     }
 });

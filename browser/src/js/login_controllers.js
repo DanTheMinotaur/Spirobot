@@ -17,7 +17,7 @@ export function addLoginListeners() {
 }
 
 /**
- * Loads Login Popup window
+ * Loads Google Login Popup
  */
 function loginGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -31,6 +31,11 @@ function loginGoogle() {
     });
 }
 
+/**
+ * Handles user login via email
+ * @param email
+ * @param password
+ */
 function loginEmail(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password).catch((error) => {
         console.log("Could Not Login: ", error);
@@ -38,6 +43,10 @@ function loginEmail(email, password) {
     });
 }
 
+/**
+ * Handles and displays login errors for user
+ * @param error the firebase error response
+ */
 function displayLoginError(error) {
 
     let loginErrorDisplay = document.getElementById("loginError");
@@ -64,8 +73,6 @@ function displayLoginError(error) {
  */
 export function logoutListener(app, firebaseAuth) {
     document.getElementById("logout").addEventListener("click", () => {
-        firebaseAuth.signOut().then(() => {
-            app.innerHTML = loginTemplate({});
-        });
+        firebaseAuth.signOut();
     })
 }

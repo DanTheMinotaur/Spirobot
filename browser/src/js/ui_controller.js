@@ -146,16 +146,25 @@ export class UIController{
         });
     }
 
+    /**
+     * Loads the image gallery when called and creates a lightbox gakkery effect for all images loaded
+     */
     loadImageGallery() {
         let self = this;
         let image_list = document.getElementById("image-list");
 
+        /**
+         * Builds a single gallery element
+         * @param img_src the url of the image
+         * @param img_title the image title
+         * @returns {string} html string of element
+         */
         function buildGalleryElm(img_src, img_title) {
             return `<a class="list-item image-lightbox" href="${img_src}">
                     <div class="card is-shady">
                     <div class="card-image">
                         <figure class="image is-4by3">
-                            <img src="${img_src}" alt="${img_title}?w=1600" data-target="modal-image2">
+                            <img src="${img_src}" alt="${img_title}" data-target="modal-image2">
                         </figure>
                     </div>
                     <div class="card-content">
@@ -182,13 +191,12 @@ export class UIController{
                         {
                             arrowNavigation: true,
                             injectBaseStyles: false
-                        }));
+                        }
+                        )
+                    );
                 });
             });
-
         });
-
-
     }
 
     /**
@@ -199,7 +207,7 @@ export class UIController{
     handleJoystickMovements(interval = 1000, threshold = 25) {
         let self = this;
         /**
-         * Inner function which hanles movements from the joystick and transmits them to firebase.
+         * Inner function which handles movements from the joystick and transmits them to firebase.
          * up == y > 25
          * down == y < -25
          * left == x < -25
@@ -281,12 +289,30 @@ export class UIController{
     updateEvents(eventsTableElem = this.ui_elements.eventsTable) {
         let self = this;
 
-        function addRow(icon, message, datetime) {
+        /**
+         * Creates a row for events table
+         * @param icon the type of icon
+         * @param message the event message
+         * @param datetime the date and time object
+         */
+        function addRow(status, message, datetime) {
             //console.log("Adding Row for message:" + message);
             let row = eventsTableElem.insertRow(0);
-            row.insertCell(0).innerHTML = icon;
+
+            let icon = "fa-bell-o";
+            if (status === "info") {
+                icon = "fa-info-circle";
+            } else if (status === "success") {
+                icon = "fa-check";
+            } else if (status === "error") {
+                icon = "fa-times";
+            } else if (status === "warning") {
+                icon = "fa-minus-circle"
+            }
+
+            row.insertCell(0).innerHTML = `<i class="fa ${icon}">`;
             row.insertCell(1).innerHTML = message;
-            row.insertCell(2).innerHTML = datetime;
+            row.insertCell(2).innerHTML = datetime.split("T").join(" ").replace("-", ":").replace("-", ":");
         }
 
 
@@ -295,19 +321,19 @@ export class UIController{
             console.log("Events Full Data: " + eventsData);
             for (let key in eventsData) {
                 try {
-                    addRow('<i class="fa fa-bell-o">', eventsData[key].message, eventsData[key].datetime);
+                    console.log(event);
+                    addRow(eventsData[key].type, eventsData[key].message, eventsData[key].datetime);
                 } catch (e) {
                     console.log("Error in data keys ");
                     console.log(e);
                 }
             }
         });
-        //this.events.off();
         this.events.limitToLast(1).on('child_added', function (newChildData) {
-            //console.log(newChildData.val());
             try {
                 let event = newChildData.val();
-                addRow('<i class="fa fa-bell-o">', event.message, event.datetime);
+                console.log(event);
+                addRow(event.type, event.message, event.datetime);
                 self.notificationAlert("Latest Notification",  event.message, event.type);
             } catch (e) {
                 console.log("Error in data keys ");
@@ -340,12 +366,9 @@ export class UIController{
             console.log("Selected Option: " + selected_res);
             this.controls.update({"auto_mode": selected_res})
         });
-        // this.updateEvents();
         this.checkStatus();
         this.setSwitchs();
     }
-
-
 
     /**
      * Creates notifcation for display
