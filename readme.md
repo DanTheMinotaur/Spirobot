@@ -29,5 +29,12 @@ Spirobot uses a number of other projects to work properly:
 
 ## Screens
 ### Browser
-
+![Browser in standby mode](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/Browser%20StandbyMode.png?raw=true)
+Browser in standby mode
+![Browser in manual mode](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/MainPageOnScreenShot.png?raw=true)
+Browser in manual mode
+![Browser events and gallery](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/EventsandGallery.png?raw=true)
+Browser events and gallery
 ### Bot
+
+
