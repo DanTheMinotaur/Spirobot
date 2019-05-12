@@ -12,12 +12,12 @@ class TestSensorCommunication(unittest.TestCase):
         print("Proximity Sensor Values: {}".format(sensor_values))
         c.send_proximity_data(sensor_values)
 
-    # def test_motion(self):
-    #     c = Communicate()
-    #     m = MotionArray()
-    #     sensor_values = m.detect_motion(10)
-    #     print("Motion Sensor Values: {}".format(sensor_values))
-    #     c.send_motion_data(sensor_values)
+    def test_motion(self):
+        c = Communicate()
+        m = MotionArray()
+        sensor_values = m.detect_motion(10)
+        print("Motion Sensor Values: {}".format(sensor_values))
+        c.send_motion_data(sensor_values)
 
 if __name__ == '__main__':
     unittest.main()

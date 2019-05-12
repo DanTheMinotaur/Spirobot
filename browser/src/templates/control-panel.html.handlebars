@@ -13,6 +13,12 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
+                    <button class="button is-danger" id="read-motion-sensor-data" style="display: none;">
+                        <strong>Read Motion Sensor</strong>
+                        <span class="icon">
+                            <i class="fa fa-refresh"></i>
+                        </span>
+                    </button>
                     <button class="button is-primary" id="event-menu-trigger">
                         <strong>Events</strong>
                         <span class="icon">
@@ -29,7 +35,6 @@
                         <strong>Logout</strong>
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -91,6 +96,33 @@
                     </div>
                     <div class="tile is-parent is-3">
                         <article class="tile is-child box blue animated" id="controls-container">
+                            <div id="proximity-readings" class="columns" style="display: none;">
+                                <div class="column">
+                                    <article class="message is-danger">
+                                        <div class="message-header">
+                                        <p>Proximity Data</p>
+                                      </div>
+                                        <table class="table is-bordered is-fullwidth">
+                                            <thead>
+                                                <tr>
+                                                      <th>Position</th>
+                                                      <th>Distance CM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Front</th>
+                                                    <td id="front">20.2</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Rear</th>
+                                                    <td id="rear">20.8</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </article>
+                                </div>
+                            </div>
                             <div id="joystick-container">
                                 <div id="joystick">
                                     <div class="columns is-mobile is-centered is-gapless">
@@ -122,28 +154,42 @@
                                     <button class="button is-warning">Send Move</button>
                                 </div>
                             </div>
-                            <div id="proximity-readings" class="columns" style="display: none;">
+
+                            <div id="motion-sensor" class="columns">
                                 <div class="column">
-                                <table class="table is-bordered is-fullwidth">
-                                    <thead>
-                                        <tr>
-                                              <th>Position</th>
-                                              <th>Distance CM</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th>Front</th>
-                                            <td id="front">20.2</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Rear</th>
-                                            <td id="rear">20.8</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <article class="message">
+                                        <div class="message-header">
+                                        <p>Motion Data</p>
+                                        <button class="delete" aria-label="delete" id="close-motion"></button>
+                                      </div>
+                                        <table class="table is-bordered is-fullwidth">
+                                            <thead>
+                                                <tr>
+                                                      <th>Position</th>
+                                                      <th>Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>Front</th>
+                                                    <td id="motion-front"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Rear</th>
+                                                    <td id="motion-rear"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Left</th>
+                                                    <td id="motion-left"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Rear</th>
+                                                    <td id="motion-right"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </article>
                                 </div>
-                                <div id="motion"></div>
                             </div>
                         </article>
                     </div>

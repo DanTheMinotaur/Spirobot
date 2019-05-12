@@ -99,6 +99,12 @@ class BotController:
 
         self.communications.send_proximity_data(self.proximity_sensors.read_sensors())
 
+    def __check_motion(self):
+        """ Checks if motion sensor data is requested and sends it if so """
+        if self.communications.get_motion_sensor():
+            self.communications.set_status("Detecting Motion")
+            self.communications.send_motion_data(self.motion_sensors.detect_motion(10))
+
     def __check_video(self):
         """
         Checks the current video status and compares it if its not currently active then starts/stops live streaming
@@ -152,6 +158,7 @@ class BotController:
         self.__check_video()
         self.__check_picture()
         self.__check_ping()
+        self.__check_motion()
 
     def check_commands(self):
         """

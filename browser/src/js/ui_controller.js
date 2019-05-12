@@ -14,6 +14,7 @@ export class UIController{
          * @type {{controlPanel: HTMLElement, eventsPanel: HTMLElement, statusUpdate: HTMLElement, eventsTable: HTMLElement, joystick: HTMLElement, eventsMenuButton: HTMLElement, cameraButton: HTMLElement, videoSwitch: HTMLElement, modeSelect: HTMLElement}}
          */
         this.ui_elements = {
+            "motionSensorReadButton": document.getElementById("read-motion-sensor-data"),
             "videoSwitch": document.getElementById("video-switch"),
             "cameraButton": document.getElementById("camera-button"),
             "eventsTable": document.getElementById("events-table"),
@@ -62,6 +63,9 @@ export class UIController{
         this.handleSensorReadings();
     }
 
+    /**
+     * Handles motion sensor interaction for proxmity sensors in the browser
+     */
     handleSensorReadings() {
         let proximity_display = document.getElementById("proximity-readings");
         function greaterThanThreshold(value) {
@@ -77,13 +81,50 @@ export class UIController{
                 if (proximity_display.style.display === "none") {
                     proximity_display.style.display = "block";
                 }
-                console.log(proximity_data);
                 document.getElementById("front").innerHTML = greaterThanThreshold(proximity_data.front);
                 document.getElementById("rear").innerHTML = greaterThanThreshold(proximity_data.rear);
             } else {
                 proximity_display.style.display = "none";
             }
-        })
+        });
+
+        let motion_display = document.getElementById("motion-sensor");
+
+        this.ui_elements.motionSensorReadButton.addEventListener("click", () => {
+            console.log("Reading Motion");
+            this.controls.update({
+                "read_motion": true
+            });
+        });
+
+        function motionToText(motion) {
+            if (motion) {
+                return "Detected";
+            }
+            return "Not Detected";
+        }
+
+        this.database.ref("motion_data").on("value", (data) => {
+            let motion_data = data.val();
+            if (motion_data) {
+                if (motion_display.style.display === "none") {
+                    motion_display.style.display = "block";
+                }
+                console.log(motion_data);
+                document.getElementById("motion-rear").innerHTML = motionToText(motion_data.rear);
+                document.getElementById("motion-front").innerHTML = motionToText(motion_data.front);
+                document.getElementById("motion-left").innerHTML = motionToText(motion_data.left);
+                document.getElementById("motion-right").innerHTML = motionToText(motion_data.right);
+            } else {
+                motion_display.style.display = "none";
+            }
+        });
+
+        document.getElementById("close-motion").addEventListener("click", () => {
+            this.database.ref("/").update({
+                "motion_data": false
+            })
+        });
     }
 
     handleCustomMoves() {
@@ -490,12 +531,14 @@ export class UIController{
         this.controls.child('auto_mode').on('value', function (mode_val) {
             self.ui_elements.modeSelect.value = mode_val.val();
             console.log(mode_val.val());
-            if (mode_val.val() || mode_val.val() === 0) { // Auto Mode
+            if (mode_val.val() || mode_val.val() === 0) { // Auto Mode or Standby more
                 self.ui_elements.controlContainer.classList.add("bounceOutRight");
                 self.ui_elements.controlContainer.classList.remove("bounceInRight");
+                self.ui_elements.motionSensorReadButton.style.display = "none";
             } else {
                 self.ui_elements.controlContainer.classList.add("bounceInRight");
                 self.ui_elements.controlContainer.classList.remove("bounceOutRight");
+                self.ui_elements.motionSensorReadButton.style.display = "block";
             }
         });
     }
