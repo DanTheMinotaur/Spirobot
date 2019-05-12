@@ -38,7 +38,8 @@ class Communicate(Common):
         self.__status = db.reference("status")
         self.__images = db.reference("images")
         self.__custom_moves = db.reference("custom_moves")
-        self.__sensor_data = db.reference("sensor_data")
+        self.__motion_data = db.reference("motion_data")
+        self.__proximity_data = db.reference("proximity_data")
         self.__message_token = db.reference("token")
         self.__video_state = None
         self.communication_controls = {}
@@ -50,7 +51,7 @@ class Communicate(Common):
         Validates a configuration against what config it should be
         :param current_config: The configuration to check
         :param correct_config: The configuration that is correct
-        :return: Boolean
+        :return: Boolean indicating weather config is valid.
         """
         for config_item in correct_config:
             if config_item not in current_config:
@@ -152,15 +153,55 @@ class Communicate(Common):
         self.__controls.update({"video": video_status})
 
     def get_video(self):
+        """
+        Checks if the video set command
+        :return:
+        """
         if self.__check_control("video"):
             return self.communication_controls["video"]
 
     def get_picture(self):
-        if self.__check_control("picture") and self.communication_controls["picture"]:
+        """
+        Checks if command to take a picture has been set
+        :return: True if set, False if not
+        """
+        return self.__get__control_command("picture")
+
+    def __get__control_command(self, command: str):
+        """
+        Helper method to get and reset boolean based control command
+        :param command:
+        :return:
+        """
+        if self.__check_control(command) and self.communication_controls[command]:
             self.__controls.update({
-                "picture": False
+                command: False
             })
             return True
+        return False
+
+    def get_motion_sensor(self):
+        """
+        Checks the sensor reading command has been set
+        :return: Indication weather to read motion sensors
+        """
+        return self.__get__control_command("read_motion")
+
+    def send_proximity_data(self, proximity_data: dict):
+        """
+        Sends proximity data to firebase.
+        :param proximity_data:
+        :return:
+        """
+        self.__proximity_data.update(proximity_data)
+
+    def send_motion_data(self, motion_data: dict):
+        """
+        Sends motion data from MotionArray to Firebase
+        :param motion_data:
+        :return: None
+        """
+        self.__motion_data.update(motion_data)
 
     def clear_events(self):
         """

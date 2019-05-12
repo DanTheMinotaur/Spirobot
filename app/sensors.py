@@ -33,6 +33,9 @@ class MotionArray:
                 detected = sensor_object.motion_detected
                 if detected:
                     results[sensor] = detected
+        for sensor in self.__motion_sensors.keys():
+            if sensor not in results:
+                results[sensor] = False
         return results
 
     def read_sensor(self, sensor: str):

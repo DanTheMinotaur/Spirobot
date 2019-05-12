@@ -59,6 +59,31 @@ export class UIController{
         this.handleNotifications();
         this.handleCustomMoves();
         this.updateEvents();
+        this.handleSensorReadings();
+    }
+
+    handleSensorReadings() {
+        let proximity_display = document.getElementById("proximity-readings");
+        function greaterThanThreshold(value) {
+            if (value >= 100) {
+                return "Nothing";
+            }
+            return value;
+        }
+        this.database.ref("proximity_data").on("value", (data) => {
+            let proximity_data = data.val();
+
+            if (proximity_data) {
+                if (proximity_display.style.display === "none") {
+                    proximity_display.style.display = "block";
+                }
+                console.log(proximity_data);
+                document.getElementById("front").innerHTML = greaterThanThreshold(proximity_data.front);
+                document.getElementById("rear").innerHTML = greaterThanThreshold(proximity_data.rear);
+            } else {
+                proximity_display.style.display = "none";
+            }
+        })
     }
 
     handleCustomMoves() {
@@ -338,10 +363,8 @@ export class UIController{
 
         this.events.on('value', function (eventsData) {
             eventsData = eventsData.val();
-            console.log("Events Full Data: " + eventsData);
             for (let key in eventsData) {
                 try {
-                    console.log(event);
                     addRow(eventsData[key].type, eventsData[key].message, eventsData[key].datetime);
                 } catch (e) {
                     console.log("Error in data keys ");
@@ -352,7 +375,6 @@ export class UIController{
         this.events.limitToLast(1).on('child_added', function (newChildData) {
             try {
                 let event = newChildData.val();
-                console.log(event);
                 addRow(event.type, event.message, event.datetime);
                 self.notificationAlert("Latest Notification",  event.message, event.type);
             } catch (e) {

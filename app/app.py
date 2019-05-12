@@ -97,6 +97,8 @@ class BotController:
             self.communications.set_status("Moving Bot {}".format(move))
             self.make_move(move)
 
+        self.communications.send_proximity_data(self.proximity_sensors.read_sensors())
+
     def __check_video(self):
         """
         Checks the current video status and compares it if its not currently active then starts/stops live streaming

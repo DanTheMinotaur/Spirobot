@@ -4,11 +4,13 @@
     "ping": true,
     "video": false,
     "picture": false,
-    "auto_mode": 0
+    "auto_mode": 0,
+    "read_motion": false
   },
   "status": false,
   "events": 0,
   "custom_moves": 0,
-  "sensor_data": 0,
+  "motion_data": false,
+  "proximity_data": false,
   "images": 0
 }

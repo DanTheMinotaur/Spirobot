@@ -86,7 +86,6 @@
                 <div class="tile is-ancestor has-text-centered">
                     <div class="tile is-parent" id="video-container">
                         <article class="tile is-child box animated" id="video-stream-container">
-<!--                            <iframe id="live-stream-frame" width="640" height="360" src="https://www.youtube.com/embed/GAtSt9SVc-0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
                             <iframe id="live-stream-frame" width="640" height="360" src="https://www.youtube.com/embed/live_stream?channel=UC5TaG-84yWqkwYU1NA1x5JQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </article>
                     </div>
@@ -123,7 +122,29 @@
                                     <button class="button is-warning">Send Move</button>
                                 </div>
                             </div>
-                            <div id="sensor-readings"></div>
+                            <div id="proximity-readings" class="columns" style="display: none;">
+                                <div class="column">
+                                <table class="table is-bordered is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                              <th>Position</th>
+                                              <th>Distance CM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>Front</th>
+                                            <td id="front">20.2</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Rear</th>
+                                            <td id="rear">20.8</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <div id="motion"></div>
+                            </div>
                         </article>
                     </div>
                 </div>
