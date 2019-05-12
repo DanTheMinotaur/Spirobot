@@ -7,6 +7,9 @@ from app.utils import Common
 
 
 class BotController:
+    """
+    Main Application control logic
+    """
     def __init__(self):
         self.communications = Communicate()
         self.proximity_sensors = ProximitySensors()
@@ -31,7 +34,7 @@ class BotController:
         Wrapper that makes bot move. 
         :param move: the movement type
         :param repeat: Number of times to repeat the move.
-        :return: 
+        :return: None
         """
         self.bot.make_move(move, repeat=repeat)
 
@@ -92,6 +95,10 @@ class BotController:
         self.communications.add_event("Live Streaming to YouTube {}ing.".format(command))
 
     def __check_move(self):
+        """
+        Checks if a movement command has been set.
+        :return:
+        """
         move = self.communications.get_move()
         if move is not None and move in self.bot.movements:
             self.communications.set_status("Moving Bot {}".format(move))
@@ -170,7 +177,7 @@ class BotController:
 
     def _select_mode(self):
         """
-        Switches bewteen different bot modes.
+        Switches between different bot modes.
         :return: None
         """
         self.__check_mode()

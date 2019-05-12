@@ -6,6 +6,9 @@ from app.sensors import MotionArray, ProximitySensors
 class TestSensorCommunication(unittest.TestCase):
 
     def test_proximity(self):
+        """
+        Test sending proximity data to firebase
+        """
         c = Communicate()
         p = ProximitySensors()
         sensor_values = p.read_sensors()
@@ -13,6 +16,9 @@ class TestSensorCommunication(unittest.TestCase):
         c.send_proximity_data(sensor_values)
 
     def test_motion(self):
+        """
+        Test Send motion data to firebase
+        """
         c = Communicate()
         m = MotionArray()
         sensor_values = m.detect_motion(10)

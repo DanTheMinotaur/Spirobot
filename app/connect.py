@@ -67,7 +67,7 @@ class Communicate(Common):
         default_config = Common.load_config("./config/default_structure.json")  # Default config for bot.
         if root_config is not None:
             for config_item, config_value in default_config.items():
-                if (config_item == "events" and "events" in root_config) or (config_item == "images" and "images" in root_config):
+                if (config_item == "events" and "events" in root_config) or (config_item == "images" and "images" in root_config):  # Skip if events and images already populated
                     continue
                 self.root.update({
                     config_item: default_config[config_item]
@@ -243,7 +243,13 @@ class Communicate(Common):
         self.__images.push(image_url)
         return image_blob.public_url
 
-    def send_notification(self, title, body):
+    def send_notification(self, title: str, body: str):
+        """
+        Sends a browser notification
+        :param title: The title of notification
+        :param body: The text to display
+        :return: None
+        """
         message_token = self.__message_token.get()
         if message_token is not None:
             message = messaging.Message(notification=messaging.Notification(

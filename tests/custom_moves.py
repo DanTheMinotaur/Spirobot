@@ -4,6 +4,9 @@ from app.connect import Communicate
 
 class TestCustomMoves(unittest.TestCase):
     def test_custom_moves_set(self):
+        """
+        Tests setting custom movement files in firebase.
+        """
         static_move_names = [
             "walk1",
             "walk2",

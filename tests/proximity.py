@@ -4,6 +4,9 @@ import unittest
 
 class TestProximity(unittest.TestCase):
     def test_prox(self):
+        """
+        Test Proximity Sensors
+        """
         p = ProximitySensors()
         self.assertIsNotNone(p.read_sensors())
 

@@ -35,9 +35,9 @@ class TestMovement(unittest.TestCase):
             "rightmiddle"
         ]
     }]
-    # Test Movement Validator
-    def test_validate_movement_config(self):
 
+    def test_validate_movement_config(self):
+        """ Test Movement Validator """
         m = Movements()
         self.assertTrue(m.validate_instructions(self.movement_config), "Leg Config Method Working")
 
@@ -48,18 +48,26 @@ class TestMovement(unittest.TestCase):
         self.assertIsNotNone(m.load_config("./config/movements/walk-forward.json"),
                              "Could not load and validate config file")
 
-    # Test load multiple configs
     def test_load_movements(self):
+        """
+        Test load multiple configs
+        """
         m = Movements()
         m.load_movement_files()
         self.assertIsNotNone(m.movements)
 
     def test_movement(self):
+        """
+        Tests walking forward movement
+        """
         m = Movements()
         m.make_move("walk-forward")
         self.assertTrue(True)
 
     def test_save_config(self):
+        """
+        Test Saving config.
+        """
         m = Movements()
         self.assertTrue(m.save_new_movement(self.movement_config, "testconfig"))
         m.set_all_initial()

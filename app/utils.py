@@ -21,6 +21,12 @@ class Common:
 
     @staticmethod
     def save_config(file_name: str, data_dict: dict):
+        """
+        Saves a config file
+        :param file_name: name of config file
+        :param data_dict: the configuration data
+        :return: None
+        """
         with open(file_name, 'w') as json_file:
             json.dump(data_dict, json_file)
 

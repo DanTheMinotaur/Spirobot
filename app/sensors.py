@@ -60,6 +60,11 @@ class ProximitySensors:
 
     @staticmethod
     def __format_reading(reading):
+        """
+        Converts the reading into decimal and rounds
+        :param reading: the initial reading
+        :return: converted reading
+        """
         return round(reading * 100, 2)
 
     def read_sensors(self, front: bool = True, rear: bool = True):

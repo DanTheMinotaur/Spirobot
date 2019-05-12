@@ -119,7 +119,10 @@ class Movements(Legs):
     ]
 
     def __init__(self, user_movements_src: str = "./config/movements/"):
-        """ Load Leg Constructor """
+        """
+        Load Leg Constructor
+        :param user_movements_src: the source of custom movement files
+        """
         super().__init__()
         self.load_movement_files("./config/movements/core/")
         self.load_movement_files(user_movements_src)
