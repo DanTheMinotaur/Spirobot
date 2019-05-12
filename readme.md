@@ -36,5 +36,5 @@ Browser in manual mode
 ![Browser events and gallery](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/EventsandGallery.png?raw=true)
 Browser events and gallery
 ### Bot
-
-
+![Bot Command Line Program](https://github.com/DanTheMinotaur/Spirobot/blob/master/images/screens/CLIInterface.png?raw=true?raw=true)
+Bot Command Line Program
